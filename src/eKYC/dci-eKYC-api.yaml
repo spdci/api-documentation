@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: eKYC API
+  description: ''
+  version: 0.0.1
+servers:
+  - description: Gateway endpoint
+    url: https://localhost:8081/
+tags:
+  - name: e-KYC API
+    description: 'List of APIs to validate and take consent of beneficiaries from the National ID system' 
+paths:
+  /v1/sendotp:
+    post:
+      tags:
+        - e-KYC API
+      summary: 'Generate OTP using national id'
+      description: Generate OTP using national id
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendOTPRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /v1/validateOTP:
+    post:
+      tags:
+        - e-KYC API
+      summary: Validate OTP which was generated with national id
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateOTPRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+components:
+  parameters:
+    authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: Access token which was issued after successful login with gateway auth server.
+      schema:
+        type: string
+        example: Bearer <...>        
+    version:
+      in: header
+      name: x-api-version
+      schema:
+        type: string
+        example: "1.0.0"
+      required: false
+      description: If not provided use latest api version as default
+    x-timestamp:
+      in: header
+      name: timestamp
+      schema:
+        type: string
+        example: "2022-12-04T18:01:07+00:00"
+      required: true
+      description: Timestamp of request when it was sent , ideally it should be GMT
+    x-hmac:
+      in: header
+      name: x-hmac
+      schema:
+        type: string
+        example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
+      required: true
+      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+    x-registry-type:
+      in: header
+      name: x-registry-type
+      schema:
+        type: string
+        enum: ['x-mosip','x-farmer','x-social','x-crvs','x-student']
+      required: true
+      description: This param used to decide which service to be called to retrieve data
+    x-sender-id:
+      in: header
+      name: x-sender-id
+      schema:
+        type: string
+        example: "Farmer help programme "
+      required: true
+      description: Information about requester , it may be some code of SP system
+    x-message-id:
+      in: header
+      name: x-message-id
+      schema:
+        type: string
+        format: uuid
+        example: 0c96614c-7255-4774-b109-cd53ee859000
+      required: true
+      description: UUID string to be sent in request header for tracking of request
+    x-async:
+      in: header
+      name: x-async
+      schema:
+        type: string
+        example: true
+      required: true
+      description: Async param indicate that response to be sent immediate or in call back, if _true_ send data in response if _false_ just return HTTP status 202
+    x-callbackendpoint:
+      in: header
+      name: x-callbackendpoint
+      schema:
+        type: string
+        example: "https://senderhost/callback/on-disburse"
+      required: false
+      description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: string
+        return_message:
+          type: string
+        error_code:
+          type: string
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request
+    IdentifierType:
+      type: object
+      properties:
+        identifier_type:
+          type: string
+          enum: ['NATIONAL_ID','FARMER_REG_NO']
+    IdentifierValue:
+      type: object
+      properties:
+        identifier_value:
+          type: string
+          example: 345678912    
+    ValidateOTPRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+      type: object
+      properties:
+        otp:
+          type: string
+    SendOTPRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+    HttpErrorResponse:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+        error_message:
+          type: string
+  securitySchemes:
+    spmis_auth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,320 @@
+openapi: 3.0.3
+info:
+  title: Authentication and Autherization API Documentation
+  description: ""
+  version: 0.0.1
+
+servers:
+  - description: Gateway endpoint
+    url: https://localhost:8081/
+tags:
+  - name: Authorization API
+    description: 'Authorization API' 
+paths:
+  /v1/auth:
+    post:
+      tags:
+        - Authorization API
+      summary: 'Generage token using client id and secret'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /v1/login:
+    post:
+      tags:
+        - Authorization API
+      summary: 'Generage token for user with his credentials and spmis client id and secret'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+
+
+components:
+  parameters:
+    authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: Access token which was issued after successful login with gateway auth server.
+      schema:
+        type: string
+        example: Bearer <...>        
+    version:
+      in: header
+      name: x-api-version
+      schema:
+        type: string
+        example: "1.0.0"
+      required: false
+      description: If not provided use latest api version as default
+    x-timestamp:
+      in: header
+      name: timestamp
+      schema:
+        type: string
+        example: "2022-12-04T18:01:07+00:00"
+      required: true
+      description: Timestamp of request when it was sent , ideally it should be GMT
+    x-hmac:
+      in: header
+      name: x-hmac
+      schema:
+        type: string
+        example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
+      required: true
+      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+    x-registry-type:
+      in: header
+      name: x-registry-type
+      schema:
+        type: string
+        enum: ['x-mosip','x-farmer','x-social','x-crvs','x-student']
+      required: true
+      description: This param used to decide which service to be called to retrieve data
+    x-sender-id:
+      in: header
+      name: x-sender-id
+      schema:
+        type: string
+        example: "Farmer help programme "
+      required: true
+      description: Information about requester , it may be some code of SP system
+    x-message-id:
+      in: header
+      name: x-message-id
+      schema:
+        type: string
+        format: uuid
+        example: 0c96614c-7255-4774-b109-cd53ee859000
+      required: true
+      description: UUID string to be sent in request header for tracking of request
+    x-async:
+      in: header
+      name: x-async
+      schema:
+        type: string
+        example: true
+      required: true
+      description: Async param indicate that response to be sent immediate or in call back, if _true_ send data in response if _false_ just return HTTP status 202
+    x-callbackendpoint:
+      in: header
+      name: x-callbackendpoint
+      schema:
+        type: string
+        example: "https://senderhost/callback/on-disburse"
+      required: false
+      description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
+  schemas:
+    AuthRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+          example: 2fd153ab-86c8-45fb-990d-851840e46061
+          description: The client id provided to SP system
+        client_secret_key:
+          type: string
+          example: 8636abe2-bdfb-4238-8bff-200ed3652d1e
+          description: The secret token provided along with client id
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: spuser1
+          description: Username of SP system
+        password:
+          type: string
+          example: "Encrypted string"
+          description: Encrypted password string
+        spmisid:
+          type: string
+          example: spmis
+          description: SPMIS identification string
+        client_id:
+          type: string
+          example: 2fd153ab-86c8-45fb-990d-851840e46061
+          description: The client id provided to SP system
+        client_secret_key:
+          type: string
+          example: 8636abe2-bdfb-4238-8bff-200ed3652d1e
+          description: The secret token provided along with client id
+    AuthResponse:
+      type: object
+      properties:
+        client_id:
+          type: string
+          example: 2fd153ab-86c8-45fb-990d-851840e46061
+          description: The client id provided to SP system
+        tokenInfo:
+          $ref: '#/components/schemas/TokenInfo'
+    LoginResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          example: 2fd153ab-86c8-45fb-990d-851840e46061
+          description: The client id provided to SP system
+        tokenInfo:
+          $ref: '#/components/schemas/TokenInfo'
+    TokenInfo:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          type: string
+        refresh_expires_in:
+          type: string
+        refresh_token:
+          type: string
+        token_type:
+          type: string
+        not-before-policy:
+          type: string
+        session_state:
+          type: string
+        scope:
+          type: string
+    HttpErrorResponse:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+        error_message:
+          type: string
+  securitySchemes:
+    spmis_auth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
