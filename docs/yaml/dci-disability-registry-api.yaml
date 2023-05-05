@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
-  title: Farmer registry APIs
+  title: Disability registry APIs
   description: ''
   version: 0.0.1
 servers:
-  - description: Farmer registry access point
+  - description: Disability registry access point
     url: https://localhost:8081/
 tags:
   - name: Search API
@@ -12,7 +12,7 @@ tags:
   - name: Eligibility determination API
     description: ''
   - name: Event subscription
-    description: 'The event subscription APIs facilate to get notification when any event happens in farmer registry, The client application meed to register for each event seperately with provided client id and client secret'
+    description: 'The event subscription APIs facilate to get notification when any event happens in disability registry, The client application meed to register for each event seperately with provided client id and client secret'
 
 paths:
   /v1/search:
@@ -184,15 +184,15 @@ paths:
                   $ref: '#/components/schemas/SupportedEligibility'          
       security:
         - spmis_auth:
-            - read:claims
+            - read:eligibity
     post:
       tags:
         - Eligibility determination API 
-      summary: To get information of claim for person
-      description: Response will contain claim details
+      summary: To get information of eligibity for person
+      description: Response will contain information about requested eligibity that may include boolean status or json with more details
       operationId: ''
       requestBody:
-        description: send details of identifier
+        description: Send details to be validated
         content:
           application/json:
             schema:
@@ -250,7 +250,7 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-  /v1/subscription:
+  /v1/subscription-list:
     get:
       tags:
         - Event subscription 
@@ -278,12 +278,13 @@ paths:
                   $ref: '#/components/schemas/SupportedEvents'          
       security:
         - spmis_auth:
-            - read:claims
+            - read:eligibity
+  /v1/subscribe:
     post:
       tags:
         - Event subscription  
       summary: To subscribe for specific event
-      description: Response will contain claim details
+      description: Response will contain eligibity details
       operationId: ''
       requestBody:
         description: send details of identifier
@@ -344,7 +345,72 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-
+  /v1/unsubscribe:
+    post:
+      tags:
+        - Event subscription  
+      summary: To subscribe for specific event
+      description: Response will contain eligibity details
+      operationId: ''
+      requestBody:
+        description: send details of identifier
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnSubscribeRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
 components:
   parameters:
     authorization:
@@ -384,7 +450,7 @@ components:
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-mosip','x-farmer','x-social','x-crvs','x-student']
+        enum: ['x-disability']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:
@@ -392,7 +458,7 @@ components:
       name: x-sender-id
       schema:
         type: string
-        example: "Farmer help programme "
+        example: "NOBLE_SP_PROGRAMME"
       required: true
       description: Information about requester , it may be some code of SP system
     x-message-id:
@@ -423,7 +489,7 @@ components:
   schemas:
     SearchRequest:
       type: object
-      example: '{"transaction_id":"0c96614c-7255-4774-b109-cd53ee851769","additionalFields":["contact","address","dob"],"filtergroups":[{"groupid":"A","operator-with-next-group":"and","fields":[{"fieldname":"identifier.type","operator":"contains","value":"NATIONAL_ID","nextfieldoperator":"and"},{"fieldname":"identifier.value","operator":"contains","value":"345678912","nextfieldoperator":""}]},{"groupid":"B","operator-with-next-group":"","fields":[{"fieldname":"name.first_name","operator":"contains","value":"john","nextfieldoperator":"or"},{"fieldname":"name.last_name","operator":"contains","value":"doe","nextfieldoperator":""}]}],"sortby":[{"fieldname":"name.first_name","order":"asc"}],"pagination":{"page_size":10,"page_number":5}}'
+#      example: '{"transaction_id":"0c96614c-7255-4774-b109-cd53ee851769","additionalFields":["contact","address","dob"],"filtergroups":[{"groupid":"A","operator-with-next-group":"and","fields":[{"fieldname":"identifier.type","operator":"contains","value":"NATIONAL_ID","nextfieldoperator":"and"},{"fieldname":"identifier.value","operator":"contains","value":"345678912","nextfieldoperator":""}]},{"groupid":"B","operator-with-next-group":"","fields":[{"fieldname":"name.first_name","operator":"contains","value":"john","nextfieldoperator":"or"},{"fieldname":"name.last_name","operator":"contains","value":"doe","nextfieldoperator":""}]}],"sortby":[{"fieldname":"name.first_name","order":"asc"}],"pagination":{"page_size":10,"page_number":5}}'
       properties:
         transaction_id:
           type: string
@@ -431,9 +497,8 @@ components:
         filtergroups:
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/FilterGroupFarmerRegistry'
-              - $ref: '#/components/schemas/FilterGroupCRVSRegistry'
+            allOf:
+              - $ref: '#/components/schemas/FilterGroupDisabilityRegistry'
         sortby:
           $ref: '#/components/schemas/Sort'
         pagination:
@@ -445,7 +510,7 @@ components:
             page_number:
               type: number
               example: 5  
-    FilterGroupFarmerRegistry:
+    FilterGroupDisabilityRegistry:
       type: object
       properties:
         groupid:
@@ -462,29 +527,9 @@ components:
             anyOf:
               - $ref: '#/components/schemas/IdentifierTypeField'
               - $ref: '#/components/schemas/IdentifierValueField'
+              - $ref: '#/components/schemas/RegionField'
               - $ref: '#/components/schemas/NameField'
-              - $ref: '#/components/schemas/CropTypeField'
-              - $ref: '#/components/schemas/RegionField'
-              - $ref: '#/components/schemas/FarmerTypeField'
-    FilterGroupCRVSRegistry:
-      type: object
-      properties:
-        groupid:
-          type: string
-          format: string
-          example: "A"
-        operator-with-next-group:
-          type: string
-          description: 'Operation with next group' 
-          enum: ["and", "or"]
-        fields:
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/IdentifierTypeField'
-              - $ref: '#/components/schemas/IdentifierValueField'
-              - $ref: '#/components/schemas/RegionField'
-              - $ref: '#/components/schemas/Repositories'
+              - $ref: '#/components/schemas/DisabilityTypeField'
     Field:
       type: object
       required:
@@ -511,7 +556,7 @@ components:
             value: 
               type: string
               example: "NATIONAL_ID"
-              enum: ['NATIONAL_ID','FARMER_ID']
+              enum: ['NATIONAL_ID','DISABILITY_CERTIFICATE_NO']
     IdentifierValueField:
       description: 'Search with identifier value'
       allOf: 
@@ -546,8 +591,8 @@ components:
               type: string
               example: "John"
               description: 'Search by first name or last name of human'
-    CropTypeField:
-      description: 'Search by crop type'    
+    DisabilityTypeField:
+      description: 'Search by disability type'    
       allOf: 
         - $ref: '#/components/schemas/Field'
         - type: object
@@ -557,12 +602,12 @@ components:
           properties: 
             fieldname:
               type: string
-              example: 'croptype'
+              example: 'disabilitytype'
               enum: ['croptype']
             value: 
               type: string
-              example: "kharif"
-              enum: ['kharif','rabi','zaid']
+              example: "Blindness"
+              enum: ['Blindness','Low Vision','Deaf','Haemophilia','Thalassemia','Sickle Cell Disease']
               description: 'Search by crop type'
     RegionField:
       description: 'Search by region'        
@@ -582,43 +627,10 @@ components:
               example: "SE- India"
               enum: ['SE- India','WEST - INDIA']
               description: 'Search by location'
-    FarmerTypeField:
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'farmertype'
-              enum: ['farmertype']
-            value: 
-              type: string
-              example: "marginal"
-              enum: ['owner','marginal']
-              description: 'Search by farmer type'
-    Repositories:
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'repository_type'
-              enum: ['repository_type']
-            value: 
-              type: string
-              example: "marginal"
-              enum: ['Birth', 'Death', 'Marriage']
-              description: 'Search by farmer type'
     FieldOperator:
       type: string
       enum:
+        - in
         - or
         - and
         - contains
@@ -637,7 +649,6 @@ components:
         order:
           type: string
           enum: ["asc","desc"]
-
     ApiResponse:
       type: object
       properties:
@@ -654,7 +665,7 @@ components:
         data: 
           type: array
           items:
-            $ref: '#/components/schemas/FarmerInfo'
+            $ref: '#/components/schemas/DisabilityInfo'
     HumanName:
       type: object
       properties:
@@ -673,7 +684,7 @@ components:
         last_name:
           type: string
           example: doe
-    FarmerInfo:
+    DisabilityInfo:
       type: object
       properties:
         identifier:
@@ -684,29 +695,66 @@ components:
               - $ref: '#/components/schemas/Identifier'
         name:
           $ref: '#/components/schemas/HumanName'
-        location:
+        age:
           type: string
-        crop_type:
+        birthday:
           type: string
           enum: ['Food Crops','Feed Crops','Fiber Crops','Oil Crops','Ornamental Crops','Industrial Crops']
-        farmer_type:
+        gender:
           type: string
-          enum: ['Marginal','Small','Medium','Large','Sharecropper','Tenant','Owner','landless']
-        landsize:
-          type: string
+          enum: ['Male','Female','Transgender male','Transgender female']
         contactno:
           type: string
+        disability: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Disability'
+    Disability:
+      type: object
+      properties:
+        registration_id:
+          type: string
+          format: string
+          example: 'DR20230502001-001'
+        certificate_issue_date:
+          type: string
+          description: Certificate issue date 
+          example: '15-Jan-1986'
+        disability_since:
+          type: string
+          format: string
+          example: '05-Dec-1985'
+        disability_type:
+          type: string
+          format: string
+          example: 'Mobility | Cerebral Palsy'
+        disability_percentage:
+          type: string
+          format: string
+          example: '97'        
+        disability_by_birth:
+          type: string
+          format: string
+          example: 'No'        
+        identifier_institutation:
+          type: string
+          format: string
+          example: 'Village Health Center'        
+        treating_institutation:
+          type: string
+          format: string
+          example: 'Urban Health Center'          
     SupportedEligibility:
       type: object
       properties:
-        claim_id:
+        eligibity_id:
           type: string
           format: string
-        claim_type:
+        eligibity_type:
           type: string
-          description: claim type 
-          example: IS_A_FARMER
-          enum: ['IS_A_FARMER']
+          description: Supprted eligibity checks by disability registry 
+          example: IS_DISABLE
+          enum: ['IS_DISABLE']
         response_format:
           type: string
           enum: ['json','boolean','pdf','png','jpeg']
@@ -717,13 +765,13 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/FarmerRegistrationEvent'
-    FarmerRegistrationEvent:
+              - $ref: '#/components/schemas/DisableRegistrationEvent'
+    DisableRegistrationEvent:
       type: object
       properties:
         event_code:
           type: string
-          enum: ['FARMER_REGISTRATION']
+          enum: ['DISABLE_PERSON_REGISTRATION']
           description: 'To subscribe this event send this code in subscription request'
         response_format:
           type: string
@@ -732,17 +780,28 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/FarmerInfo'
+              - $ref: '#/components/schemas/DisabilityInfo'
     SubscriptionRequest:
       type: object
       properties:
         event_code:
           type: string
-          enum: ['FARMER_REGISTRATION']
+          enum: ['DISABLE_PERSON_REGISTRATION']
           description: 'To subscribe this event send this code in subscription request'
         client_id:
           type: string
         callback_url:
+          type: string
+    UnSubscribeRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['DISABLE_PERSON_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        reason:
           type: string
     SubscriptionResponse:
       type: object
@@ -753,25 +812,22 @@ components:
           type: string
         error_code:
           type: string
-        subscribed_events:
-          type: string
-          example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in request
         data: 
           type: array
+          description: 'List of all subscribed events with registry'
           items:
             $ref: '#/components/schemas/SubscriptionRequest'
-    EligibilityIsFarmerCheck:
+    EligibilityIsDisableCheck:
       type: object
       properties:
-        claim_id:
+        eligibity_id:
           type: string
           format: string
-        claim_type:
+        eligibity_type:
           type: string
-          description: claim type 
-          example: IS_A_FARMER
-          enum: ['IS_A_FARMER']
+          description: eligibity type 
+          example: IS_DISABLE
+          enum: ['IS_DISABLE']
         response_format:
           type: string
           enum: ['json','boolean','pdf','png','jpeg'] 
@@ -784,7 +840,7 @@ components:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/EligibilityIsFarmerCheck'
+              - $ref: '#/components/schemas/EligibilityIsDisableCheck'
         attestation:
           $ref: '#/components/schemas/EligibilityVerifier'
     EligibilityVerifier:
@@ -792,7 +848,7 @@ components:
       properties:
         institutation_code:
           type: string
-          enum: ['GOV-AGRI-GUJ','GOV-AGRI-MH']
+          enum: ['GOV-HEALTH-DEPT-GUJ','GOV-HEALTH-DEPT-MH']
         institutation_name:
           type: string
           example: Department of Agricalture
@@ -805,7 +861,7 @@ components:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/EligibilityIsFarmerCheck'
+              - $ref: '#/components/schemas/EligibilityIsDisableCheck'
         attestation:
           $ref: '#/components/schemas/EligibilityVerifier'
         issuance_metadata:
@@ -813,15 +869,15 @@ components:
           additionalProperties:
             type: string
           example:
-            'FARMER_CERTIFICATE_NO': 'IN-GJ-01-23456'
-            'FARMER_TYPE': 
+            'DISABILITY_CERTIFICATE_NO': 'IN-GJ-01-23456'
+            'DISABILITY_TYPE': 
               enum: ['owner','rented']
     Identifier:
       type: object
       properties:
         type:
           type: string
-          enum: ['NATIONAL_ID','FARMER_REG_NO']
+          enum: ['NATIONAL_ID','DISABILITY_CERTIFICATE_NO']
         value:
           type: string
           example: 345678912
@@ -838,14 +894,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-#    spmis_auth:
-#      type: http
-#      scheme: bearer
-#      bearerFormat: jwt
-#      flows:
-#        implicit:
-#          authorizationUrl: https://localhost:8081/oauth/authorize
-#          scopes:
-#            read:search: Allowed to perform search operation
-#            read:claims: Read list of claims
