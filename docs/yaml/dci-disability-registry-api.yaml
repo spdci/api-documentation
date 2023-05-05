@@ -718,6 +718,10 @@ components:
           type: string
           format: string
           example: 'DR20230502001-001'
+        certificate_issue_no:
+          type: string
+          description: Certificate number
+          example: '15-Jan-1986'
         certificate_issue_date:
           type: string
           description: Certificate issue date 
@@ -729,7 +733,12 @@ components:
         disability_type:
           type: string
           format: string
-          example: 'Mobility | Cerebral Palsy'
+          example: 'Mobility | Spastic hemiplegic cerebral palsy'
+        disability_icd10_code:
+          type: string
+          format: string
+          example: 'G80.1'
+
         disability_percentage:
           type: string
           format: string
