@@ -47,6 +47,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'          
+        '202':
+          description: Accepted 
         '400':
           description: Bad Request
           content:
@@ -349,11 +351,11 @@ paths:
     post:
       tags:
         - Event subscription  
-      summary: To subscribe for specific event
-      description: Response will contain eligibity details
+      summary: To un-subscribe for specific event
+      description: Response will contain list of subscribed events
       operationId: ''
       requestBody:
-        description: send details of identifier
+        description: 'Request to un-subscribe'
         content:
           application/json:
             schema:
