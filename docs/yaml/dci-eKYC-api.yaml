@@ -11,9 +11,11 @@ servers:
     url: https://localhost:8081/
 tags:
   - name: e-KYC using OTP
-    description: 'List of APIs to validate and take consent of beneficiaries from the National ID system' 
+    description: '' 
+  - name: e-KYC using Demographic 
+    description: '' 
   - name: e-KYC using BioMetric
-    description: 'List of APIs to validate and take consent of beneficiaries from the National ID system' 
+    description: '' 
 paths:
   /sendotp:
     post:
@@ -112,6 +114,83 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ValidateOTPRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /demographic:
+    post:
+      tags:
+        - e-KYC using Demographic
+      summary: 'To perform e-KYC using demographic information'
+      description: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemographicEkycRequest'     
         required: true
       responses:
         '102':
@@ -503,6 +582,40 @@ components:
         identifier_value:
           type: string
           example: 345678912    
+    DemographicEkycRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/HumanName'
+        dob:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        person_photo:
+          $ref: '#/components/schemas/ImageInfo'
+    HumanName:
+      type: object
+      properties:
+        suffix:
+          type: string
+          example: PhD
+        prefix:
+          type: string
+          example: Mr.
+        first_name:
+          type: string
+          example: john
+        middle_name:
+          type: string
+          example: doe
+        last_name:
+          type: string
+          example: doe
     FingerPrintEkycRequest:
       allOf: 
         - $ref: '#/components/schemas/IdentifierType'
@@ -549,6 +662,7 @@ components:
           type: string
         image_base_64_string:
           type: string
+          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'
           description: Base64 encoded image data 
         image_creation_date:
           type: string
