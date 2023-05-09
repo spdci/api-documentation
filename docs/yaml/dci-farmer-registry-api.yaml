@@ -1,7 +1,9 @@
 openapi: 3.0.3
 info:
   title: Farmer registry APIs
-  description: ''
+  description: 'A Farmer registry API is an application programming interface that allows developers to access data from a farmer registry. A farmer registry is a database that contains information about farmers, including their contact information, location, farm size, crops grown, and other relevant details.
+  
+  The Farmer registry API provides a standardized way for developers to access data from a farmer registry, which can make it easier and faster to build applications that support farmers. '
   version: 0.0.1
 servers:
   - description: Farmer registry access point
@@ -173,6 +175,14 @@ paths:
       summary: Get list of eligibility determination supported by registry
       description: ''
       operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
       responses:
         '200':
           description: successful operation
@@ -180,8 +190,21 @@ paths:
             application/json:
               schema: 
                 type: array
+                example: '[
+                          {
+                            "claim_id": "string",
+                            "claim_type": "POVERTY_SCORE",
+                            "response_format": "json"
+                          },{
+                            "claim_id": "string",
+                            "claim_type": "IS_FARMER",
+                            "response_format": "json"
+                          }
+                        ]'
                 items:
-                  $ref: '#/components/schemas/SupportedEligibility'          
+                  allOf:
+                    - $ref: '#/components/schemas/IsFarmerEligibility'
+                    - $ref: '#/components/schemas/PovertyScoreEligibility'
       security:
         - spmis_auth:
             - read:claims
@@ -191,6 +214,14 @@ paths:
       summary: To get information of claim for person
       description: Response will contain claim details
       operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
       requestBody:
         description: ''
         content:
@@ -279,7 +310,6 @@ paths:
       security:
         - spmis_auth:
             - read:eligibity
-
   /subscribe:
     post:
       tags:
@@ -807,6 +837,40 @@ components:
         last_name:
           type: string
           example: doe
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+    Contact:
+      type: object
+      properties:
+        email:
+          type: string
+        phone:
+          type: string
+    Proof:
+      type: object
+      properties:
+        type:
+          type: string
+          example: 'Ed25519Signature2018'        
+        created:
+          type: string
+          example: '2023-05-09T12:34:56Z'      
+        verificationMethod:
+          type: string
+          example: 'did:example:123#key-1'        
+        proofPurpose:
+          type: string
+          example: 'assertionMethod'       
+        jws:
+          type: string
+          example: 'eyJhbGciOiJFZDI1NTE5U2lnbmF0dXJlMjAxOCIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..iHCBYnF2ovIe9hjaaxEC25N-2P8w4Qtf9zQBUV-zXnLHfYqzzubpI8f0mvmXdD6rvYB-9Zx_bFdK46e1IcblDA'        
     FarmerInfo:
       type: object
       properties:
@@ -830,7 +894,7 @@ components:
           type: string
         contactno:
           type: string
-    SupportedEligibility:
+    IsFarmerEligibility:
       type: object
       properties:
         claim_id:
@@ -843,7 +907,7 @@ components:
           enum: ['IS_A_FARMER']
         response_format:
           type: string
-          enum: ['json','boolean','pdf','png','jpeg']
+          enum: ['json']
     SupportedEvents:
       type: object
       properties:
@@ -852,6 +916,20 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/FarmerRegistrationEvent'
+    PovertyScoreEligibility:
+      type: object
+      properties:
+        claim_id:
+          type: string
+          format: string
+        claim_type:
+          type: string
+          description: Poverty score check 
+          example: POVERTY_SCORE
+          enum: ['POVERTY_SCORE']
+        response_format:
+          type: string
+          enum: ['json']
     UnSubscribeRequest:
       type: object
       properties:
@@ -906,61 +984,127 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionRequest'
-    EligibilityIsFarmerCheck:
-      type: object
-      properties:
-        claim_id:
-          type: string
-          format: string
-        claim_type:
-          type: string
-          description: claim type 
-          example: IS_A_FARMER
-          enum: ['IS_A_FARMER']
-        response_format:
-          type: string
-          enum: ['json','boolean','pdf','png','jpeg'] 
     EligibilityDeterminationRequest:
       type: object
       properties:
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-        operations:
+        payload:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/EligibilityIsFarmerCheck'
-        attestation:
-          $ref: '#/components/schemas/EligibilityVerifier'
-    EligibilityVerifier:
+              - $ref: '#/components/schemas/VerifiableCredentialIsFarmer'
+              - $ref: '#/components/schemas/VerifiableCredentialPovertyScore'
+    VerifiableCredentialIsFarmer:
       type: object
       properties:
-        institutation_code:
+        context:
+          type: array
+          example: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
+          items:
+            type: string
+            enum: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
+        type:
+          type: array
+          example: ['VerifiableCredential','FarmerCredential']
+          items:
+            type: string
+            items:
+              type: string
+            example: ["VerifiableCredential", "FarmerCredential"]                 
+        issuer: 
           type: string
-          enum: ['GOV-AGRI-GUJ','GOV-AGRI-MH']
-        institutation_name:
+          example: 'did:farmer-registry:345678912'
+        issuanceDate:
           type: string
-          example: Department of Agricalture
+        expirationDate:
+          type: string
+        credentialSubject:
+          $ref: '#/components/schemas/CredentialSubject'
+        proof:
+          $ref: '#/components/schemas/Proof'
+    VerifiableCredentialPovertyScore:
+      type: object
+      properties:
+        context:
+          type: array
+          example: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
+          items:
+            type: string
+            enum: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
+        type:
+          type: array
+          example: ['VerifiableCredential','FarmerPovertyScoreCredential']
+          items:
+            type: string
+            items:
+              type: string
+            example: ["VerifiableCredential", "FarmerPovertyScoreCredential"]                 
+        issuer: 
+          type: string
+          example: 'did:farmer-registry:345678912'
+        issuanceDate:
+          type: string
+        expirationDate:
+          type: string
+        credentialSubject:
+          $ref: '#/components/schemas/CredentialSubject'
+        proof:
+          $ref: '#/components/schemas/Proof'
+    CredentialSubject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        id:
+          type: string
+        person:
+          $ref: '#/components/schemas/HumanName'
+        address:
+          $ref: '#/components/schemas/Address'
+        contact:
+          $ref: '#/components/schemas/Contact' 
     EligibilityDeterminationResponse:
       type: object
       properties:
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-        operations:
+        verifiableCredential:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/EligibilityIsFarmerCheck'
-        attestation:
-          $ref: '#/components/schemas/EligibilityVerifier'
-        issuance_metadata:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            'FARMER_CERTIFICATE_NO': 'IN-GJ-01-23456'
-            'FARMER_TYPE': 
-              enum: ['owner','rented']
+              - $ref : '#/components/schemas/VerifiableCredentialIsFarmerResponse'
+              - $ref : '#/components/schemas/VerifiableCredentialPovertyScoreResponse'
+    VerifiableCredentialIsFarmerResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'https://registry-host/isfarmer/NATIONAL_ID/345678912'
+        issuer:
+          type: string
+          example: 'https://registry-host.com'
+        issuanceDate:
+          type: string
+          example: '2022-05-09T10:11:12Z'          
+        credentialSubject:
+            $ref : '#/components/schemas/CredentialSubject'
+        is_farmer:
+          type: boolean
+          example: true
+    VerifiableCredentialPovertyScoreResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'https://registry-host/isfarmer/NATIONAL_ID/345678912'
+        issuer:
+          type: string
+          example: 'https://registry-host.com'
+        issuanceDate:
+          type: string
+          example: '2022-05-09T10:11:12Z'          
+        credentialSubject:
+            $ref : '#/components/schemas/CredentialSubject'
+        poverty_score:
+          type: boolean
+          example: '70%'
     EventsRequest:
       type: object
       properties:
@@ -1000,7 +1144,6 @@ components:
           type: string
         error_message:
           type: string
-
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http

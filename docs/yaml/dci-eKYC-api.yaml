@@ -19,7 +19,7 @@ tags:
   - name: e-KYC using BioMetric
     description: '' 
 paths:
-  /sendotp:
+  /ekyc/sendotp:
     post:
       tags:
         - e-KYC using OTP
@@ -94,7 +94,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /validateOTP:
+  /ekyc/validateOTP:
     post:
       tags:
         - e-KYC using OTP
@@ -169,7 +169,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /demographic:
+  /ekyc/demographic:
     post:
       tags:
         - e-KYC using Demographic
@@ -244,7 +244,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /biometric/fingerprint:
+  /ekyc/biometric/fingerprint:
     post:
       tags:
         - e-KYC using BioMetric
@@ -319,7 +319,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /biometric/iris:
+  /ekyc/biometric/iris:
     post:
       tags:
         - e-KYC using BioMetric
@@ -394,7 +394,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /biometric/face:
+  /ekyc/biometric/face:
     post:
       tags:
         - e-KYC using BioMetric

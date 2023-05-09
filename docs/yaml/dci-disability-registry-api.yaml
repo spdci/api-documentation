@@ -1,7 +1,9 @@
 openapi: 3.0.3
 info:
   title: Disability registry APIs
-  description: ''
+  description: ' **A Disability registry APIs** is an application programming interface that allows developers to access data from a disability registry. A disability registry is a database that contains information about individuals with disabilities, including their demographic information, medical history, and disability status.
+The Disability registry API can be used by developers to build applications and tools that provide services and support for people with disabilities. For example, a developer could use the API to build an app that helps people with disabilities find accessible transportation or locate disability-friendly housing.
+The Disability registry API provides a standardized way for developers to access data from a disability registry, which can make it easier and faster to build applications that support people with disabilities.'
   version: 0.0.1
 servers:
   - description: Disability registry access point
@@ -295,6 +297,14 @@ paths:
             schema:
               $ref: '#/components/schemas/SubscriptionRequest'     
         required: true
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
       responses:
         '200':
           description: Successful operation
@@ -361,6 +371,14 @@ paths:
             schema:
               $ref: '#/components/schemas/UnSubscribeRequest'     
         required: true
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
       responses:
         '200':
           description: Successful operation
@@ -427,6 +445,14 @@ paths:
             schema:
               $ref: '#/components/schemas/EventsRequest'     
         required: true
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
       responses:
         '200':
           description: Successful operation
