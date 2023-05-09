@@ -15,7 +15,7 @@ tags:
     description: 'The event subscription APIs facilate to get notification when any event happens in disability registry, The client application meed to register for each event seperately with provided client id and client secret'
 
 paths:
-  /v1/search:
+  /search:
     post:
       tags:
         - Search API
@@ -94,7 +94,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /v1/on-search:
+  /on-search:
     post:
       tags:
         - Search API 
@@ -168,7 +168,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /v1/eligibility-determination:
+  /eligibility-determination:
     get:
       tags:
         - Eligibility determination API 
@@ -252,7 +252,7 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-  /v1/subscription-list:
+  /subscription-list:
     get:
       tags:
         - Event subscription 
@@ -281,7 +281,7 @@ paths:
       security:
         - spmis_auth:
             - read:eligibity
-  /v1/subscribe:
+  /subscribe:
     post:
       tags:
         - Event subscription  
@@ -347,7 +347,7 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-  /v1/unsubscribe:
+  /unsubscribe:
     post:
       tags:
         - Event subscription  
@@ -413,6 +413,73 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
+  /events:
+    post:
+      tags:
+        - Event subscription  
+      summary: The events will retrieve all events for specific subscription
+      description: Response will contain eligibity details
+      operationId: ''
+      requestBody:
+        description: send details of identifier
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventsRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
+
 components:
   parameters:
     authorization:
@@ -803,6 +870,31 @@ components:
           type: string
         callback_url:
           type: string
+        status:
+          type: string        
+    EventsRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['DISABLE_PERSON_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        start_date:
+          type: string
+          description: 'Date from which events to retrieve'
+        end_date:
+          type: string        
+          description: 'Date upto which events to retrieve'        
+    EventsResponse:
+      type: object
+      properties:
+        eventlist:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/DisableRegistrationEvent'
     UnSubscribeRequest:
       type: object
       properties:
@@ -822,6 +914,8 @@ components:
         return_message:
           type: string
         error_code:
+          type: string
+        status:
           type: string
         data: 
           type: array

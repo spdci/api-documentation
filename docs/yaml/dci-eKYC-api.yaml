@@ -1,7 +1,9 @@
 openapi: 3.0.3
 info:
-  title: eKYC API
-  description: ''
+  title: e-KYC APIs
+  description: 'The eKYC (Electronic Know Your Customer) is a process of verifying the identity of a customer or client using electronic means. The demographic information of the customer can be used to verify their identity in the eKYC process. The demographic information typically includes details such as name, date of birth, address, and other personal information.
+
+JSON (JavaScript Object Notation) is a data format that is commonly used for transmitting data over the internet. It is a lightweight format that is easy to read and write. JSON can be used to represent demographic information in the eKYC process.'
   version: 0.0.1
 servers:
   # Added by API Auto Mocking Plugin
@@ -31,8 +33,6 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
         description: Search request body
         content:
@@ -183,8 +183,6 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
         description: Search request body
         content:
@@ -511,7 +509,7 @@ components:
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-mosip','x-farmer','x-social','x-crvs','x-student']
+        enum: ['x-mosip','x-crvs']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:

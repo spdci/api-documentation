@@ -11,7 +11,7 @@ tags:
   - name: Authorization API
     description: 'Authorization API' 
 paths:
-  /v1/auth:
+  /auth:
     post:
       tags:
         - Authorization API
@@ -24,7 +24,7 @@ paths:
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
       requestBody:
-        description: Search request body
+        description: 'Auth request'
         content:
           application/json:
             schema:
@@ -84,7 +84,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /v1/login:
+  /login/withcredentials:
     post:
       tags:
         - Authorization API
@@ -157,6 +157,154 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /login/generateotp:
+    post:
+      tags:
+        - Authorization API
+      summary: 'Generate OTP using national id'
+      description: Generate OTP using national id or refistered mobile no or alternate no registred with registry or ID system
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendOTPRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateOTPResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+ 
+      security:
+        - spmis_auth:
+            - read:search
+  /login/validateOTP:
+    post:
+      tags:
+        - Authorization API
+      summary: Validate OTP which was generated with national id
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: 'Validate OTP request'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateOTPRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
 
 
 components:
@@ -235,6 +383,19 @@ components:
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
   schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: string
+        return_message:
+          type: string
+        error_code:
+          type: string
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request
     AuthRequest:
       type: object
       properties:
@@ -246,6 +407,11 @@ components:
           type: string
           example: 8636abe2-bdfb-4238-8bff-200ed3652d1e
           description: The secret token provided along with client id
+        grant_type:
+          type: string
+          example: 'client_credentials'
+        scope:
+          $ref: '#/components/schemas/OidcScope'
     LoginRequest:
       type: object
       properties:
@@ -287,6 +453,44 @@ components:
           description: The client id provided to SP system
         tokenInfo:
           $ref: '#/components/schemas/TokenInfo'
+    GenerateOTPResponse:
+      type: object
+      properties:
+        otp:
+          type: string
+          example: 335695
+          description: OTP
+        success:
+          type: string
+        return_message:
+          type: string
+        error_code:
+          type: string
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request          
+    OidcScope:
+      type: string
+      description: ''
+      items:
+        enum:
+          - disburse.disburse
+          - disburse.on-disburse
+          - disburse.status
+          - disburse.on-status
+          - mapper.link
+          - mapper.unlink
+          - mapper.update
+          - mapper.on-update
+          - mapper.resolve
+          - mapper.on-resolve
+          - mapper.status
+          - mapper.on-status
+          - credential.issue
+          - credential.on-issue
+          - credential.search
+          - credential.on-search
     TokenInfo:
       type: object
       properties:
@@ -306,6 +510,38 @@ components:
           type: string
         scope:
           type: string
+    SendOTPRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'    
+      type: object
+      properties:
+        uin_registered_contact_no:
+          type: string
+          example: 12345679
+        alternate_contact_no:
+          type: string
+          example: 12345679    
+    ValidateOTPRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+      type: object
+      properties:
+        otp:
+          type: string
+    IdentifierType:
+      type: object
+      properties:
+        identifier_type:
+          type: string
+          enum: ['NATIONAL_ID','FARMER_REG_NO']
+    IdentifierValue:
+      type: object
+      properties:
+        identifier_value:
+          type: string
+          example: 345678912
     HttpErrorResponse:
       description: HTTP layer error details
       properties:

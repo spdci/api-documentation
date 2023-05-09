@@ -15,7 +15,7 @@ tags:
     description: 'The event subscription APIs facilate to get notification when any event happens in farmer registry, The client application meed to register for each event seperately with provided client id and client secret'
 
 paths:
-  /v1/search:
+  /search:
     post:
       tags:
         - Search API
@@ -92,7 +92,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /v1/on-search:
+  /on-search:
     post:
       tags:
         - Search API 
@@ -166,7 +166,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /v1/eligibility-determination:
+  /eligibility-determination:
     get:
       tags:
         - Eligibility determination API 
@@ -192,7 +192,7 @@ paths:
       description: Response will contain claim details
       operationId: ''
       requestBody:
-        description: send details of identifier
+        description: ''
         content:
           application/json:
             schema:
@@ -250,7 +250,7 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-  /v1/subscription:
+  /subscription-list:
     get:
       tags:
         - Event subscription 
@@ -278,15 +278,17 @@ paths:
                   $ref: '#/components/schemas/SupportedEvents'          
       security:
         - spmis_auth:
-            - read:claims
+            - read:eligibity
+
+  /subscribe:
     post:
       tags:
         - Event subscription  
       summary: To subscribe for specific event
-      description: Response will contain claim details
+      description: Response will contain eligibity details
       operationId: ''
       requestBody:
-        description: send details of identifier
+        description: ''
         content:
           application/json:
             schema:
@@ -299,6 +301,138 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubscriptionResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
+  /unsubscribe:
+    post:
+      tags:
+        - Event subscription  
+      summary: To un-subscribe for specific event
+      description: Response will contain list of subscribed events
+      operationId: ''
+      requestBody:
+        description: 'Request to un-subscribe'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnSubscribeRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
+  /events:
+    post:
+      tags:
+        - Event subscription  
+      summary: The events will retrieve all events for specific subscription
+      description: Response will contain eligibity details
+      operationId: ''
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventsRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'     
         '400':
           description: Bad Request
           content:
@@ -718,6 +852,17 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/FarmerRegistrationEvent'
+    UnSubscribeRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['DISABLE_PERSON_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        reason:
+          type: string    
     FarmerRegistrationEvent:
       type: object
       properties:
@@ -816,6 +961,29 @@ components:
             'FARMER_CERTIFICATE_NO': 'IN-GJ-01-23456'
             'FARMER_TYPE': 
               enum: ['owner','rented']
+    EventsRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['FARMER_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        start_date:
+          type: string
+          description: 'Date from which events to retrieve'
+        end_date:
+          type: string        
+          description: 'Date upto which events to retrieve'
+    EventsResponse:
+      type: object
+      properties:
+        eventlist:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/FarmerRegistrationEvent'    
     Identifier:
       type: object
       properties:
