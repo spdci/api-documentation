@@ -192,12 +192,12 @@ paths:
                 type: array
                 example: '[
                           {
-                            "claim_id": "string",
-                            "claim_type": "POVERTY_SCORE",
+                            "elegibity_check_id": "string",
+                            "elegibity_check_type": "POVERTY_SCORE",
                             "response_format": "json"
                           },{
-                            "claim_id": "string",
-                            "claim_type": "IS_FARMER",
+                            "elegibity_check_id": "string",
+                            "elegibity_check_type": "IS_FARMER",
                             "response_format": "json"
                           }
                         ]'
@@ -897,10 +897,10 @@ components:
     IsFarmerEligibility:
       type: object
       properties:
-        claim_id:
+        elegibity_check_id:
           type: string
           format: string
-        claim_type:
+        elegibity_check_type:
           type: string
           description: claim type 
           example: IS_A_FARMER
@@ -919,10 +919,10 @@ components:
     PovertyScoreEligibility:
       type: object
       properties:
-        claim_id:
+        elegibity_check_id:
           type: string
           format: string
-        claim_type:
+        elegibity_check_type:
           type: string
           description: Poverty score check 
           example: POVERTY_SCORE
@@ -1010,6 +1010,8 @@ components:
             items:
               type: string
             example: ["VerifiableCredential", "FarmerCredential"]                 
+        determine:
+          $ref : '#/components/schemas/IsFarmerEligibility'
         issuer: 
           type: string
           example: 'did:farmer-registry:345678912'
@@ -1038,6 +1040,8 @@ components:
             items:
               type: string
             example: ["VerifiableCredential", "FarmerPovertyScoreCredential"]                 
+        determine:
+          $ref : '#/components/schemas/PovertyScoreEligibility'
         issuer: 
           type: string
           example: 'did:farmer-registry:345678912'
