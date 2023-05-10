@@ -192,12 +192,12 @@ paths:
                 type: array
                 example: '[
                           {
-                            "elegibity_check_id": "string",
-                            "elegibity_check_type": "POVERTY_SCORE",
+                            "eligibility_check_id": "string",
+                            "eligibility_check_type": "POVERTY_SCORE",
                             "response_format": "json"
                           },{
-                            "elegibity_check_id": "string",
-                            "elegibity_check_type": "IS_FARMER",
+                            "eligibility_check_id": "string",
+                            "eligibility_check_type": "IS_FARMER",
                             "response_format": "json"
                           }
                         ]'
@@ -897,10 +897,10 @@ components:
     IsFarmerEligibility:
       type: object
       properties:
-        elegibity_check_id:
+        eligibility_check_id:
           type: string
           format: string
-        elegibity_check_type:
+        eligibility_check_type:
           type: string
           description: claim type 
           example: IS_A_FARMER
@@ -919,10 +919,10 @@ components:
     PovertyScoreEligibility:
       type: object
       properties:
-        elegibity_check_id:
+        eligibility_check_id:
           type: string
           format: string
-        elegibity_check_type:
+        eligibility_check_type:
           type: string
           description: Poverty score check 
           example: POVERTY_SCORE
