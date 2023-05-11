@@ -198,13 +198,13 @@ components:
         type: string
         example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
       required: true
-      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+      description: Signature created in combination of {payload}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
     x-registry-type:
       in: header
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-mosip','x-farmer','x-social','x-crvs','x-student']
+        enum: ['x-crvs']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:
