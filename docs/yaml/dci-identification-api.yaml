@@ -1,14 +1,10 @@
 openapi: 3.0.3
 info:
   title: Identification APIs
-  description: 'dentification REST APIs are application programming interfaces that allow developers to integrate identification and authentication functionalities into their applications. These APIs typically provide a secure and efficient way to verify the identity of users by allowing them to authenticate with usernames and passwords, API keys, tokens, or other forms of credentials.
+  description: 'Identification REST APIs are application programming interfaces that allow developers to integrate identification and authentication functionalities into their applications. These APIs typically provide a secure and efficient way to verify the identity of users by allowing them to authenticate with usernames and passwords, API keys, tokens, or other forms of credentials.
   Some common functionalities that identification REST APIs may offer send otp/ validate otp / identify based on demographic and biometric. These APIs can be used by developers to build a variety of applications such as social protection system that require secure identification and ekyc.'
   version: 0.0.1
 servers:
-  # Added by API Auto Mocking Plugin
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/0.0.1
   - description: Gateway endpoint
     url: https://localhost:8081/
 tags:

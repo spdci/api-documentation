@@ -4,6 +4,9 @@ info:
   description: ''
   version: 0.0.1
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/0.0.1
   - description: Gateway endpoint
     url: https://localhost:8081/
 tags:
@@ -240,17 +243,18 @@ components:
 
   schemas:
     SearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/FilterGroupCRVSRegistry'
       type: object
-      example: '{"transaction_id":"0c96614c-7255-4774-b109-cd53ee851769","additionalFields":["contact","address","dob"],"filtergroups":[{"groupid":"A","operator-with-next-group":"and","fields":[{"fieldname":"identifier.type","operator":"contains","value":"NATIONAL_ID","nextfieldoperator":"and"},{"fieldname":"identifier.value","operator":"contains","value":"345678912","nextfieldoperator":""}]},{"groupid":"B","operator-with-next-group":"","fields":[{"fieldname":"name.first_name","operator":"contains","value":"john","nextfieldoperator":"or"},{"fieldname":"name.last_name","operator":"contains","value":"doe","nextfieldoperator":""}]}],"sortby":[{"fieldname":"name.first_name","order":"asc"}],"pagination":{"page_size":10,"page_number":5}}'
       properties:
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee851769
-        filtergroups:
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/FilterGroupCRVSRegistry'
+#        filtergroups:
+#          type: array
+#          items:
+#            oneOf:
+#              - $ref: '#/components/schemas/FilterGroupCRVSRegistry'
         sortby:
           $ref: '#/components/schemas/Sort'
         pagination:
@@ -262,17 +266,61 @@ components:
             page_number:
               type: number
               example: 5  
+    SearchCondition:
+      description: Expression with a condition
+      type: object
+      properties:
+        expression1:
+          $ref: '#/components/schemas/SearchExpression'
+        condition:
+          $ref: '#/components/schemas/SearchExpCondition'
+        expression2:
+          $ref: '#/components/schemas/SearchExpression'
+      required:
+        - expression1
+    SearchConditionList:
+      items:
+        $ref: '#/components/schemas/SearchCondition'
+    SearchExpCondition:
+      description: Condition in an expression
+      type: string
+      enum:
+        - and
+        - or
+        - not
+      example: and
+    SearchExpOperator:
+      description: Operator in an expression
+      type: string
+      enum:
+        - gt
+        - lt
+        - eq
+        - ge
+        - le
+      example: eq
+    SearchExpression:
+      description: Expression
+      properties:
+        seq_num:
+          description: Expression sequence number for correlation
+          type: number
+          example: 1
+        attribute_name:
+          type: string
+          description: attribute name
+          enum: ['']
+        operator:
+          $ref: '#/components/schemas/SearchExpOperator'
+        attribute_value:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
     FilterGroupCRVSRegistry:
       type: object
       properties:
-        groupid:
-          type: string
-          format: string
-          example: "A"
-        operator-with-next-group:
-          type: string
-          description: 'Operation with next group' 
-          enum: ["and", "or"]
         fields:
           type: array
           items:
@@ -285,12 +333,9 @@ components:
       type: object
       required:
         - operator
-        - nextfieldoperator
       properties: 
         operator:
           $ref: '#/components/schemas/FieldOperator'
-        nextfieldoperator: 
-          $ref: '#/components/schemas/GroupOperator'
     IdentifierTypeField:
       description: 'Search with identifier type'
       allOf: 

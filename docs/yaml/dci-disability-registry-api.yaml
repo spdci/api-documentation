@@ -104,6 +104,7 @@ paths:
       description: The requester will pass information submitted in search and if response prepared then it will send content
       parameters:
         - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"        
         - $ref: "#/components/parameters/authorization"
         - $ref: '#/components/parameters/x-registry-type'
         - $ref: '#/components/parameters/x-message-id'
@@ -202,6 +203,14 @@ paths:
             schema:
               $ref: '#/components/schemas/EligibilityDeterminationRequest'     
         required: true
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"        
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'      
       responses:
         '200':
           description: Successful operation
@@ -267,8 +276,6 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
       description: ''
       operationId: ''
       responses:
@@ -539,7 +546,7 @@ components:
         type: string
         example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
       required: true
-      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+      description: Signature created in combination of {payload}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
     x-registry-type:
       in: header
       name: x-registry-type
@@ -775,7 +782,7 @@ components:
           example: john
         middle_name:
           type: string
-          example: doe
+          example: m
         last_name:
           type: string
           example: doe
@@ -800,6 +807,7 @@ components:
           enum: ['Male','Female','Transgender male','Transgender female']
         contactno:
           type: string
+          example: '+61-7894562317'
         disability: 
           type: array
           items:
@@ -831,7 +839,6 @@ components:
           type: string
           format: string
           example: 'G80.1'
-
         disability_percentage:
           type: string
           format: string
@@ -896,8 +903,10 @@ components:
           type: string
         callback_url:
           type: string
+          example: 'https://youdomain.com/endpoint'
         status:
           type: string        
+          enum: ['REGISTERED','ERROR']
     EventsRequest:
       type: object
       properties:
@@ -907,11 +916,14 @@ components:
           description: 'To subscribe this event send this code in subscription request'
         client_id:
           type: string
+          example: '15fd01b2-eff0-11ed-a05b-0242ac120003'
         start_date:
           type: string
+          example: '05/01/2021'
           description: 'Date from which events to retrieve'
         end_date:
-          type: string        
+          type: string       
+          example: '05/31/2023' 
           description: 'Date upto which events to retrieve'        
     EventsResponse:
       type: object
@@ -930,19 +942,22 @@ components:
           description: 'To subscribe this event send this code in subscription request'
         client_id:
           type: string
+          example: '15fd01b2-eff0-11ed-a05b-0242ac120003'
         reason:
           type: string
+          example: 'Opted for other service'
     SubscriptionResponse:
       type: object
       properties:
         success:
-          type: string
+          type: boolean
+          enum: [true,false]
         return_message:
           type: string
-        error_code:
-          type: string
+          example: 'Subscribed successfully'
         status:
-          type: string
+          type: string        
+          enum: ['REGISTERED','ERROR']
         data: 
           type: array
           description: 'List of all subscribed events with registry'
@@ -1017,9 +1032,10 @@ components:
       properties:
         error_code:
           type: string
+          enum: ['ERR_001','ERR_002','ERR_001']
         error_message:
           type: string
-
+          example: 'This is error'
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
