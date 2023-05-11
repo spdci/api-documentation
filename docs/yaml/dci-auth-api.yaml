@@ -5,6 +5,9 @@ info:
   version: 0.0.1
 
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/0.0.1
   - description: Gateway endpoint
     url: https://localhost:8081/
 tags:
@@ -171,6 +174,7 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-token'        
       requestBody:
         description: Request body
         content:
@@ -247,6 +251,7 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-token'
       requestBody:
         description: 'Validate OTP request'
         content:
@@ -262,7 +267,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'          
+                $ref: '#/components/schemas/LoginResponse'          
         '400':
           description: Bad Request
           content:
@@ -317,6 +322,14 @@ components:
       schema:
         type: string
         example: Bearer <...>        
+    x-token:
+      name: x-token
+      in: header
+      required: true
+      description: 'System token'
+      schema:
+        type: string
+        example: Bearer <...>     
     version:
       in: header
       name: x-api-version
@@ -340,7 +353,7 @@ components:
         type: string
         example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
       required: true
-      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+      description: Signature created in combination of {payload}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
     x-registry-type:
       in: header
       name: x-registry-type
@@ -354,7 +367,7 @@ components:
       name: x-sender-id
       schema:
         type: string
-        example: "Farmer help programme "
+        example: 'SP_SYSTEM_1'
       required: true
       description: Information about requester , it may be some code of SP system
     x-message-id:
@@ -431,6 +444,12 @@ components:
           type: string
           example: 2fd153ab-86c8-45fb-990d-851840e46061
           description: The client id provided to SP system
+        scope: 
+          $ref: '#/components/schemas/OidcScope'
+        grant_type:
+          type: string
+          enum: [password]
+          example: 'password'
         client_secret_key:
           type: string
           example: 8636abe2-bdfb-4238-8bff-200ed3652d1e
@@ -456,80 +475,85 @@ components:
     GenerateOTPResponse:
       type: object
       properties:
-        otp:
-          type: string
-          example: 335695
-          description: OTP
         success:
-          type: string
+          type: boolean
+          enum: [true,false] 
         return_message:
           type: string
-        error_code:
-          type: string
+          example: 'OTP generated successfully and sent on mobile number ending with XXXX'
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
           description: The transaction_id received in request          
     OidcScope:
       type: string
-      description: ''
+      description: 'The scope attribute provide a way to limit the amount of access that is granted to an access token '
+      example: 'search'
       items:
         enum:
-          - disburse.disburse
-          - disburse.on-disburse
-          - disburse.status
-          - disburse.on-status
-          - mapper.link
-          - mapper.unlink
-          - mapper.update
-          - mapper.on-update
-          - mapper.resolve
-          - mapper.on-resolve
-          - mapper.status
-          - mapper.on-status
-          - credential.issue
-          - credential.on-issue
-          - credential.search
-          - credential.on-search
+          - search
+          - auth
+          - login
+          - subscribe
+          - unsubscribe
+          - ekyc.sendotp
+          - ekyc.validateotp
+          - ekyc.demographic
+          - ekyc.biometric.fingureprint
+          - ekyc.biometric.iris
+          - ekyc.biometric.face
     TokenInfo:
       type: object
       properties:
         access_token:
           type: string
+          description: 'Base64 encoded string - JWT token'
+          example: 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJNNU9XZ1BZLWJ6ekxxS2dib2QxM0lra05lbXNhUWJNQzd3bXdacVVob3kwIn0.eyJleHAiOjE2ODM3NjgxNDIsImlhdCI6MTY4Mzc2Nzg0MiwianRpIjoiYjkzZDExNmItZWUwOS00Y2NkLTk5YzAtYzllNjU0ZWZjYTQ4IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL3NwbWlzIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6Ijg1MTRjMDljLWYyMmMtNDU2Mi1hYTY0LWQyNDYzZTg1NTk1ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6InNwbWlzIiwic2Vzc2lvbl9zdGF0ZSI6IjFmNzQ4YjdiLWU3NmQtNGQ2Yi05M2MxLWVjZjhmM2Q4Y2Q2NiIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLXNwbWlzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiIxZjc0OGI3Yi1lNzZkLTRkNmItOTNjMS1lY2Y4ZjNkOGNkNjYiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJhZG1pbiBhZG1pbiIsInByZWZlcnJlZF91c2VybmFtZSI6ImFkbWluIiwiZ2l2ZW5fbmFtZSI6ImFkbWluIiwiZmFtaWx5X25hbWUiOiJhZG1pbiJ9.lqVRcrJzFZSCFi9Gl4usBknH2eW252Qa8QUWEnmhSkOGl8W7FYN2ro2wruSi3F4cGcPRPADzXFhFGD-Wp3BfOLGzzI7i6x1wAVBhD1AMJN1mXlU0kyrNk_x-UYAsR1jIGhybHpNlqyeG0ao9aa0Aq-MiykZ3n3MA1I_LjxRvl0aQixq-2AkZr773u5vVcYtleXGHe8me8ImUsbGSeD2SkxlkiG7r1XMLKP9MTzDyohABwSY7kVrVE3kXkyr15uKb5V-siWwqTwL9YOqonxHvo-7ji31rsCCgDh9Rs9TpG1e-JKXXoGYq87_3iU0L5iC6e2GddLDLZCI_c7KSGh9Szg'
         expires_in:
-          type: string
+          type: number
+          example: 300
+          description: Validity of access_token  in seconds
         refresh_expires_in:
           type: string
+          description: Validity of refresh_token  in seconds
+          example: 1800
         refresh_token:
           type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NWQzNGVmZi1lMTYxLTQ0NTMtYjE1Zi01ODkxZDA2MGJlOWEifQ.eyJleHAiOjE2ODM3Njk2NDIsImlhdCI6MTY4Mzc2Nzg0MiwianRpIjoiYzg5M2YwYWUtNmYwOS00OGYzLThjMzAtMjQ2NGI5MWM1ZmUwIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL3NwbWlzIiwiYXVkIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL3NwbWlzIiwic3ViIjoiODUxNGMwOWMtZjIyYy00NTYyLWFhNjQtZDI0NjNlODU1OTVlIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InNwbWlzIiwic2Vzc2lvbl9zdGF0ZSI6IjFmNzQ4YjdiLWU3NmQtNGQ2Yi05M2MxLWVjZjhmM2Q4Y2Q2NiIsInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6IjFmNzQ4YjdiLWU3NmQtNGQ2Yi05M2MxLWVjZjhmM2Q4Y2Q2NiJ9.84cZJ-RYVYukbW64-fU72jSrG3VphUoaMxXtP0Uyodo'
+          description: 'Refresh token string value'
         token_type:
           type: string
-        not-before-policy:
-          type: string
+          enum: [Bearer]
         session_state:
           type: string
-        scope:
-          type: string
+          description: 'Used to track session '
+          example: '1f748b7b-e76d-4d6b-93c1-ecf8f3d8cd66'
+        scope: 
+          $ref: '#/components/schemas/OidcScope'
     SendOTPRequest:
       allOf: 
         - $ref: '#/components/schemas/IdentifierType'
         - $ref: '#/components/schemas/IdentifierValue'    
       type: object
       properties:
-        uin_registered_contact_no:
+        scope: 
+          $ref: '#/components/schemas/OidcScope'
+        grant_type:
           type: string
-          example: 12345679
-        alternate_contact_no:
+          enum: [otp]
+        registered_contact_no:
           type: string
-          example: 12345679    
+          example: +61-7894561231
     ValidateOTPRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
       type: object
       properties:
         otp:
           type: string
+          example: 051283
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in which OTP was generated        
     IdentifierType:
       type: object
       properties:
