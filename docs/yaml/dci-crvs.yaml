@@ -9,11 +9,15 @@ servers:
     url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/0.0.1
   - description: Gateway endpoint
     url: https://localhost:8081/
+
 tags:
   - name: Search API
     description: '' 
+  - name: Eligibility determination API
+    description: ''
+  - name: Event subscription
+    description: 'The event subscription APIs facilate to get notification when any event happens in crvs registry, The client application meed to register for each event seperately with provided client id and client secret'
 paths:
-
   /v1/search:
     post:
       tags:
@@ -165,6 +169,277 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /eligibility-determination:
+    get:
+      tags:
+        - Eligibility determination API 
+      summary: Get list of eligibility determination supported by registry
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                example: '[
+                          {
+                            "eligibility_check_type": "IS_ALIVE",
+                            "response_format": "json"
+                          }
+                        ]'
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/IsAliveEligibility'
+      security:
+        - spmis_auth:
+            - read:claims
+    post:
+      tags:
+        - Eligibility determination API 
+      summary: To get information of claim for person
+      description: Response will contain claim details
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EligibilityDeterminationRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityDeterminationResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
+
+  /subscription-list:
+    get:
+      tags:
+        - Event subscription 
+      summary: Get list of supported events in registry
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupportedEvents'          
+      security:
+        - spmis_auth:
+            - read:eligibity
+  /subscribe:
+    post:
+      tags:
+        - Event subscription  
+      summary: To subscribe for specific event
+      description: Response will contain eligibity details
+      operationId: ''
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
+  /unsubscribe:
+    post:
+      tags:
+        - Event subscription  
+      summary: To un-subscribe for specific event
+      description: Response will contain list of subscribed events
+      operationId: ''
+      requestBody:
+        description: 'Request to un-subscribe'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnSubscribeRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
+
+
 components:
   parameters:
     authorization:
@@ -321,25 +596,28 @@ components:
     FilterGroupCRVSRegistry:
       type: object
       properties:
-        fields:
+        query:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/IdentifierTypeField'
-              - $ref: '#/components/schemas/IdentifierValueField'
-              - $ref: '#/components/schemas/RegionField'
+              - $ref: '#/components/schemas/NameField'
+              - $ref: '#/components/schemas/ExpressionAnd'
               - $ref: '#/components/schemas/Repositories'
-    Field:
+    ExpressionOr:
       type: object
-      required:
-        - operator
-      properties: 
-        operator:
-          $ref: '#/components/schemas/FieldOperator'
+      properties:
+        expression:
+          type: string
+          enum: [or]
+    ExpressionAnd:
+      type: object
+      properties:
+        expression:
+          type: string
+          enum: [and]
     IdentifierTypeField:
       description: 'Search with identifier type'
       allOf: 
-        - $ref: '#/components/schemas/Field'
         - type: object
           required:
             - fieldname
@@ -356,7 +634,6 @@ components:
     IdentifierValueField:
       description: 'Search with identifier value'
       allOf: 
-        - $ref: '#/components/schemas/Field'
         - type: object
           required:
             - fieldname
@@ -366,14 +643,33 @@ components:
               type: string
               example: 'identifier.value'
               enum: ['identifier.value']
+            operator:
+              $ref: '#/components/schemas/FieldOperatorAnd'
             value: 
               type: string
               example: "345678912"
               description: 'Any string that contains identifier, for example for identifier.type NATIONAL_ID value may be 345678912'
+    NameField:
+      description: 'Search by name'        
+      allOf: 
+        - type: object
+          required:
+            - fieldname
+            - value
+          properties: 
+            fieldname:
+              type: string
+              example: 'firstname'
+              enum: ['firstname']
+            operator:
+              $ref: '#/components/schemas/FieldOperatorAnd'
+            value: 
+              type: string
+              example: "john"
+              description: 'Search by firstname'
     RegionField:
       description: 'Search by region'        
       allOf: 
-        - $ref: '#/components/schemas/Field'
         - type: object
           required:
             - fieldname
@@ -383,6 +679,8 @@ components:
               type: string
               example: 'region'
               enum: ['location']
+            operator:
+              $ref: '#/components/schemas/FieldOperatorAnd'
             value: 
               type: string
               example: "SE- India"
@@ -390,7 +688,6 @@ components:
               description: 'Search by location'
     Repositories:
       allOf: 
-        - $ref: '#/components/schemas/Field'
         - type: object
           required:
             - fieldname
@@ -400,17 +697,28 @@ components:
               type: string
               example: 'repository_type'
               enum: ['repository_type']
+            operator:
+              $ref: '#/components/schemas/FieldOperatorAnd'
             value: 
               type: string
               example: "Birth"
               enum: ['Birth', 'Death', 'Marriage']
               description: 'Search by repository_type type'
-    FieldOperator:
+    FieldOperatorOr:
       type: string
       enum:
         - or
+    FieldOperatorAnd:
+      type: string
+      enum:
         - and
+    FieldOperatorcontains:
+      type: string
+      enum:
         - contains
+    FieldOperatorLike:
+      type: string
+      enum:
         - like
     GroupOperator:
       type: string
@@ -481,8 +789,10 @@ components:
           $ref: '#/components/schemas/HumanName'
         groom_nationality:
           type: string
+          example: 'Dominican'
         groom_date_of_birth:
           type: string
+          example: '12/05/1983'        
         groom_marital_status:
           type: string
           enum: [unmarried,divorced,widowed]
@@ -500,19 +810,25 @@ components:
           $ref: '#/components/schemas/HumanName'
         bride_nationality:
           type: string
+          example: 'Dominican'
         bride_date_of_birth:
-          type: string
+          type: 'string'
+          example: '12/05/1983'
         bride_marital_status:
           type: string
           enum: [unmarried,divorced,widowed]
         contactno:
           type: string
+          example: '+1-7894561312'
         date_of_marriage:
           type: string
+          example: '12/05/2022'          
         place_of_marriage:
           type: string
+          example: 'Angel Iceland'
         marriage_registration_number:
           type: string
+          example: 'MRN_DC-20221205A12'
     CRVSSearchByBRNResponse:
       type: object
       properties:
@@ -532,14 +848,19 @@ components:
           type: string
         date_of_birth:
           type: string
+          example: '11/17/1980'
         date_of_death:
           type: string
+          example: '01/03/2023'
         gender:
           type: string
+          example: 'male'          
         birth_registration_number:
           type: string
+          example: 'BRN_XP-19801109A11'
         death_registration_number:
           type: string            
+          example: 'DRN_XP-20230309A11'
     CRVSSearchByDRNResponse:
       type: object
       properties:
@@ -557,22 +878,28 @@ components:
           $ref: '#/components/schemas/HumanName'
         contactno:
           type: string
+          example: '+1-7894561312'
         date_of_birth:
           type: string
+          example: '11/17/1980'
         date_of_death:
           type: string
+          example: '01/03/2023'
         gender:
           type: string
+          example: 'male'
         birth_registration_number:
           type: string
+          example: 'BRN_XP-19801109A11'
         death_registration_number:
           type: string
+          example: 'MRN_DC-20221205A12'          
     Identifier:
       type: object
       properties:
         type:
           type: string
-          enum: ['NATIONAL_ID','FARMER_REG_NO']
+          enum: ['NATIONAL_ID','BIRTH_REG_NO']
         value:
           type: string
           example: 345678912
@@ -583,6 +910,206 @@ components:
           type: string
         error_message:
           type: string
+    SupportedEvents:
+      type: object
+      properties:
+        eventlist:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/BirthRegistrationEvent'
+    BirthRegistrationEvent:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['BIRTH_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        response_format:
+          type: string
+          enum: ['json']
+        response_sample:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/CRVSSearchByBRNResponse'
+    SubscriptionRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['BIRTH_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        callback_url:
+          type: string
+    SubscriptionResponse:
+      type: object
+      properties:
+        success:
+          type: string
+        return_message:
+          type: string
+        error_code:
+          type: string
+        subscribed_events:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request
+        data: 
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionRequest'
+    UnSubscribeRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['BIRTH_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        reason:
+          type: string  
+    IsAliveEligibility:
+      type: object
+      properties:
+        eligibility_check_id:
+          type: string
+          format: string
+        eligibility_check_type:
+          type: string
+          description: claim type 
+          example: IS_ALIVE
+          enum: ['IS_ALIVE']
+        response_format:
+          type: string
+          enum: ['json']  
+    EligibilityDeterminationRequest:
+      type: object
+      description: '' 
+      properties:
+        eligibility_codes:
+          type: array
+          items:
+            type: string
+          example: ["IS_ALIVE", "IS_MARRIED", "IS_SENIOR_CITIZEN"]
+          description: 'Is given id valid in farmer registry, This will check in farmer registry for supplied information of ID'
+        national_id:
+          type: string
+          example: 345678912
+#    EligibilityDeterminationRequest:
+#      type: object
+#      properties:
+#        
+#        payload:
+#          type: array
+#          items:
+#            anyOf:
+#              - $ref: '#/components/schemas/VerifiableCredentialIsAlive'
+    VerifiableCredentialIsAlive:
+      type: object
+      properties:
+        context:
+          type: array
+          example: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/crvs/v1']
+          items:
+            type: string
+            enum: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/crvs/v1']
+        type:
+          type: array
+          example: ['VerifiableCredential','IsAliveCredential']
+          items:
+            type: string
+            items:
+              type: string
+            example: ["VerifiableCredential", "IsAliveCredential"]                 
+        determine:
+          $ref : '#/components/schemas/IsAliveEligibility'
+        issuer: 
+          type: string
+          example: 'did:crvs-registry:345678912'
+        issuanceDate:
+          type: string
+        expirationDate:
+          type: string
+        credentialSubject:
+          $ref: '#/components/schemas/CredentialSubject'
+        proof:
+          $ref: '#/components/schemas/Proof'
+    EligibilityDeterminationResponse:
+      type: object
+      properties:
+        verifiableCredential:
+          type: array
+          items:
+            anyOf:
+              - $ref : '#/components/schemas/VerifiableCredentialIsAliveResponse'
+    CredentialSubject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        id:
+          type: string
+        person:
+          $ref: '#/components/schemas/HumanName'
+        address:
+          $ref: '#/components/schemas/Address'
+        contact:
+          $ref: '#/components/schemas/Contact' 
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+    Contact:
+      type: object
+      properties:
+        email:
+          type: string
+        phone:
+          type: string
+    Proof:
+      type: object
+      properties:
+        type:
+          type: string
+          example: 'Ed25519Signature2018'        
+        created:
+          type: string
+          example: '2023-05-09T12:34:56Z'      
+        verificationMethod:
+          type: string
+          example: 'did:example:123#key-1'        
+        proofPurpose:
+          type: string
+          example: 'assertionMethod'       
+        jws:
+          type: string
+          example: 'eyJhbGciOiJFZDI1NTE5U2lnbmF0dXJlMjAxOCIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..iHCBYnF2ovIe9hjaaxEC25N-2P8w4Qtf9zQBUV-zXnLHfYqzzubpI8f0mvmXdD6rvYB-9Zx_bFdK46e1IcblDA' 
+    VerifiableCredentialIsAliveResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'https://registry-host/isalive/NATIONAL_ID/345678912'
+        issuer:
+          type: string
+          example: 'https://registry-host.com'
+        issuanceDate:
+          type: string
+          example: '2022-05-09T10:11:12Z'          
+        credentialSubject:
+            $ref : '#/components/schemas/CredentialSubject'
+        is_alive:
+          type: boolean
+          example: true
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
