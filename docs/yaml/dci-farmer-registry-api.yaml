@@ -15,7 +15,8 @@ tags:
     description: ''
   - name: Event subscription
     description: 'The event subscription APIs facilate to get notification when any event happens in farmer registry, The client application meed to register for each event seperately with provided client id and client secret'
-
+  - name: Validation API 
+    description: 'List of API that exibit validation capability'
 paths:
   /search:
     post:
@@ -508,7 +509,104 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-
+  /validation:
+    get:
+      tags:
+        - Validation API 
+      summary: The validation API will validate perticular validation like IS_FARMER, IS_POOR, IS_SENIOR_CITIZEN etc flags
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ValidationCheckRequest'
+      security:
+        - spmis_auth:
+            - read:claims
+    post:
+      tags:
+        - Validation API  
+      summary: To perform boolean operation to check certain data set for items like is IS_FARMER, IS_POOR, IS_SENIOR_CITIZEN 
+      description: Response will contain claim details
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationCheckRequest'     
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationCheckResponse'     
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'                 
+      security:
+        - spmis_auth:
+            - read:relationships
 components:
   parameters:
     authorization:
@@ -548,7 +646,7 @@ components:
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-mosip','x-farmer','x-social','x-crvs','x-student']
+        enum: ['x-farmer']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:
@@ -1148,6 +1246,43 @@ components:
           type: string
         error_message:
           type: string
+    
+    ValidationCheckRequest:
+      type: object
+      description: '' 
+      properties:
+        validation_code:
+          type: array
+          items:
+            type: string
+          example: ["IS_FARMER", "IS_POOR", "IS_SENIOR_CITIZEN"]
+          description: 'Is given id valid in farmer registry, This will check in farmer registry for supplied information of ID'
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+    ValidationCheckResponse:
+      type: object
+      description: '' 
+      properties:
+        validations:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/ValidationResponse'
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+    ValidationResponse:
+      type: object
+      description: '' 
+      properties:
+        validation_code:
+          type: string
+          enum: ['IS_SENIOR_CITIZEN']
+          example: 'IS_SENIOR_CITIZEN'
+        response:
+          type: boolean
+          enum: [true,false]
+          description: 'This flag will indicate outcome of validation check'
+    
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
