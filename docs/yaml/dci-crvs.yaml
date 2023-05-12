@@ -202,12 +202,12 @@ paths:
                     - $ref: '#/components/schemas/IsAliveEligibility'
       security:
         - spmis_auth:
-            - read:claims
+            - read:eligibity
     post:
       tags:
         - Eligibility determination API 
-      summary: To get information of claim for person
-      description: Response will contain claim details
+      summary: ''
+      description: Response will contain elegibity details
       operationId: ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -980,7 +980,7 @@ components:
           format: string
         eligibility_check_type:
           type: string
-          description: claim type 
+          description: Eligibility type 
           example: IS_ALIVE
           enum: ['IS_ALIVE']
         response_format:

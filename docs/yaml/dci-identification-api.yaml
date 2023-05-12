@@ -240,11 +240,11 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /identification/biometric/fingerprint:
+  /identification/biometric:
     post:
       tags:
         - Identification using BioMetric
-      summary: Identification using fingerprint print,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
+      summary: Identification using biometric print,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
       description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
@@ -259,7 +259,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FingerPrintIdentificationRequest'     
+              $ref: '#/components/schemas/BiometricRequest'     
         required: true
       responses:
         '102':
@@ -269,7 +269,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FingerPrintIdentificationResponse'          
+                $ref: '#/components/schemas/BiometricResponse'          
         '400':
           description: Bad Request
           content:
@@ -315,157 +315,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /identification/biometric/iris:
-    post:
-      tags:
-        - Identification using BioMetric
-      summary:  Identification using finger IRIS,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
-      description: '' 
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: Search request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IrisIdentificationRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IrisIdentificationResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-  /identification/biometric/face:
-    post:
-      tags:
-        - Identification using BioMetric
-      summary: Identification using face, The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
-      description: '' 
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: Search request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FaceIdentificationRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FaceIdentificationResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-
+   
 components:
   parameters:
     authorization:
@@ -679,7 +529,7 @@ components:
         image_base_64_string:
           type: string
           example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'
-    FingerPrintIdentificationResponse:
+    BiometricResponse:
       type: object
       properties:
         success:
@@ -742,7 +592,15 @@ components:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
           description: The transaction_id received in request 
-
+    BiometricRequest:
+      type: object
+      properties:
+        national_id:
+          type: string
+          example: 345678912
+        pid_block:
+          type: string
+          example: 'PID Block data'  
     ImageInfo:
       type: object
       description: '' 

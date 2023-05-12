@@ -244,11 +244,11 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /ekyc/biometric/fingerprint:
+  /ekyc/biometric:
     post:
       tags:
         - e-KYC using BioMetric
-      summary: e-KYC using fingerprint print,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
+      summary: e-KYC using biometric information,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
       description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
@@ -263,7 +263,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FingerPrintEkycRequest'     
+              $ref: '#/components/schemas/BiometricRequest'     
         required: true
       responses:
         '102':
@@ -319,157 +319,7 @@ paths:
       security:
         - spmis_auth:
             - read:ekyc.biometric.fingerprint
-  /ekyc/biometric/iris:
-    post:
-      tags:
-        - e-KYC using BioMetric
-      summary:  e-KYC using finger IRIS,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
-      description: '' 
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IrisEkycRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EkycResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:ekyc.biometric.iris
-  /ekyc/biometric/face:
-    post:
-      tags:
-        - e-KYC using BioMetric
-      summary: e-KYC using face, The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
-      description: '' 
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FaceEkycRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EkycResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:ekyc.biometric.face
-
+ 
 components:
   parameters:
     authorization:
@@ -613,7 +463,7 @@ components:
           type: string
         address:
           $ref: '#/components/schemas/Address'
-        person_image_base_64_string:
+        photo:
           type: string
           example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...' 
     IdentifierType:
@@ -649,7 +499,7 @@ components:
           type: string
         address:
           type: string
-        person_image_base_64_string:
+        photo:
           type: string
           example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
     HumanName:
@@ -670,23 +520,15 @@ components:
         last_name:
           type: string
           example: doe
-    FingerPrintEkycRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-        - $ref: '#/components/schemas/Concent'
+    BiometricRequest:
       type: object
       properties:
-        hand_info:
+        national_id:
           type: string
-          enum: [left,right]
-        finger_info:
+          example: 345678912
+        pid_block:
           type: string
-          enum: [thumb,index,middle,ring]
-        image_base_64_string:
-          type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
-
+          example: 'PIX XML'    
     IrisEkycRequest:
       allOf: 
         - $ref: '#/components/schemas/IdentifierType'
