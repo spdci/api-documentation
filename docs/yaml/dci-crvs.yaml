@@ -212,7 +212,7 @@ components:
       name: x-sender-id
       schema:
         type: string
-        example: "Farmer help programme "
+        example: "SP_CRVS_2022"
       required: true
       description: Information about requester , it may be some code of SP system
     x-message-id:
@@ -352,7 +352,7 @@ components:
             value: 
               type: string
               example: "NATIONAL_ID"
-              enum: ['NATIONAL_ID','FARMER_ID']
+              enum: ['NATIONAL_ID','CRVS_ID']
     IdentifierValueField:
       description: 'Search with identifier value'
       allOf: 
@@ -402,9 +402,9 @@ components:
               enum: ['repository_type']
             value: 
               type: string
-              example: "marginal"
+              example: "Birth"
               enum: ['Birth', 'Death', 'Marriage']
-              description: 'Search by farmer type'
+              description: 'Search by repository_type type'
     FieldOperator:
       type: string
       enum:
