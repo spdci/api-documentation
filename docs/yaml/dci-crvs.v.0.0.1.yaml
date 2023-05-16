@@ -1,176 +1,15 @@
 openapi: 3.0.3
 info:
-  title: e-KYC APIs
-  description: 'The eKYC (Electronic Know Your Customer) is a process of verifying the identity of a customer or client using electronic means. The demographic information of the customer can be used to verify their identity in the eKYC process. The demographic information typically includes details such as name, date of birth, address, and other personal information.
-
-JSON (JavaScript Object Notation) is a data format that is commonly used for transmitting data over the internet. It is a lightweight format that is easy to read and write. JSON can be used to represent demographic information in the eKYC process.'
+  title: CRVS interoperability APIs
+  description: ''
   version: 0.0.1
 servers:
   - description: Gateway endpoint
     url: https://localhost:8081/
-tags:
-  - name: e-KYC using OTP
-    description: '' 
-  - name: e-KYC using Demographic 
-    description: '' 
-  - name: e-KYC using BioMetric
-    description: '' 
 paths:
-  /ekyc/sendotp:
+  /crvs/IDEventDates:
     post:
-      tags:
-        - e-KYC using OTP
-      summary: 'Generate OTP using national id'
-      description: Generate OTP using national id
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SendOTPRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenerateOTPResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-  /ekyc/validateOTP:
-    post:
-      tags:
-        - e-KYC using OTP
-      summary: Validate OTP which was generated with national id
-      description: '' 
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: Request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidateOTPRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EkycResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-  /ekyc/demographic:
-    post:
-      tags:
-        - e-KYC using Demographic
-      summary: 'To perform e-KYC using demographic information'
+      summary: 'API that provide date of birth , date of death or marriage date base on ID'
       description: ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -180,12 +19,14 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Request body
+        description: Search request body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DemographicEkycRequest'     
+              $ref: '#/components/schemas/IDEventDatesRequest'     
         required: true
       responses:
         '102':
@@ -195,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EkycResponse'          
+                $ref: '#/components/schemas/IDEventDatesResponse'          
         '400':
           description: Bad Request
           content:
@@ -241,12 +82,10 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /ekyc/biometric:
+  /crvs/IDInfoLookup:
     post:
-      tags:
-        - e-KYC using BioMetric
-      summary: e-KYC using biometric information,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
-      description: '' 
+      summary: 'API which provide demographic details of a person on an ID'
+      description:  ''
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -255,12 +94,14 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Send request of e-KYC using finger print 
+        description: Search request body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BiometricRequest'     
+              $ref: '#/components/schemas/IDInfoLookupRequest'     
         required: true
       responses:
         '102':
@@ -270,7 +111,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EkycResponse'          
+                $ref: '#/components/schemas/IDInfoLookupResponse'          
         '400':
           description: Bad Request
           content:
@@ -315,8 +156,160 @@ paths:
                 $ref: '#/components/schemas/HttpErrorResponse' 
       security:
         - spmis_auth:
-            - read:ekyc.biometric.fingerprint
+            - read:search
+  /crvs/ageCategoryCheck:
+    post:
+      summary: 'API to check isjunior, ismajor, issenior '
+      description: The Search operation perfromed for registry 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCheckRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryCheckResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /crvs/MarriageInfo:
+    post:
+      summary: 'API that provide marriage details'
+      description: 'To retrieve marriage details based on id' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarriageInfoRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarriageInfoResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
  
+
+
 components:
   parameters:
     authorization:
@@ -350,13 +343,13 @@ components:
         type: string
         example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
       required: true
-      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+      description: Signature created in combination of {payload}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
     x-registry-type:
       in: header
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-mosip','x-crvs']
+        enum: ['x-crvs']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:
@@ -364,7 +357,7 @@ components:
       name: x-sender-id
       schema:
         type: string
-        example: "Farmer help programme "
+        example: "SP_CRVS_2022"
       required: true
       description: Information about requester , it may be some code of SP system
     x-message-id:
@@ -392,7 +385,210 @@ components:
         example: "https://senderhost/callback/on-disburse"
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
+
   schemas:
+  
+    IDEventDatesRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    IDEventDatesResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/IDEventDatesObject'
+    IDEventDatesObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        contactno:
+          type: string
+          example: '+91-0000000000'
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        date_of_death:
+          type: string
+          example: '01/03/2023'
+        date_of_marriage:
+          type: string
+          example: '09/11/1995'
+        gender:
+          type: string
+          example: 'male'          
+
+    IDInfoLookupRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    IDInfoLookupResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/IDInfoLookupObject'
+    IDInfoLookupObject:
+      type: object
+      properties:
+        identifier:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+              - $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        father_name:
+          $ref: '#/components/schemas/HumanName'
+        mother_name:
+          $ref: '#/components/schemas/HumanName'
+        contactno:
+          type: string
+          example: '+91-0000000000'
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        date_of_death:
+          type: string
+          example: '01/03/2023'
+        gender:
+          type: string
+          example: 'male'          
+        birth_registration_number:
+          type: string
+          example: 'BRN_XP-19801109A11'
+        death_registration_number:
+          type: string            
+          example: 'DRN_XP-20230309A11'          
+
+
+    CategoryCheckRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    CategoryCheckResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/CategoryCheckObject'
+    CategoryCheckObject:
+      type: object
+      properties:
+        identifier:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+              - $ref: '#/components/schemas/Identifier'
+        age_category:
+          type: string
+          enum: ['isjunior', 'ismajor', 'issenior']
+              
+    MarriageInfoRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    MarriageInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/MarriageInfoObject'
+    MarriageInfoObject:
+      type: object
+      properties:
+        groom_identifier:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+              - $ref: '#/components/schemas/Identifier'
+        groom_name:
+          $ref: '#/components/schemas/HumanName'
+        groom_father_name:
+          $ref: '#/components/schemas/HumanName'
+        groom_mother_name:
+          $ref: '#/components/schemas/HumanName'
+        groom_nationality:
+          type: string
+          example: 'Dominican'
+        groom_date_of_birth:
+          type: string
+          example: '12/05/1983'        
+        groom_marital_status:
+          type: string
+          enum: [unmarried,divorced,widowed]
+        bride_identifier:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+              - $ref: '#/components/schemas/Identifier'
+        bride_name:
+          $ref: '#/components/schemas/HumanName'
+        bride_father_name:
+          $ref: '#/components/schemas/HumanName'
+        bride_mother_name:
+          $ref: '#/components/schemas/HumanName'
+        bride_nationality:
+          type: string
+          example: 'Dominican'
+        bride_date_of_birth:
+          type: 'string'
+          example: '12/05/1983'
+        bride_marital_status:
+          type: string
+          enum: [unmarried,divorced,widowed]
+        contactno:
+          type: string
+          example: '+1-7894561312'
+        date_of_marriage:
+          type: string
+          example: '12/05/2022'          
+        place_of_marriage:
+          type: string
+          example: 'Angel Iceland'
+        marriage_registration_number:
+          type: string
+          example: 'MRN_DC-20221205A12'     
+
     ApiResponse:
       type: object
       properties:
@@ -400,105 +596,14 @@ components:
           type: string
         return_message:
           type: string
+          example: 'Success message'
         error_code:
           type: string
+          example: 'Error message'
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
           description: The transaction_id received in request
-    ApiResponseSuccess:
-      type: object
-      properties:
-        success:
-          type: boolean
-          enum: [true,false]
-        return_message:
-          type: string
-          example: 'Ekyc performed successfully'
-        transaction_id:
-          type: string
-          example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in request
-    GenerateOTPResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          enum: [true,false] 
-        return_message:
-          type: string
-          example: 'OTP generated successfully and sent on mobile number ending with XXXX'
-        transaction_id:
-          type: string
-          example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in response from server 
-    ValidateOTPRequest:
-      allOf: 
-        - $ref: '#/components/schemas/Concent'      
-      type: object
-      properties:
-        transaction_id:
-          type: string
-          example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in response from server
-        otp:
-          type: number
-          example: 051283
-
-    EkycResponse:
-      allOf:
-        - $ref: '#/components/schemas/ApiResponseSuccess'
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-      type: object
-      properties:
-        person:
-          $ref: '#/components/schemas/HumanName'
-        dob:
-          type: string
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        photo:
-          type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...' 
-    IdentifierType:
-      type: object
-      properties:
-        identifier_type:
-          type: string
-          enum: ['NATIONAL_ID','FARMER_REG_NO']
-    Concent:
-      type: object
-      properties:
-        concent:
-          type: boolean
-          enum: [true,false]
-    IdentifierValue:
-      type: object
-      properties:
-        identifier_value:
-          type: string
-          example: 345678912    
-    DemographicEkycRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-        - $ref: '#/components/schemas/Concent'
-      type: object
-      properties:
-        person:
-          $ref: '#/components/schemas/HumanName'
-        dob:
-          type: string
-        phone:
-          type: string
-        address:
-          type: string
-        photo:
-          type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
     HumanName:
       type: object
       properties:
@@ -517,46 +622,17 @@ components:
         last_name:
           type: string
           example: doe
-    BiometricRequest:
+
+
+    Identifier:
       type: object
       properties:
-        national_id:
+        type:
+          type: string
+          enum: ['NATIONAL_ID','BIRTH_REG_NO']
+        value:
           type: string
           example: 345678912
-        pid_block:
-          type: string
-          example: 'PID Block data'    
-    IrisEkycRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-        - $ref: '#/components/schemas/Concent'
-      type: object
-      properties:
-        eye_info:
-          type: string
-          enum: [left,right,both]
-        image_base_64_string:
-          type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
-    FaceEkycRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-      type: object
-      properties:
-        image_base_64_string:
-          type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
-    SendOTPRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'    
-      type: object
-      properties:
-        registered_contact_no:
-          type: string
-          example: +61-7894561231
     HttpErrorResponse:
       description: HTTP layer error details
       properties:
@@ -564,30 +640,7 @@ components:
           type: string
         error_message:
           type: string
-    Address:
-      type: object
-      properties:
-        use:
-          type: string
-          enum: [home,office]
-        type:
-          type: string
-          enum: [postal , physical , both]
-        text:
-          type: string
-          example: ''          
-        city:
-          type: string
-          example: ''          
-        district:
-          type: string
-          example: ''          
-        state:
-          type: string
-          example: ''          
-        postal_code:
-          type: string
-          example: ''                    
+
 
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme

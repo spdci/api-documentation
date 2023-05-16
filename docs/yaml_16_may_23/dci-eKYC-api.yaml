@@ -1,25 +1,24 @@
 openapi: 3.0.3
 info:
-  title: e-KYC APIs
-  description: 'The eKYC (Electronic Know Your Customer) is a process of verifying the identity of a customer or client using electronic means. The demographic information of the customer can be used to verify their identity in the eKYC process. The demographic information typically includes details such as name, date of birth, address, and other personal information.
-
-JSON (JavaScript Object Notation) is a data format that is commonly used for transmitting data over the internet. It is a lightweight format that is easy to read and write. JSON can be used to represent demographic information in the eKYC process.'
+  title: Identification APIs
+  description: 'Identification REST APIs are application programming interfaces that allow developers to integrate identification and authentication functionalities into their applications. These APIs typically provide a secure and efficient way to verify the identity of users by allowing them to authenticate with usernames and passwords, API keys, tokens, or other forms of credentials.
+  Some common functionalities that identification REST APIs may offer send otp/ validate otp / identify based on demographic and biometric. These APIs can be used by developers to build a variety of applications such as social protection system that require secure identification and ekyc.'
   version: 0.0.1
 servers:
   - description: Gateway endpoint
     url: https://localhost:8081/
 tags:
-  - name: e-KYC using OTP
+  - name: Identification using OTP
     description: '' 
-  - name: e-KYC using Demographic 
+  - name: Identification using Demographic 
     description: '' 
-  - name: e-KYC using BioMetric
+  - name: Identification using BioMetric
     description: '' 
 paths:
-  /ekyc/sendotp:
+  /identification/sendotp:
     post:
       tags:
-        - e-KYC using OTP
+        - Identification using OTP
       summary: 'Generate OTP using national id'
       description: Generate OTP using national id
       parameters:
@@ -31,7 +30,7 @@ paths:
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
       requestBody:
-        description: Request body
+        description: Search request body
         content:
           application/json:
             schema:
@@ -91,10 +90,10 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /ekyc/validateOTP:
+  /identification/validateOTP:
     post:
       tags:
-        - e-KYC using OTP
+        - Identification using OTP
       summary: Validate OTP which was generated with national id
       description: '' 
       parameters:
@@ -106,7 +105,7 @@ paths:
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
       requestBody:
-        description: Request body
+        description: Search request body
         content:
           application/json:
             schema:
@@ -120,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EkycResponse'          
+                $ref: '#/components/schemas/ValidateOTPResponse'          
         '400':
           description: Bad Request
           content:
@@ -166,11 +165,11 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /ekyc/demographic:
+  /identification/demographic:
     post:
       tags:
-        - e-KYC using Demographic
-      summary: 'To perform e-KYC using demographic information'
+        - Identification using Demographic
+      summary: 'To perform identification using demographic information'
       description: ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -185,7 +184,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DemographicEkycRequest'     
+              $ref: '#/components/schemas/DemographicIdentificationRequest'     
         required: true
       responses:
         '102':
@@ -195,7 +194,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EkycResponse'          
+                $ref: '#/components/schemas/DemographicIdentificationResponse'          
         '400':
           description: Bad Request
           content:
@@ -241,11 +240,11 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /ekyc/biometric:
+  /identification/biometric:
     post:
       tags:
-        - e-KYC using BioMetric
-      summary: e-KYC using biometric information,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
+        - Identification using BioMetric
+      summary: Identification using biometric print,The interoperatibility layer will responsible to covnert registry or id system format. SP system should send image data to interoperability layer in Base64 format.Refer ISO 19794-4:2011 Specifications.https://en.wikipedia.org/wiki/CBEFF.
       description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
@@ -256,7 +255,7 @@ paths:
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
       requestBody:
-        description: Send request of e-KYC using finger print 
+        description: Send request of identification using finger print 
         content:
           application/json:
             schema:
@@ -270,7 +269,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EkycResponse'          
+                $ref: '#/components/schemas/BiometricResponse'          
         '400':
           description: Bad Request
           content:
@@ -315,8 +314,8 @@ paths:
                 $ref: '#/components/schemas/HttpErrorResponse' 
       security:
         - spmis_auth:
-            - read:ekyc.biometric.fingerprint
- 
+            - read:search
+   
 components:
   parameters:
     authorization:
@@ -350,13 +349,13 @@ components:
         type: string
         example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
       required: true
-      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+      description: Signature created in combination of {payload}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
     x-registry-type:
       in: header
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-mosip','x-crvs']
+        enum: ['x-mosip','x-id-system']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:
@@ -364,7 +363,7 @@ components:
       name: x-sender-id
       schema:
         type: string
-        example: "Farmer help programme "
+        example: "SP_SYSTEM_001"
       required: true
       description: Information about requester , it may be some code of SP system
     x-message-id:
@@ -392,12 +391,14 @@ components:
         example: "https://senderhost/callback/on-disburse"
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
+
   schemas:
     ApiResponse:
       type: object
       properties:
         success:
-          type: string
+          type: boolean
+          enum: [true]
         return_message:
           type: string
         error_code:
@@ -406,19 +407,43 @@ components:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
           description: The transaction_id received in request
-    ApiResponseSuccess:
+    ValidateOTPResponse:
       type: object
       properties:
         success:
           type: boolean
-          enum: [true,false]
+          enum: [true]
         return_message:
           type: string
-          example: 'Ekyc performed successfully'
+          example: 'OTP validated successfully'
+          enum: ['OTP validated successfully','Invalid OTP','OTP expired']
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in request
+          description: The transaction_id received in request    
+    DemographicIdentificationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        return_message:
+          type: string
+          example: 'Person validated successfully'
+          enum: ['Person validated successfully','Invalid info of persoon']
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request 
+    SendOTPRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'    
+      type: object
+      properties:
+        registered_contact_no:
+          type: string
+          example: +61-7894561231    
     GenerateOTPResponse:
       type: object
       properties:
@@ -431,61 +456,33 @@ components:
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in response from server 
+          description: The transaction_id received in request 
     ValidateOTPRequest:
-      allOf: 
-        - $ref: '#/components/schemas/Concent'      
       type: object
       properties:
+        otp:
+          type: string
+          example: 051283
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in response from server
-        otp:
-          type: number
-          example: 051283
-
-    EkycResponse:
-      allOf:
-        - $ref: '#/components/schemas/ApiResponseSuccess'
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-      type: object
-      properties:
-        person:
-          $ref: '#/components/schemas/HumanName'
-        dob:
-          type: string
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        photo:
-          type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...' 
+          description: The transaction_id received in which OTP was generated     
     IdentifierType:
       type: object
       properties:
         identifier_type:
           type: string
           enum: ['NATIONAL_ID','FARMER_REG_NO']
-    Concent:
-      type: object
-      properties:
-        concent:
-          type: boolean
-          enum: [true,false]
     IdentifierValue:
       type: object
       properties:
         identifier_value:
           type: string
           example: 345678912    
-    DemographicEkycRequest:
+    DemographicIdentificationRequest:
       allOf: 
         - $ref: '#/components/schemas/IdentifierType'
         - $ref: '#/components/schemas/IdentifierValue'
-        - $ref: '#/components/schemas/Concent'
       type: object
       properties:
         person:
@@ -496,9 +493,9 @@ components:
           type: string
         address:
           type: string
-        photo:
+        person_photo:
           type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
+          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'          
     HumanName:
       type: object
       properties:
@@ -517,6 +514,84 @@ components:
         last_name:
           type: string
           example: doe
+    FingerPrintIdentificationRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+      type: object
+      properties:
+        hand_info:
+          type: string
+          enum: [left,right]
+        finger_info:
+          type: string
+          enum: [thumb,index,middle,ring]
+        image_base_64_string:
+          type: string
+          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'
+    BiometricResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        return_message:
+          type: string
+          example: 'Person validated successfully using fingure print'
+          enum: ['Person validated successfully using fingure print','Invalid info of persoon']
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request     
+    IrisIdentificationRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+      type: object
+      properties:
+        eye_info:
+          type: string
+          enum: [left,right,both]
+        image_base_64_string:
+          type: string
+          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'
+    FaceIdentificationRequest:
+      allOf: 
+        - $ref: '#/components/schemas/IdentifierType'
+        - $ref: '#/components/schemas/IdentifierValue'
+      type: object
+      properties:
+        image_base_64_string:
+          type: string
+          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'
+    IrisIdentificationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        return_message:
+          type: string
+          example: 'Person validated successfully using iris'
+          enum: ['Person validated successfully using iris','Invalid info of persoon']
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request 
+    FaceIdentificationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        return_message:
+          type: string
+          example: 'Person validated successfully face info'
+          enum: ['Person validated successfully using face info','Invalid info of persoon']
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request 
     BiometricRequest:
       type: object
       properties:
@@ -525,38 +600,24 @@ components:
           example: 345678912
         pid_block:
           type: string
-          example: 'PID Block data'    
-    IrisEkycRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-        - $ref: '#/components/schemas/Concent'
+          example: 'PID Block data'  
+    ImageInfo:
       type: object
+      description: '' 
       properties:
-        eye_info:
+        image_resolution:
           type: string
-          enum: [left,right,both]
+        image_extension:
+          type: string
+          example: [jpeg,png]
+        image_size_in_kb:
+          type: string
         image_base_64_string:
           type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
-    FaceEkycRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'
-      type: object
-      properties:
-        image_base_64_string:
+          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'
+          description: Base64 encoded image data 
+        image_creation_date:
           type: string
-          example: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...'    
-    SendOTPRequest:
-      allOf: 
-        - $ref: '#/components/schemas/IdentifierType'
-        - $ref: '#/components/schemas/IdentifierValue'    
-      type: object
-      properties:
-        registered_contact_no:
-          type: string
-          example: +61-7894561231
     HttpErrorResponse:
       description: HTTP layer error details
       properties:
@@ -564,31 +625,6 @@ components:
           type: string
         error_message:
           type: string
-    Address:
-      type: object
-      properties:
-        use:
-          type: string
-          enum: [home,office]
-        type:
-          type: string
-          enum: [postal , physical , both]
-        text:
-          type: string
-          example: ''          
-        city:
-          type: string
-          example: ''          
-        district:
-          type: string
-          example: ''          
-        state:
-          type: string
-          example: ''          
-        postal_code:
-          type: string
-          example: ''                    
-
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http

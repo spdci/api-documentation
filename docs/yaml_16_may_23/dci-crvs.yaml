@@ -13,8 +13,8 @@ servers:
 tags:
   - name: Search API
     description: '' 
-  - name: CRVS Query APIs
-    description: 'This api will query CRVS interoperability layer for supported checks'
+  - name: Eligibility determination API
+    description: ''
   - name: Event subscription
     description: 'The event subscription APIs facilate to get notification when any event happens in crvs registry, The client application meed to register for each event seperately with provided client id and client secret'
 paths:
@@ -172,7 +172,7 @@ paths:
   /eligibility-determination:
     get:
       tags:
-        - CRVS Query APIs 
+        - Eligibility determination API 
       summary: Get list of eligibility determination supported by registry
       description: ''
       operationId: ''
@@ -205,7 +205,7 @@ paths:
             - read:eligibity
     post:
       tags:
-        - CRVS Query APIs 
+        - Eligibility determination API 
       summary: ''
       description: Response will contain elegibity details
       operationId: ''
