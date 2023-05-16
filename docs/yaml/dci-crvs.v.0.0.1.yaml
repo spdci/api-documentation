@@ -9,7 +9,7 @@ servers:
 paths:
   /crvs/IDEventDates:
     post:
-      summary: 'API that provide date of birth , date of death or marriage date base on ID'
+      summary: 'API that provide date of birth/date of death/marriage date based on ID'
       description: ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -84,7 +84,7 @@ paths:
             - read:search
   /crvs/IDInfoLookup:
     post:
-      summary: 'API which provide demographic details of a person on an ID'
+      summary: 'API which provide demographic details of a person based on an ID'
       description:  ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -157,10 +157,10 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /crvs/ageCategoryCheck:
+  /crvs/ageCheck:
     post:
-      summary: 'API to check isjunior, ismajor, issenior '
-      description: The Search operation perfromed for registry 
+      summary: 'API to retrieve age of person based on ID'
+      description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -234,8 +234,8 @@ paths:
             - read:search
   /crvs/MarriageInfo:
     post:
-      summary: 'API that provide marriage details'
-      description: 'To retrieve marriage details based on id' 
+      summary: 'API to retrieve marriage info of person based on ID'
+      description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -307,9 +307,6 @@ paths:
       security:
         - spmis_auth:
             - read:search
- 
-
-
 components:
   parameters:
     authorization:
@@ -501,9 +498,9 @@ components:
       properties:
         identifier:
           $ref: '#/components/schemas/Identifier'
-        age_category:
-          type: string
-          enum: ['isjunior', 'ismajor', 'issenior']
+        age:
+          type: number
+          example: 50
               
     MarriageInfoRequest:
       type: object
@@ -632,10 +629,8 @@ components:
           type: string
         error_message:
           type: string
-
-
   securitySchemes:
-    spmis_auth:            # arbitrary name for the security scheme
+    spmis_auth:            
       type: http
       scheme: bearer
       bearerFormat: JWT
