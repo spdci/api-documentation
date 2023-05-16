@@ -451,11 +451,7 @@ components:
       type: object
       properties:
         identifier:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/Identifier'
-              - $ref: '#/components/schemas/Identifier'
+          $ref: '#/components/schemas/Identifier'
         name:
           $ref: '#/components/schemas/HumanName'
         father_name:
@@ -504,11 +500,7 @@ components:
       type: object
       properties:
         identifier:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/Identifier'
-              - $ref: '#/components/schemas/Identifier'
+          $ref: '#/components/schemas/Identifier'
         age_category:
           type: string
           enum: ['isjunior', 'ismajor', 'issenior']
