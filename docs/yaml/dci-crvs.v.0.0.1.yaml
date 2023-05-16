@@ -9,6 +9,8 @@ servers:
 paths:
   /crvs/IDEventDates:
     post:
+      tags:
+        - CRVS APIs
       summary: 'API that provides date of birth/date of death/marriage date based on ID'
       description: ''
       parameters:
@@ -84,7 +86,9 @@ paths:
             - read:search
   /crvs/IDInfoLookup:
     post:
-      summary: 'API that provides demographic details of a person based on an ID'
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides person info based on an ID'
       description:  ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -157,8 +161,87 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /crvs/IDDemographic:
+    post:
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides demographic details of a person based on an ID'
+      description:  ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDInfoLookupRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildDemographicResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
   /crvs/ageCheck:
     post:
+      tags:
+        - CRVS APIs
       summary: 'API to retrieve the age of a person based on ID'
       description: '' 
       parameters:
@@ -232,8 +315,87 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /crvs/maritalStatusCheck:
+    post:
+      tags:
+        - CRVS APIs
+      summary: 'API to retrieve marital status of a person based on ID'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaritalStatusCheckRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaritalStatusCheckResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
   /crvs/MarriageInfo:
     post:
+      tags:
+        - CRVS APIs      
       summary: 'API that provides marriage information for a person based on ID'
       description: '' 
       parameters:
@@ -307,6 +469,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
+
 components:
   parameters:
     authorization:
@@ -451,6 +614,32 @@ components:
           $ref: '#/components/schemas/Identifier'
         name:
           $ref: '#/components/schemas/HumanName'
+        contactno:
+          type: string
+          example: '+91-0000000000'
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        gender:
+          type: string
+          example: 'male'          
+    ChildDemographicResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/ChildDemographicObject'
+    ChildDemographicObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
         father_name:
           $ref: '#/components/schemas/HumanName'
         mother_name:
@@ -467,12 +656,6 @@ components:
         gender:
           type: string
           example: 'male'          
-        birth_registration_number:
-          type: string
-          example: 'BRN_XP-19801109A11'
-        death_registration_number:
-          type: string            
-          example: 'DRN_XP-20230309A11'          
 
 
     CategoryCheckRequest:
@@ -501,6 +684,34 @@ components:
         age:
           type: number
           example: 50
+    MaritalStatusCheckRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    MaritalStatusCheckResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/MaritalStatusCheckObject'
+    MaritalStatusCheckObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        marital_status:
+          type: string
+          example: married
+          enum: ['single','married','annualed','widowed']
+
               
     MarriageInfoRequest:
       type: object
@@ -531,19 +742,12 @@ components:
               - $ref: '#/components/schemas/Identifier'
         groom_name:
           $ref: '#/components/schemas/HumanName'
-        groom_father_name:
-          $ref: '#/components/schemas/HumanName'
-        groom_mother_name:
-          $ref: '#/components/schemas/HumanName'
         groom_nationality:
           type: string
           example: 'Dominican'
         groom_date_of_birth:
           type: string
           example: '12/05/1983'        
-        groom_marital_status:
-          type: string
-          enum: [unmarried,divorced,widowed]
         bride_identifier:
           type: array
           items:
@@ -552,22 +756,12 @@ components:
               - $ref: '#/components/schemas/Identifier'
         bride_name:
           $ref: '#/components/schemas/HumanName'
-        bride_father_name:
-          $ref: '#/components/schemas/HumanName'
-        bride_mother_name:
-          $ref: '#/components/schemas/HumanName'
         bride_nationality:
           type: string
           example: 'Dominican'
         bride_date_of_birth:
           type: 'string'
           example: '12/05/1983'
-        bride_marital_status:
-          type: string
-          enum: [unmarried,divorced,widowed]
-        contactno:
-          type: string
-          example: '+1-7894561312'
         date_of_marriage:
           type: string
           example: '12/05/2022'          
@@ -592,7 +786,8 @@ components:
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in request
+          description: The transaction_id to track request response
+
     HumanName:
       type: object
       properties:
@@ -618,7 +813,7 @@ components:
       properties:
         type:
           type: string
-          enum: ['NATIONAL_ID','BIRTH_REG_NO']
+          enum: ['NATIONAL_ID','BIRTH_REG_NO','MARRIAGE_REG_NO','DEATH_REG_NO']
         value:
           type: string
           example: 345678912
