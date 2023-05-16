@@ -4,6 +4,9 @@ info:
   description: ''
   version: 0.0.1
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/0.0.1
   - description: Gateway endpoint
     url: https://localhost:8081/
 paths:
@@ -39,6 +42,83 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IDEventDatesResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /crvs/event:
+    post:
+      tags:
+        - CRVS APIs
+      summary: 'API that provides life event details based on event type and data retrieved based on event ID'
+      description: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInfoRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventInfoResponse'          
         '400':
           description: Bad Request
           content:
@@ -556,6 +636,100 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/Identifier'
+
+    EventInfoRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/EventInfoRequestObject'
+    
+    EventInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/EventInfoResponseObject'
+    EventInfoResponseObject:
+      type: object
+      properties:
+        event:
+          type: string
+          enum: ['birth','death','marriage']
+        event_data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/BirthInfo'
+              - $ref: '#/components/schemas/DeathInfo'
+              - $ref: '#/components/schemas/MarriageInfoObject'
+    BirthInfo:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        father_name:
+          $ref: '#/components/schemas/HumanName'
+        mother_name:
+          $ref: '#/components/schemas/HumanName'
+        contactno:
+          type: string
+          example: '+91-0000000000'
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        gender:
+          type: string
+          example: 'male'    
+        birth_registration_no:
+          type: string
+          example: '01/03/2023'
+        birth_place_address:
+          type: string
+          example: 'Address of birth pace'
+          
+    DeathInfo:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        father_name:
+          $ref: '#/components/schemas/HumanName'
+        mother_name:
+          $ref: '#/components/schemas/HumanName'
+        contactno:
+          type: string
+          example: '+91-0000000000'
+        date_of_death:
+          type: string
+          example: '01/03/2023'
+        gender:
+          type: string
+          example: 'male'    
+        death_registration_no:
+          type: string
+          example: '01/03/2023'
+        death_place_address:
+          type: string
+          example: 'Address of death place'
+    EventInfoRequestObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        event:
+          type: string
+          enum: ['birth','death','marriage']
     IDEventDatesResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
