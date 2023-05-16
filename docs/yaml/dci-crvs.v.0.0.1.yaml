@@ -91,7 +91,7 @@ paths:
     post:
       tags:
         - CRVS APIs
-      summary: 'API that provides life event details based on event type and data retrieved based on event ID'
+      summary: 'API that provides life event details based on event type and data retrieved based on ID of person'
       description: ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -664,6 +664,52 @@ components:
           enum: ['birth','death','marriage']
         event_data:
           type: array
+          example: '{
+  "success": "string",
+  "return_message": "Success message",
+  "error_code": "Error message",
+  "transaction_id": "0c96614c-7255-4774-b109-cd53ee859000",
+  "data": [
+    {
+      "event": "birth",
+      "event_data": [
+        {
+          "identifier": {
+            "type": "NATIONAL_ID",
+            "value": "345678912"
+          },
+          "name": {
+            "suffix": "PhD",
+            "prefix": "Mr.",
+            "first_name": "john",
+            "middle_name": "doe",
+            "last_name": "doe"
+          },
+          "father_name": {
+            "suffix": "PhD",
+            "prefix": "Mr.",
+            "first_name": "john",
+            "middle_name": "doe",
+            "last_name": "doe"
+          },
+          "mother_name": {
+            "suffix": "PhD",
+            "prefix": "Mr.",
+            "first_name": "john",
+            "middle_name": "doe",
+            "last_name": "doe"
+          },
+          "contactno": "+91-0000000000",
+          "date_of_birth": "11/17/1980",
+          "gender": "male",
+          "birth_registration_no": "01/03/2023",
+          "birth_place_address": "Address of birth pace"
+        }
+      ]
+    }
+  ]
+} 
+'
           items:
             anyOf:
               - $ref: '#/components/schemas/BirthInfo'
