@@ -10,12 +10,12 @@ servers:
   - description: Gateway endpoint
     url: https://localhost:8081/
 paths:
-  /crvs/IDEventDates:
+  /crvs/isAlive:
     post:
       tags:
         - CRVS APIs
-      summary: 'API that provides date of birth/date of death/marriage date based on ID'
-      description: ''
+      summary: 'API to check if a person is alive or not based on ID'
+      description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -27,11 +27,11 @@ paths:
         - $ref: '#/components/parameters/x-async'
         - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Search request body
+        description: Request body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IDEventDatesRequest'     
+              $ref: '#/components/schemas/IDRequest'     
         required: true
       responses:
         '102':
@@ -41,7 +41,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IDEventDatesResponse'          
+                $ref: '#/components/schemas/IsAliveCheckResponse'          
         '400':
           description: Bad Request
           content:
@@ -87,238 +87,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /crvs/event:
-    post:
-      tags:
-        - CRVS APIs
-      summary: 'API that provides life event details based on event type and data retrieved based on ID of person'
-      description: ''
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
-      requestBody:
-        description: Search request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EventInfoRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EventInfoResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-  /crvs/IDInfoLookup:
-    post:
-      tags:
-        - CRVS APIs      
-      summary: 'API that provides person info based on an ID'
-      description:  ''
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
-      requestBody:
-        description: Search request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IDInfoLookupRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/IDInfoLookupResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-  /crvs/IDDemographic:
-    post:
-      tags:
-        - CRVS APIs      
-      summary: 'API that provides demographic details of a person based on an ID'
-      description:  ''
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
-      requestBody:
-        description: Search request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IDInfoLookupRequest'     
-        required: true
-      responses:
-        '102':
-          description: Processing 
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChildDemographicResponse'          
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-      security:
-        - spmis_auth:
-            - read:search
-  /crvs/ageCheck:
+  /crvs/getAge:
     post:
       tags:
         - CRVS APIs
@@ -335,11 +104,11 @@ paths:
         - $ref: '#/components/parameters/x-async'
         - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Search request body
+        description: Request body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CategoryCheckRequest'     
+              $ref: '#/components/schemas/IDRequest'     
         required: true
       responses:
         '102':
@@ -349,7 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CategoryCheckResponse'          
+                $ref: '#/components/schemas/AgeResponse'          
         '400':
           description: Bad Request
           content:
@@ -395,7 +164,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /crvs/maritalStatusCheck:
+  /crvs/getMaritalStatus:
     post:
       tags:
         - CRVS APIs
@@ -412,7 +181,7 @@ paths:
         - $ref: '#/components/parameters/x-async'
         - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Search request body
+        description: Request body
         content:
           application/json:
             schema:
@@ -472,7 +241,84 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /crvs/MarriageInfo:
+  /crvs/getBirthInfo:
+    post:
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides birth information for a person based on ID'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BirthInfoResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /crvs/getMarriageInfo:
     post:
       tags:
         - CRVS APIs      
@@ -489,7 +335,7 @@ paths:
         - $ref: '#/components/parameters/x-async'
         - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Search request body
+        description: Request body
         content:
           application/json:
             schema:
@@ -549,7 +395,394 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /crvs/getDeathInfo:
+    post:
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides death information for a person based on ID'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeathInfoResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /crvs/getPersonInfo:
+    post:
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides person info based on an ID'
+      description:  ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDInfoLookupResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /crvs/getDemographicInfo:
+    post:
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides demographic details of a person based on an ID'
+      description:  ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChildDemographicResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /crvs/getVitalEventDates:
+    post:
+      tags:
+        - CRVS APIs
+      summary: 'API that provides date of birth/date of death/marriage date based on ID'
+      description: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'      
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDEventDatesResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
 
+  /crvs/getVitalEvents:
+    post:
+      tags:
+        - CRVS APIs
+      summary: 'API that provides life event details based on vital event type and data retrieved based on ID of person'
+      description: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInfoRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventInfoResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+
+  
 components:
   parameters:
     authorization:
@@ -627,6 +860,25 @@ components:
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
 
   schemas:
+
+    IsAliveCheckResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/IsAliveCheckObject'
+    IsAliveCheckObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        is_alive:
+          type: string
+          enum: [yes,no]
   
     IDEventDatesRequest:
       type: object
@@ -636,9 +888,30 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/Identifier'
-
+    BirthInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/BirthInfo'
+    DeathInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/DeathInfo'
+      
     EventInfoRequest:
       type: object
+      example: '{"identifier_list":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"vital_event":"birth","txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fa"},{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"vital_event":"death","txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fb"},{"identifier":{"type":"NATIONAL_ID","value":"345678914"},"vital_event":"marriage","txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fc"}]}'
       properties:
         identifier_list:
           type: array
@@ -649,6 +922,7 @@ components:
     EventInfoResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
+      example: '{"success":"string","return_message":"Success message","error_code":"Error message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"01/03/2023","birth_place_address":"Address of birth pace"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","place_of_marriage":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
       type: object
       properties:
         data: 
@@ -659,57 +933,14 @@ components:
     EventInfoResponseObject:
       type: object
       properties:
-        event:
+        txn-id:
+          type: string
+          example: 'bb26699c-abda-45be-bdcb-7c22d13355fb'
+        vital_event:
           type: string
           enum: ['birth','death','marriage']
-        event_data:
+        vital_event_data:
           type: array
-          example: '{
-  "success": "string",
-  "return_message": "Success message",
-  "error_code": "Error message",
-  "transaction_id": "0c96614c-7255-4774-b109-cd53ee859000",
-  "data": [
-    {
-      "event": "birth",
-      "event_data": [
-        {
-          "identifier": {
-            "type": "NATIONAL_ID",
-            "value": "345678912"
-          },
-          "name": {
-            "suffix": "PhD",
-            "prefix": "Mr.",
-            "first_name": "john",
-            "middle_name": "doe",
-            "last_name": "doe"
-          },
-          "father_name": {
-            "suffix": "PhD",
-            "prefix": "Mr.",
-            "first_name": "john",
-            "middle_name": "doe",
-            "last_name": "doe"
-          },
-          "mother_name": {
-            "suffix": "PhD",
-            "prefix": "Mr.",
-            "first_name": "john",
-            "middle_name": "doe",
-            "last_name": "doe"
-          },
-          "contactno": "+91-0000000000",
-          "date_of_birth": "11/17/1980",
-          "gender": "male",
-          "birth_registration_no": "01/03/2023",
-          "birth_place_address": "Address of birth pace"
-        }
-      ]
-    }
-  ]
-} 
-'
           items:
             anyOf:
               - $ref: '#/components/schemas/BirthInfo'
@@ -749,10 +980,6 @@ components:
           $ref: '#/components/schemas/Identifier'
         name:
           $ref: '#/components/schemas/HumanName'
-        father_name:
-          $ref: '#/components/schemas/HumanName'
-        mother_name:
-          $ref: '#/components/schemas/HumanName'
         contactno:
           type: string
           example: '+91-0000000000'
@@ -773,9 +1000,12 @@ components:
       properties:
         identifier:
           $ref: '#/components/schemas/Identifier'
-        event:
+        vital_event:
           type: string
           enum: ['birth','death','marriage']
+        txn-id:
+          type: string
+          example: 'bb26699c-abda-45be-bdcb-7c22d13355fb'
     IDEventDatesResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -878,7 +1108,7 @@ components:
           example: 'male'          
 
 
-    CategoryCheckRequest:
+    IDRequest:
       type: object
       properties:
         identifier_list:
@@ -886,7 +1116,7 @@ components:
           items:
             allOf:
               - $ref: '#/components/schemas/Identifier'
-    CategoryCheckResponse:
+    AgeResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
       type: object
