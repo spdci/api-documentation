@@ -551,7 +551,7 @@ paths:
     post:
       tags:
         - CRVS APIs      
-      summary: 'API that provides demographic details of a person based on an ID'
+      summary: 'API that provides parents information of a person based on an ID'
       description:  ''
       parameters:
         - $ref: "#/components/parameters/version"
