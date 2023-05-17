@@ -547,7 +547,7 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /crvs/getDemographicInfo:
+  /crvs/getParentInfo:
     post:
       tags:
         - CRVS APIs      
