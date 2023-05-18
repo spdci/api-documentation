@@ -251,7 +251,7 @@ paths:
     post:
       tags:
         - Query Farmer Registry Registry API
-      summary: 'Api to retireve farmer information based on ID'
+      summary: 'Api to retrieve farmer information based on ID'
       description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
@@ -328,7 +328,7 @@ paths:
     post:
       tags:
         - Query Farmer Registry Registry API
-      summary: 'Api to retireve land information of farmer based on ID'
+      summary: 'Api to retrieve land information of farmer based on ID'
       description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
@@ -405,7 +405,7 @@ paths:
     post:
       tags:
         - Query Farmer Registry Registry API
-      summary: 'Api to retireve crop information with land of a farmer based on ID'
+      summary: 'Api to retrieve crop information with land of a farmer based on ID'
       description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
