@@ -1,22 +1,22 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
-  title: Farmer registry APIs
-  description: 'A Farmer registry API is an application programming interface that allows developers to access data from a farmer registry. A farmer registry is a database that contains information about farmers, including their contact information, location, farm size, crops grown, and other relevant details.
-  
-  The Farmer registry API provides a standardized way for developers to access data from a farmer registry, which can make it easier and faster to build applications that support farmers. '
-  version: 0.0.1
+  title: Farmer Registry Search APIs
+  description: ''
+  version: 1.0.0
 servers:
-  - description: Farmer registry access point
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/1.0.0
+  - description: Gateway endpoint
     url: https://localhost:8081/
+
 tags:
   - name: Search API
     description: '' 
-  - name: Eligibility determination API
+  - name: Query Farmer Registry Registry API
     description: ''
   - name: Event subscription
     description: 'The event subscription APIs facilate to get notification when any event happens in farmer registry, The client application meed to register for each event seperately with provided client id and client secret'
-  - name: Validation API 
-    description: 'List of API that exibit validation capability'
 paths:
   /search:
     post:
@@ -113,17 +113,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchRequest'     
+              $ref: '#/components/schemas/ApiResponse'     
         required: true
       responses:
         '102':
           description: Processing 
         '200':
-          description: Successful operation
+          description: Processing Successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'          
+                $ref: '#/components/schemas/HttpErrorResponse'          
         '400':
           description: Bad Request
           content:
@@ -169,13 +169,13 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /eligibility-determination:
-    get:
+
+  /farmer/isFarmer:
+    post:
       tags:
-        - Eligibility determination API 
-      summary: Get list of eligibility determination supported by registry
-      description: ''
-      operationId: ''
+        - Query Farmer Registry Registry API
+      summary: 'API to check if a person farmer or not based on ID'
+      description: '' 
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -184,36 +184,307 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'     
+        required: true
       responses:
+        '102':
+          description: Processing 
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
-              schema: 
-                type: array
-                example: '[
-                          {
-                            "eligibility_check_id": "string",
-                            "eligibility_check_type": "POVERTY_SCORE",
-                            "response_format": "json"
-                          },{
-                            "eligibility_check_id": "string",
-                            "eligibility_check_type": "IS_FARMER",
-                            "response_format": "json"
-                          }
-                        ]'
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/IsFarmerEligibility'
-                    - $ref: '#/components/schemas/PovertyScoreEligibility'
+              schema:
+                $ref: '#/components/schemas/IsFarmerResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
       security:
         - spmis_auth:
-            - read:claims
+            - read:search
+  /farmer/getFarmerInfo:
     post:
       tags:
-        - Eligibility determination API 
-      summary: To get information of claim for person
-      description: Response will contain claim details
+        - Query Farmer Registry Registry API
+      summary: 'Api to retireve farmer information based on ID'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FarmerInfoResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /farmer/getLandInfo:
+    post:
+      tags:
+        - Query Farmer Registry Registry API
+      summary: 'Api to retireve land information of farmer based on ID'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FarmerLandInfoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+  /farmer/getCropInfo:
+    post:
+      tags:
+        - Query Farmer Registry Registry API
+      summary: 'Api to retireve crop information with land of a farmer based on ID'
+      description: '' 
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDRequest'     
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FarmerCropInfoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+
+  /civilregistry/query:
+    post:
+      tags:
+        - Query Civil Registry API
+      summary: ''
+      description: Response will contain elegibity details
       operationId: ''
       parameters:
         - $ref: "#/components/parameters/version"
@@ -224,19 +495,182 @@ paths:
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
       requestBody:
-        description: ''
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EligibilityDeterminationRequest'     
-        required: true
+              type: array 
+              items:
+               type : object 
+               properties :
+
+                nationalID:
+                  type: string
+                  example: "john.v@mosip"
+                  description: National ID of the person to query
+                queries:
+                  type: array
+                  items:
+                    type: string
+                    example: isliving
+                             
+                    enum:
+                      - maritalStatus
+                      - dateOfBirth
+                      - dateOfDeath
+                      - Isliving
+                      - IsDivorced
+                      - mortalitycount
+                      - region
+                      - state
+                      - country
+                      - mortalityreason
+                      - morbidityreason
+                      - diagnosiscode
+                      - IsSeperated
+                      - BirthRegion
+                      - conditionAtBirth
+                      - marriageDate
+                      - divorceDate
+                      - demographicDetails
+                      - isJunior
+                      - isMajor
+                      - isSenior
+                      - marriageDetails
+             
+               
+                      
+      responses :
+        '202' :
+          description : Accepted 
+          content :
+            application/json :
+              schema :
+                type : object 
+                properties :
+                  status :
+                    type : string 
+                    enum :
+                      - accepted
+      security:
+        - spmis_auth:
+            - read:eligibity
+  /civilregistry/on-query:         
+    post:
+      tags:
+         - Query Civil Registry API
+      summary: ''
+      description: Response will response of the query
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+      requestBody :
+        required : true 
+        content :
+          application/json :
+            schema :
+              type : object 
+              properties :
+                status :
+                  type : string 
+                  enum :
+                    - success 
+                data :
+                  type : array 
+                  items :
+                    type : object 
+                    properties :
+                      nationalID :
+                        type : string 
+                        example: "john.v@mosip"
+                      isliving :
+                        type : boolean
+                        example: yes
+                        enum :
+                          - alive 
+                          - deceased 
+                      maritalStatus :
+                        type : string 
+                        example: ""
+                        enum :
+                          - single 
+                          - married 
+                          - divorced 
+                          - widowed 
+                      dateOfBirth :
+                        type : string 
+                        example: ""
+                        format : date-time 
+                      dateOfDeath :
+                        type : string 
+                        example: ""
+                        format : date-time 
+                      marriageDate :
+                        type : string 
+                        example: ""
+                        format : date-time 
+                      divorceDate :
+                        type : string 
+                        example: ""
+                        format: date-time 
+                      demographicDetails :
+                        type : object 
+                        properties :
+                          firstName :
+                            type : string 
+                            example: ""
+                          lastName :
+                            type : string 
+                            example: ""
+                          gender :
+                            type : string 
+                            example: ""
+                            enum :
+                              - male 
+                              - female 
+                              - other  
+                          address :
+                            type : object  
+                            properties:
+                              street:
+                                type: string
+                                example: ""
+                              city:
+                                type: string
+                                example: ""
+                              state:
+                                type: string
+                                example: ""
+                              zipCode:
+                                type: string
+                                example: ""
+                      isJunior:
+                        type: boolean
+                        example: ""
+                      isMajor:
+                        type: boolean
+                        example: ""
+                      isSenior:
+                        type: boolean
+                        example: ""
+                      marriageDetails:
+                        type: object
+                      birthDetails:
+                        type: object
+                        $ref: '#/components/schemas/BirthDetail'
       responses:
         '200':
-          description: Successful operation
+          description: Successful callback response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EligibilityDeterminationResponse'     
+                $ref: '#/components/schemas/HttpSuccessResponse'     
         '400':
           description: Bad Request
           content:
@@ -282,35 +716,6 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-  /subscription-list:
-    get:
-      tags:
-        - Event subscription 
-      summary: Get list of supported events in registry
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-        - $ref: '#/components/parameters/x-async'
-        - $ref: '#/components/parameters/x-callbackendpoint'
-      description: ''
-      operationId: ''
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: 
-                type: array
-                items:
-                  $ref: '#/components/schemas/SupportedEvents'          
-      security:
-        - spmis_auth:
-            - read:eligibity
   /subscribe:
     post:
       tags:
@@ -323,7 +728,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SubscriptionRequest'     
+              type: object
+              properties:
+                subscription_request:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SubscriptionRequest'     
         required: true
       responses:
         '200':
@@ -377,6 +787,47 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
+  /subscription-notify:
+    post:
+      tags:
+        - Event subscription 
+      summary: recieve notifications from farmer registry based on registered events
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      description: ''
+      operationId: ''
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notification-response:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/NotificationResponse'     
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupportedEvents'          
+      security:
+        - spmis_auth:
+            - read:eligibity
   /unsubscribe:
     post:
       tags:
@@ -443,170 +894,8 @@ paths:
       security:
         - spmis_auth:
             - read:relationships
-  /events:
-    post:
-      tags:
-        - Event subscription  
-      summary: The events will retrieve all events for specific subscription
-      description: Response will contain eligibity details
-      operationId: ''
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EventsRequest'     
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EventsResponse'     
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'                 
-      security:
-        - spmis_auth:
-            - read:relationships
-  /validation:
-    get:
-      tags:
-        - Validation API 
-      summary: The validation API will validate perticular validation like IS_FARMER, IS_POOR, IS_SENIOR_CITIZEN etc flags
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: 
-                $ref: '#/components/schemas/ValidationCheckRequest'
-      security:
-        - spmis_auth:
-            - read:claims
-    post:
-      tags:
-        - Validation API  
-      summary: To perform boolean operation to check certain data set for items like is IS_FARMER, IS_POOR, IS_SENIOR_CITIZEN 
-      description: Response will contain claim details
-      operationId: ''
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidationCheckRequest'     
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationCheckResponse'     
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'                 
-      security:
-        - spmis_auth:
-            - read:relationships
+
+
 components:
   parameters:
     authorization:
@@ -640,13 +929,13 @@ components:
         type: string
         example: "bd4a82cd319ababe57d0a822049ae8985029f82237509d3f091c82cbc7a6945c"
       required: true
-      description: Signature created in combination of {x-message-id}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
+      description: Signature created in combination of {payload}+{x-timestamp:}+{x-sender-id}.This is usually encrypted string using HMAC-SHA-256 algorithm with the private key.
     x-registry-type:
       in: header
       name: x-registry-type
       schema:
         type: string
-        enum: ['x-farmer']
+        enum: ['x-crvs']
       required: true
       description: This param used to decide which service to be called to retrieve data
     x-sender-id:
@@ -654,7 +943,7 @@ components:
       name: x-sender-id
       schema:
         type: string
-        example: "Farmer help programme "
+        example: "SP_CRVS_2022"
       required: true
       description: Information about requester , it may be some code of SP system
     x-message-id:
@@ -682,20 +971,20 @@ components:
         example: "https://senderhost/callback/on-disburse"
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
+
   schemas:
     SearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/FilterGroupFarmerRegistry'
       type: object
-      example: '{"transaction_id":"0c96614c-7255-4774-b109-cd53ee851769","additionalFields":["contact","address","dob"],"filtergroups":[{"groupid":"A","operator-with-next-group":"and","fields":[{"fieldname":"identifier.type","operator":"contains","value":"NATIONAL_ID","nextfieldoperator":"and"},{"fieldname":"identifier.value","operator":"contains","value":"345678912","nextfieldoperator":""}]},{"groupid":"B","operator-with-next-group":"","fields":[{"fieldname":"name.first_name","operator":"contains","value":"john","nextfieldoperator":"or"},{"fieldname":"name.last_name","operator":"contains","value":"doe","nextfieldoperator":""}]}],"sortby":[{"fieldname":"name.first_name","order":"asc"}],"pagination":{"page_size":10,"page_number":5}}'
       properties:
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee851769
-        filtergroups:
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/FilterGroupFarmerRegistry'
-              - $ref: '#/components/schemas/FilterGroupCRVSRegistry'
+        farmerbeneficiaryId:
+          $ref: '#/components/schemas/benefeciaryId'
+        farmerRegistrationNumber:
+          $ref: '#/components/schemas/registrationNumber'  
         sortby:
           $ref: '#/components/schemas/Sort'
         pagination:
@@ -707,94 +996,28 @@ components:
             page_number:
               type: number
               example: 5  
+ 
+ 
     FilterGroupFarmerRegistry:
       type: object
       properties:
-        groupid:
-          type: string
-          format: string
-          example: "A"
-        operator-with-next-group:
-          type: string
-          description: 'Operation with next group' 
-          enum: ["and", "or"]
-        fields:
+        query:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/IdentifierTypeField'
-              - $ref: '#/components/schemas/IdentifierValueField'
               - $ref: '#/components/schemas/NameField'
-              - $ref: '#/components/schemas/CropTypeField'
-              - $ref: '#/components/schemas/RegionField'
-              - $ref: '#/components/schemas/FarmerTypeField'
-    FilterGroupCRVSRegistry:
+              - $ref: '#/components/schemas/Expression'
+              - $ref: '#/components/schemas/SchemeAvailed'
+    Expression:
       type: object
       properties:
-        groupid:
+        expression:
           type: string
-          format: string
-          example: "A"
-        operator-with-next-group:
-          type: string
-          description: 'Operation with next group' 
-          enum: ["and", "or"]
-        fields:
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/IdentifierTypeField'
-              - $ref: '#/components/schemas/IdentifierValueField'
-              - $ref: '#/components/schemas/RegionField'
-              - $ref: '#/components/schemas/Repositories'
-    Field:
-      type: object
-      required:
-        - operator
-        - nextfieldoperator
-      properties: 
-        operator:
-          $ref: '#/components/schemas/FieldOperator'
-        nextfieldoperator: 
-          $ref: '#/components/schemas/GroupOperator'
-    IdentifierTypeField:
-      description: 'Search with identifier type'
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'identifier.type'
-              enum: ['identifier.type']
-            value: 
-              type: string
-              example: "NATIONAL_ID"
-              enum: ['NATIONAL_ID','FARMER_ID']
-    IdentifierValueField:
-      description: 'Search with identifier value'
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'identifier.value'
-              enum: ['identifier.value']
-            value: 
-              type: string
-              example: "345678912"
-              description: 'Any string that contains identifier, for example for identifier.type NATIONAL_ID value may be 345678912'
+          example: "and"
+          enum: [and,or]
     NameField:
-      description: 'Search with first name, HumanName is response object so fields of HumanName to be sent in search'
+      description: 'Search by name'        
       allOf: 
-        - $ref: '#/components/schemas/Field'
         - type: object
           required:
             - fieldname
@@ -802,16 +1025,17 @@ components:
           properties: 
             fieldname:
               type: string
-              example: 'name.first_name'
-              enum: ['name.first_name','name.last_name']
-            value: 
-              type: string
-              example: "John"
-              description: 'Search by first name or last name of human'
-    CropTypeField:
-      description: 'Search by crop type'    
+              description: Name of the field to be searched
+              enum: ['firstname', 'lastname', 'national_identifier', 'email', 'gender', 'birthdate', 'place_of_birth', 'phone_number', 'address.addressline1', 'address.addressline2', 'address.locality', 'address.region', 'address.postal_code', 'address.country','marriagedate','deathdate','divorcedate','seperationdate','annulmentdate']
+            operator:
+              $ref: '#/components/schemas/FieldOperator'
+            value:
+             type: string
+             example: 'john'
+             description: 'Search by Name'
+
+    SchemeAvailed:
       allOf: 
-        - $ref: '#/components/schemas/Field'
         - type: object
           required:
             - fieldname
@@ -819,77 +1043,28 @@ components:
           properties: 
             fieldname:
               type: string
-              example: 'croptype'
-              enum: ['croptype']
+              example: 'scheme-availed'
+              
+            operator:
+              $ref: '#/components/schemas/FieldOperator'
             value: 
               type: string
-              example: "kharif"
-              enum: ['kharif','rabi','zaid']
-              description: 'Search by crop type'
-    RegionField:
-      description: 'Search by region'        
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'region'
-              enum: ['location']
-            value: 
-              type: string
-              example: "SE- India"
-              enum: ['SE- India','WEST - INDIA']
-              description: 'Search by location'
-    FarmerTypeField:
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'farmertype'
-              enum: ['farmertype']
-            value: 
-              type: string
-              example: "marginal"
-              enum: ['owner','marginal']
-              description: 'Search by farmer type'
-    Repositories:
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'repository_type'
-              enum: ['repository_type']
-            value: 
-              type: string
-              example: "marginal"
-              enum: ['Birth', 'Death', 'Marriage']
-              description: 'Search by farmer type'
+              example: "PM-KISAN"
+              enum: ['RKVY','PMKSY','PM-KISAN','NA']
+              description: 'Search by scheme availed type'
+    benefeciaryId:
+      type: string
+      description: '<br> 1. Beneficiary id is a normative case insensitive represenation represented as id@id-provider </br>'
+      format: '^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$'
+      example: '12345@token.mosip'
+    registrationNumber:
+      type: string
+      description: Unique registration number of farmer in a farmer registry 
+      example: '12345678901234567890'          
     FieldOperator:
       type: string
-      enum:
-        - or
-        - and
-        - contains
-        - like
-    GroupOperator:
-      type: string
-      enum:
-        - or
-        - and
+      example: "eq"
+      enum: [eq,not eq,and,or,contain, not contain, like,not like, range,gt,not gt,lt.not lt,between]
     Sort:
       type: object
       properties:
@@ -899,7 +1074,6 @@ components:
         order:
           type: string
           enum: ["asc","desc"]
-
     ApiResponse:
       type: object
       properties:
@@ -916,7 +1090,20 @@ components:
         data: 
           type: array
           items:
-            $ref: '#/components/schemas/FarmerInfo'
+            $ref: '#/components/schemas/CRVSSearchByBRNResponse'
+    BaseResponse:
+      type: object
+      properties:
+        success:
+          type: string
+        return_message:
+          type: string
+        error_code:
+          type: string
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request
     HumanName:
       type: object
       properties:
@@ -935,6 +1122,478 @@ components:
         last_name:
           type: string
           example: doe
+
+    BenefeciaryId:
+      type: string
+      description: '<br> 1. Beneficiary id is a normative case insensitive represenation represented as id@id-provider </br>'
+      format: '^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$'
+      example: '12345@token.mosip'
+    ReferenceId:
+      type: string
+      description: Unique reference_id set by txn initiating system for each request in a batch
+      example: '12345678901234567890'      
+
+    FarmerInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/FarmerInfoObject'
+    FarmerInfoObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        benefeciaryId:
+          $ref: '#/components/schemas/BenefeciaryId'
+        registrationNumber:
+          $ref: '#/components/schemas/ReferenceId'
+        father_name:
+          $ref: '#/components/schemas/HumanName'
+        gaurdian_name:
+          $ref: '#/components/schemas/HumanName'
+        relation_with_gaurdian:
+          example: brother
+          enum: ['brother', 'uncle','sister','adopted', 'father']  
+        contactno:
+          type: string
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        
+        gender:
+          type: string
+          example: 'male'       
+          enum: ['male','female','transgender']   
+        location:
+          type: string
+        crop_type:
+          type: string
+          example: 'Food Crops'
+          enum: ['Food Crops','Feed Crops','Fiber Crops','Oil Crops','Ornamental Crops','Industrial Crops']
+        farmer_type:
+          type: string
+          example: 'Marginal'
+          enum: ['Marginal','Small','Medium','Large','Sharecropper','Tenant','Owner','landless']
+        landsize:
+          type: string
+        educational-qualification:
+          type: string
+          example: 'primary-level' 
+          enum: ['primary-level','secondary-level','uneducated','graduate','postgraduate'] 
+        annual-income-from-family:
+          type: string
+        farming-main-source-income:
+          type: string
+          example: 'Y'
+          enum: ['Y','N']
+        national_id:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        crop-detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/CropDetails' 
+        dependent-details:
+          type: array
+          items:
+            $ref: '#/components/schemas/DependentDetails'  
+        land-details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LandDetails'   
+        schemes-availed:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemesAvailedDetails'      
+  
+    FarmerLandInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/FarmerLandInfoObject'    
+    
+    FarmerLandInfoObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        land_info: 
+          type: array
+          items:
+            $ref: '#/components/schemas/LandDetails'     
+    
+    FarmerCropInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/FarmerCropInfoObject'    
+    
+    FarmerCropInfoObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        crop_details_by_land: 
+          type: array
+          items:
+            $ref: '#/components/schemas/FarmerCropInfoWithLandObject'     
+
+    FarmerCropInfoWithLandObject:
+      type: object
+      properties:
+        land_info: 
+          $ref: '#/components/schemas/LandDetails'     
+        crom_info:
+          $ref: '#/components/schemas/CropDetails'
+  
+    
+    CRVSSearchByBRNResponse:
+      type: object
+      properties:
+        identifier:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+              - $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        benefeciaryId:
+          $ref: '#/components/schemas/BenefeciaryId'
+        registrationNumber:
+          $ref: '#/components/schemas/ReferenceId'
+        father_name:
+          $ref: '#/components/schemas/HumanName'
+        gaurdian_name:
+          $ref: '#/components/schemas/HumanName'
+        relation_with_gaurdian:
+          example: brother
+          enum: ['brother', 'uncle','sister','adopted', 'father']  
+        contactno:
+          type: string
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        
+        gender:
+          type: string
+          example: 'male'       
+          enum: ['male','female','transgender']   
+        location:
+          type: string
+        crop_type:
+          type: string
+          example: 'Food Crops'
+          enum: ['Food Crops','Feed Crops','Fiber Crops','Oil Crops','Ornamental Crops','Industrial Crops']
+        farmer_type:
+          type: string
+          example: 'Marginal'
+          enum: ['Marginal','Small','Medium','Large','Sharecropper','Tenant','Owner','landless']
+        landsize:
+          type: string
+        educational-qualification:
+          type: string
+          example: 'primary-level' 
+          enum: ['primary-level','secondary-level','uneducated','graduate','postgraduate'] 
+        annual-income-from-family:
+          type: string
+        farming-main-source-income:
+          type: boolean
+          example: 'Y'
+          enum: ['Y','N']
+        national_id:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        crop-detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/CropDetails' 
+        dependent-details:
+          type: array
+          items:
+            $ref: '#/components/schemas/DependentDetails'  
+        land-details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LandDetails'   
+        schemes-availed:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemesAvailedDetails'     
+    
+    SchemesAvailedDetails:
+      type: object
+      description: "Schemes availed details of Farmer as stored in Farmer Registry" 
+      properties:
+         scheme-name:
+             type: string
+         availed:  
+             type: boolean
+             example: "Y"
+             enum: ['Y','N']
+         scheme_benefit_amount:
+             type: string
+         
+    LandDetails:
+      type: object
+      description: "Land details of Farmer as stored in Farmer Registry" 
+      properties:
+         landownerName:
+             $ref: '#/components/schemas/HumanName'  
+         type_of_ownership:
+             type: string
+             example: 'leased'
+             enum: ['leased','contracted','self-owned','govt-granted']
+         land_location:  
+             $ref: '#/components/schemas/Address'
+         plot_number:
+             type: string
+         area_of_plot(sq m):
+             type: string
+         type_of_land:
+            type: string
+         altitude: 
+            type: string
+         latitude:
+            type: string
+         longitude:
+            type: string
+  
+    
+    DependentDetails:
+      type: object
+      description: "Crop details stored in Farmer Registry" 
+      properties:
+         dependentName:
+             $ref: '#/components/schemas/HumanName'  
+         age:
+             type: string
+         dependent_relationsip:
+             type: string
+             example: son
+             enum: ['son','daughter','father','mother','sister','grandparents','others']
+
+         dependent-member-id:
+              type: string
+               
+         dependent-national-id:
+              type: string
+             
+
+    CropDetails:
+      type: object
+      description: "Crop details stored in Farmer Registry" 
+      properties:
+         cropname:
+              type: string
+              example: "rabi-crop"
+              enum: ['rabi-crop','kharif-crop','fruits-crop','plantation-crop']
+              description: 'Search by crop detail'  
+         croptype:
+              type: string
+              example: "natural-farming"
+              enum: ['organic','inorganic','natural-farming']
+              description: ' crop type'     
+         sowing-time_in_months_and_weeks:
+              type: string
+         cropped_area:
+              type: string     
+    Identifier:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: ['NATIONAL_ID','BIRTH_REG_NO']
+        value:
+          type: string
+          example: 345678912
+    HttpErrorResponse:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+        error_message:
+          type: string
+    HttpSuccessResponse:
+      description: Processing Successful
+      properties:
+        error_code:
+          type: string
+        error_message:
+          type: string
+    SupportedEvents:
+      type: object
+      properties:
+        eventlist:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/BirthRegistrationEvent'
+    BirthRegistrationEvent:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: ['BIRTH_REGISTRATION']
+          description: 'To subscribe this event send this code in subscription request'
+        response_format:
+          type: string
+          enum: ['json']
+        response_sample:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/CRVSSearchByBRNResponse'
+    SubscriptionRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: [unregiser,update_benefeciary, update,land_ownership_changed,crop_detail_changed,unregister,demographic_update]
+          description: 'To subscribe this event send this code in subscription request'
+        Benefeciary_id:
+          type: string
+        Additional_info:
+          type: object
+          properties:
+           expression:
+             $ref: '#/components/schemas/ApiResponse'
+        callback_url:
+          type: string
+    SubscriptionResponse:
+      type: object
+      properties:
+        success:
+          type: string
+        return_message:
+          type: string
+        error_code:
+          type: string
+        subscribed_events:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859000
+          description: The transaction_id received in request
+        data: 
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionRequest'
+    UnSubscribeRequest:
+      type: object
+      properties:
+        event_code:
+          type: string
+          enum: [unregiser,update_benefeciary, update,land_ownership_changed,crop_detail_changed,unregister,demographic_update]
+          description: 'To subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+        reason:
+          type: string  
+    IsAliveEligibility:
+      type: object
+      properties:
+        eligibility_check_id:
+          type: string
+          format: string
+        eligibility_check_type:
+          type: string
+          description: Eligibility type 
+          example: IS_ALIVE
+          enum: ['IS_ALIVE']
+        response_format:
+          type: string
+          enum: ['json']  
+    EligibilityDeterminationRequest:
+      type: object
+      description: '' 
+      properties:
+        eligibility_codes:
+          type: array
+          items:
+            type: string
+          example: ["IS_ALIVE", "IS_MARRIED", "IS_SENIOR_CITIZEN"]
+          description: 'Is given id valid in farmer registry, This will check in farmer registry for supplied information of ID'
+        national_id:
+          type: string
+          example: 345678912
+#    EligibilityDeterminationRequest:
+#      type: object
+#      properties:
+#        
+#        payload:
+#          type: array
+#          items:
+#            anyOf:
+#              - $ref: '#/components/schemas/VerifiableCredentialIsAlive'
+    VerifiableCredentialIsAlive:
+      type: object
+      properties:
+        context:
+          type: array
+          example: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/crvs/v1']
+          items:
+            type: string
+            enum: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/crvs/v1']
+        type:
+          type: array
+          example: ['VerifiableCredential','IsAliveCredential']
+          items:
+            type: string
+            items:
+              type: string
+            example: ["VerifiableCredential", "IsAliveCredential"]                 
+        determine:
+          $ref : '#/components/schemas/IsAliveEligibility'
+        issuer: 
+          type: string
+          example: 'did:crvs-registry:345678912'
+        issuanceDate:
+          type: string
+        expirationDate:
+          type: string
+        credentialSubject:
+          $ref: '#/components/schemas/CredentialSubject'
+        proof:
+          $ref: '#/components/schemas/Proof'
+    EligibilityDeterminationResponse:
+      type: object
+      properties:
+        queryResponse:
+          type: array
+          items:
+            anyOf:
+              - $ref : '#/components/schemas/VerifiableCredentialIsAliveResponse'
+    CredentialSubject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        id:
+          type: string
+        person:
+          $ref: '#/components/schemas/HumanName'
+        address:
+          $ref: '#/components/schemas/Address'
+        contact:
+          $ref: '#/components/schemas/Contact' 
     Address:
       type: object
       properties:
@@ -968,334 +1627,118 @@ components:
           example: 'assertionMethod'       
         jws:
           type: string
-          example: 'eyJhbGciOiJFZDI1NTE5U2lnbmF0dXJlMjAxOCIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..iHCBYnF2ovIe9hjaaxEC25N-2P8w4Qtf9zQBUV-zXnLHfYqzzubpI8f0mvmXdD6rvYB-9Zx_bFdK46e1IcblDA'        
-    FarmerInfo:
+          example: 'eyJhbGciOiJFZDI1NTE5U2lnbmF0dXJlMjAxOCIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..iHCBYnF2ovIe9hjaaxEC25N-2P8w4Qtf9zQBUV-zXnLHfYqzzubpI8f0mvmXdD6rvYB-9Zx_bFdK46e1IcblDA' 
+    BirthDetail:
       type: object
       properties:
-        identifier:
+        nationalID:
+          type: string
+          example: ""
+        firstName:
+          type: string
+          example: ""
+        lastName:
+          type: string
+          example: ""
+        gender:
+          type: string
+          example: ""
+          enum:
+            - male
+            - female
+            - other  
+        
+        placeOfBirth:
+          type: object
+          properties:
+           region:
+            type: string
+            example: ""
+           state:
+            type: string
+            example: ""
+           country:
+            type: string
+            enum: [IN]
+            example: ""
+        dateOfBirth :
+          type : string 
+          format : date-time  
+          example: ""
+        relatedPersons:
+          type: object
+          properties:
+            fathername:
+             type: string
+             example: ""
+            mothername:
+             type: string
+             example: ""
+
+
+
+    VerifiableCredentialIsAliveResponse:
+      type: object
+      properties:
+        NationalId:
+         type: string
+         example: john.v@mosip
+        is_alive:
+          type: boolean
+          example: true
+    NotificationResponse:
+      type: object
+      description: CRVS Notification event
+      properties:
+        benefeciaryId:
+          type: string
+          description: '<br> 1. Beneficiary id is a normative case insensitive represenation represented as id@id-provider </br>'
+          format: '^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$'
+          example: '12345@token.mosip'
+        farmerRegistrationNumber:
+          type: string
+          description: Unique reference_id set by txn initiating system for each request in a batch
+          example: '12345678901234567890'      
+        event_code:
+          type: string
+          enum: [unregiser,update_benefeciary, update,land_ownership_changed,crop_detail_changed,unregister,demographic_update]
+          description: 'To subscribe this event send this code in subscription request'
+        farmer_data:
+               $ref: '#/components/schemas/ApiResponse'
+              
+      required:
+        - ReferenceId
+        - BenefeciaryId
+        - event_code
+    IDRequest:
+      type: object
+      properties:
+        identifier_list:
           type: array
           items:
             allOf:
               - $ref: '#/components/schemas/Identifier'
-              - $ref: '#/components/schemas/Identifier'
-        name:
-          $ref: '#/components/schemas/HumanName'
-        location:
-          type: string
-        crop_type:
-          type: string
-          enum: ['Food Crops','Feed Crops','Fiber Crops','Oil Crops','Ornamental Crops','Industrial Crops']
-        farmer_type:
-          type: string
-          enum: ['Marginal','Small','Medium','Large','Sharecropper','Tenant','Owner','landless']
-        landsize:
-          type: string
-        contactno:
-          type: string
-    IsFarmerEligibility:
+    IsFarmerResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
       type: object
       properties:
-        eligibility_check_id:
-          type: string
-          format: string
-        eligibility_check_type:
-          type: string
-          description: claim type 
-          example: IS_A_FARMER
-          enum: ['IS_A_FARMER']
-        response_format:
-          type: string
-          enum: ['json']
-    SupportedEvents:
-      type: object
-      properties:
-        eventlist:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/FarmerRegistrationEvent'
-    PovertyScoreEligibility:
-      type: object
-      properties:
-        eligibility_check_id:
-          type: string
-          format: string
-        eligibility_check_type:
-          type: string
-          description: Poverty score check 
-          example: POVERTY_SCORE
-          enum: ['POVERTY_SCORE']
-        response_format:
-          type: string
-          enum: ['json']
-    UnSubscribeRequest:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['DISABLE_PERSON_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        client_id:
-          type: string
-        reason:
-          type: string    
-    FarmerRegistrationEvent:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['FARMER_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        response_format:
-          type: string
-          enum: ['json']
-        response_sample:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/FarmerInfo'
-    SubscriptionRequest:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['FARMER_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        client_id:
-          type: string
-        callback_url:
-          type: string
-    SubscriptionResponse:
-      type: object
-      properties:
-        success:
-          type: string
-        return_message:
-          type: string
-        error_code:
-          type: string
-        subscribed_events:
-          type: string
-          example: 0c96614c-7255-4774-b109-cd53ee859000
-          description: The transaction_id received in request
         data: 
           type: array
           items:
-            $ref: '#/components/schemas/SubscriptionRequest'
-    EligibilityDeterminationRequest:
-      type: object
-      properties:
-        payload:
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/VerifiableCredentialIsFarmer'
-              - $ref: '#/components/schemas/VerifiableCredentialPovertyScore'
-    VerifiableCredentialIsFarmer:
-      type: object
-      properties:
-        context:
-          type: array
-          example: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
-          items:
-            type: string
-            enum: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
-        type:
-          type: array
-          example: ['VerifiableCredential','FarmerCredential']
-          items:
-            type: string
-            items:
-              type: string
-            example: ["VerifiableCredential", "FarmerCredential"]                 
-        determine:
-          $ref : '#/components/schemas/IsFarmerEligibility'
-        issuer: 
-          type: string
-          example: 'did:farmer-registry:345678912'
-        issuanceDate:
-          type: string
-        expirationDate:
-          type: string
-        credentialSubject:
-          $ref: '#/components/schemas/CredentialSubject'
-        proof:
-          $ref: '#/components/schemas/Proof'
-    VerifiableCredentialPovertyScore:
-      type: object
-      properties:
-        context:
-          type: array
-          example: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
-          items:
-            type: string
-            enum: ['https://www.w3.org/2018/credentials/v1','https://w3id.org/citizenship/v1','https://example.com/farmers/v1']
-        type:
-          type: array
-          example: ['VerifiableCredential','FarmerPovertyScoreCredential']
-          items:
-            type: string
-            items:
-              type: string
-            example: ["VerifiableCredential", "FarmerPovertyScoreCredential"]                 
-        determine:
-          $ref : '#/components/schemas/PovertyScoreEligibility'
-        issuer: 
-          type: string
-          example: 'did:farmer-registry:345678912'
-        issuanceDate:
-          type: string
-        expirationDate:
-          type: string
-        credentialSubject:
-          $ref: '#/components/schemas/CredentialSubject'
-        proof:
-          $ref: '#/components/schemas/Proof'
-    CredentialSubject:
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-        id:
-          type: string
-        person:
-          $ref: '#/components/schemas/HumanName'
-        address:
-          $ref: '#/components/schemas/Address'
-        contact:
-          $ref: '#/components/schemas/Contact' 
-    EligibilityDeterminationResponse:
-      type: object
-      properties:
-        verifiableCredential:
-          type: array
-          items:
-            anyOf:
-              - $ref : '#/components/schemas/VerifiableCredentialIsFarmerResponse'
-              - $ref : '#/components/schemas/VerifiableCredentialPovertyScoreResponse'
-    VerifiableCredentialIsFarmerResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 'https://registry-host/isfarmer/NATIONAL_ID/345678912'
-        issuer:
-          type: string
-          example: 'https://registry-host.com'
-        issuanceDate:
-          type: string
-          example: '2022-05-09T10:11:12Z'          
-        credentialSubject:
-            $ref : '#/components/schemas/CredentialSubject'
-        is_farmer:
-          type: boolean
-          example: true
-    VerifiableCredentialPovertyScoreResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 'https://registry-host/isfarmer/NATIONAL_ID/345678912'
-        issuer:
-          type: string
-          example: 'https://registry-host.com'
-        issuanceDate:
-          type: string
-          example: '2022-05-09T10:11:12Z'          
-        credentialSubject:
-            $ref : '#/components/schemas/CredentialSubject'
-        poverty_score:
-          type: boolean
-          example: '70%'
-    EventsRequest:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['FARMER_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        client_id:
-          type: string
-        start_date:
-          type: string
-          description: 'Date from which events to retrieve'
-        end_date:
-          type: string        
-          description: 'Date upto which events to retrieve'
-    EventsResponse:
-      type: object
-      properties:
-        eventlist:
-          type: array
-          items:
             allOf:
-              - $ref: '#/components/schemas/FarmerRegistrationEvent'    
-    Identifier:
+              - $ref: '#/components/schemas/IsFarmerCheckObject'           
+    IsFarmerCheckObject:
       type: object
       properties:
-        type:
-          type: string
-          enum: ['NATIONAL_ID','FARMER_REG_NO']
-        value:
-          type: string
-          example: 345678912
-    HttpErrorResponse:
-      description: HTTP layer error details
-      properties:
-        error_code:
-          type: string
-        error_message:
-          type: string
-    
-    ValidationCheckRequest:
-      type: object
-      description: '' 
-      properties:
-        validation_code:
-          type: array
-          items:
-            type: string
-          example: ["IS_FARMER", "IS_POOR", "IS_SENIOR_CITIZEN"]
-          description: 'Is given id valid in farmer registry, This will check in farmer registry for supplied information of ID'
         identifier:
           $ref: '#/components/schemas/Identifier'
-    ValidationCheckResponse:
-      type: object
-      description: '' 
-      properties:
-        validations:
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/ValidationResponse'
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-    ValidationResponse:
-      type: object
-      description: '' 
-      properties:
-        validation_code:
+        is_farmer:
           type: string
-          enum: ['IS_SENIOR_CITIZEN']
-          example: 'IS_SENIOR_CITIZEN'
-        response:
-          type: boolean
-          enum: [true,false]
-          description: 'This flag will indicate outcome of validation check'
-    
+          enum: [yes,no]
+
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-#    spmis_auth:
-#      type: http
-#      scheme: bearer
-#      bearerFormat: jwt
-#      flows:
-#        implicit:
-#          authorizationUrl: https://localhost:8081/oauth/authorize
-#          scopes:
-#            read:search: Allowed to perform search operation
-#            read:claims: Read list of claims
