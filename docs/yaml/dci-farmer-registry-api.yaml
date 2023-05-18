@@ -213,7 +213,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IsFarmerResponse'          
+                $ref: '#/components/schemas/FarmerListResponse'          
         '400':
           description: Bad Request
           content:
@@ -1516,7 +1516,49 @@ components:
         is_farmer:
           type: string
           enum: [yes,no]
-
+    FarmerListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/FarmerBasicInfoObject'           
+    FarmerBasicInfoObject:
+      type: object
+      properties:
+        uin:
+          type: string
+          description: Uin of farmer
+          example: '345678912' 
+        farmerId:
+          type: string
+          description: The farmer id in farmer registry
+          example: 'MH24ACV1455' 
+        fullName:
+          type: string
+          description: Full name of farmer
+          example: 'John Doe' 
+        location:
+          type: string
+          description: Location details
+          example: 'Farmville'      
+        cropType:
+          type: string
+          description: Crop type
+          example: 'Wheat'      
+        farmerType:
+          type: string
+          description: The farmer info for its type
+          example: 'Organic'      
+        landSize:
+          type: string
+          description: Unique reference_id set by txn initiating system for each request in a batch
+          example: '12345678901234567890'      
+          
+        
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
