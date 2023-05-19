@@ -4,10 +4,7 @@ info:
   description: ''
   version: 0.0.1
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/1.0.0
-  - description: Gateway endpoint
+  - description: Farmer registry interoperability layer endpoint
     url: https://localhost:8081/
 
 tags:

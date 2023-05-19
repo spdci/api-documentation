@@ -4,7 +4,7 @@ info:
   description: 'The CRVS and SP system should implement following APIs explained in Search API, Event subscription, Event Notification section'
   version: 0.0.1
 servers:
-  - description: Gateway endpoint
+  - description: CRVS registry interoperability layer endpoint
     url: https://localhost:8081/
 
 tags:
