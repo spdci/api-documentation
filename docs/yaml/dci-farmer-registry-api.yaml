@@ -168,12 +168,12 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /farmer/getFarmerList=farmerType&location=location&cropType=cropType&landSize=landSize:
-    get:
+  /farmer/getFarmerList:
+    post:
       tags:
         - Query Farmer Registry API
       summary: 'API to retrieve list of farmers based on farmerType(optional) /location(optional) / cropType(optional) / landSize(optional) '
-      description: '' 
+      description: ''
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -184,26 +184,13 @@ paths:
         - $ref: '#/components/parameters/x-sender-id'
         - $ref: '#/components/parameters/x-async'
         - $ref: '#/components/parameters/x-callbackendpoint'
-        - in: query
-          name: farmerType
-          schema:
-            type: string
-          description: The farmer type
-        - in: query
-          name: location
-          schema:
-            type: string
-          description: The location of farmer 
-        - in: query
-          name: cropType
-          schema:
-            type: string
-          description: The crop type 
-        - in: query
-          name: landSize
-          schema:
-            type: string
-          description: Land size
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetFarmerListRequest'     
+        required: true
       responses:
         '102':
           description: Processing 
@@ -964,7 +951,24 @@ components:
           items:
             anyOf:
               - $ref: '#/components/schemas/Attribute'
-            
+
+    GetFarmerListRequest:
+      type: object
+      properties:
+        farmerType:
+          type: string
+          example: 'marginal'
+        location:
+          type: string
+          example: 'South-East'
+        cropType:
+          type: string
+          example: 'seasonal'
+        landSize:
+          type: string
+          example: '5'
+        
+        
     Attribute:
       type: object
       properties:
