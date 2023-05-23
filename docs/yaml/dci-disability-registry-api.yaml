@@ -1,28 +1,24 @@
 openapi: 3.0.3
 info:
   title: Disability registry APIs
-  description: ' **A Disability registry APIs** is an application programming interface that allows developers to access data from a disability registry. A disability registry is a database that contains information about individuals with disabilities, including their demographic information, medical history, and disability status.
-The Disability registry API can be used by developers to build applications and tools that provide services and support for people with disabilities. For example, a developer could use the API to build an app that helps people with disabilities find accessible transportation or locate disability-friendly housing.
-The Disability registry API provides a standardized way for developers to access data from a disability registry, which can make it easier and faster to build applications that support people with disabilities.'
+  description: ' '
   version: 0.0.1
 servers:
   - description: Disability registry access point
     url: https://localhost:8081/
 tags:
-  - name: Search API
-    description: '' 
-  - name: Eligibility determination API
+
+  - name: Query Disability Registry API
     description: ''
-  - name: Event subscription
-    description: 'The event subscription APIs facilate to get notification when any event happens in disability registry, The client application meed to register for each event seperately with provided client id and client secret'
 
 paths:
-  /search:
+
+  /getDisablePersonList:
     post:
       tags:
-        - Search API
-      summary: To perform search operation in registry
-      description: The Search operation perfromed for registry 
+        - Query Disability Registry API
+      summary: 'API to retrieve list of disabled person based on disability_type(optional) /location(optional) / disability_percentage(optional) / registration_year(optional) '
+      description: ''
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -34,11 +30,11 @@ paths:
         - $ref: '#/components/parameters/x-async'
         - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Search request body
+        description: Request body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchRequest'     
+              $ref: '#/components/schemas/GetDisablePersonListRequest'     
         required: true
       responses:
         '102':
@@ -48,9 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'          
-        '202':
-          description: Accepted 
+                $ref: '#/components/schemas/GetDisablePersonListResponse'          
         '400':
           description: Bad Request
           content:
@@ -96,26 +90,28 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /on-search:
+  /isDisable:
     post:
       tags:
-        - Search API 
-      summary: Search request call back, if callback URL empty then save response at server end respond with data when requested
-      description: The requester will pass information submitted in search and if response prepared then it will send content
+        - Query Disability Registry API
+      summary: 'API to chek if person is disable or not'
+      description: ''
       parameters:
         - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"        
+        - $ref: "#/components/parameters/x-hmac"
         - $ref: "#/components/parameters/authorization"
         - $ref: '#/components/parameters/x-registry-type'
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
       requestBody:
-        description: Search request
+        description: Request body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchRequest'     
+              $ref: '#/components/schemas/CheckIsDisableRequest'     
         required: true
       responses:
         '102':
@@ -125,7 +121,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'          
+                $ref: '#/components/schemas/CheckIsDisableResponse'          
         '400':
           description: Bad Request
           content:
@@ -171,53 +167,39 @@ paths:
       security:
         - spmis_auth:
             - read:search
-  /eligibility-determination:
-    get:
+
+  /getDisabilityInfo:
+    post:
       tags:
-        - Eligibility determination API 
-      summary: Get list of eligibility determination supported by registry
+        - Query Disability Registry API
+      summary: 'API to retrieve all disability of person'
       description: ''
-      operationId: ''
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: 
-                type: array
-                items:
-                  $ref: '#/components/schemas/SupportedEligibility'          
-      security:
-        - spmis_auth:
-            - read:eligibity
-    post:
-      tags:
-        - Eligibility determination API 
-      summary: To get information of eligibity for person
-      description: Response will contain information about requested eligibity that may include boolean status or json with more details
-      operationId: ''
-      requestBody:
-        description: Send details to be validated
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EligibilityDeterminationRequest'     
-        required: true
       parameters:
         - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"        
+        - $ref: "#/components/parameters/x-hmac"
         - $ref: "#/components/parameters/authorization"
         - $ref: '#/components/parameters/x-registry-type'
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'      
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisabilityInfoRequest'     
+        required: true
       responses:
+        '102':
+          description: Processing 
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EligibilityDeterminationResponse'     
+                $ref: '#/components/schemas/DisablePersonInfoResponse'          
         '400':
           description: Bad Request
           content:
@@ -259,51 +241,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HttpErrorResponse'                 
+                $ref: '#/components/schemas/HttpErrorResponse' 
       security:
         - spmis_auth:
-            - read:relationships
-  /subscription-list:
-    get:
+            - read:search
+  /getCorrespondentInfo:
+    post:
       tags:
-        - Event subscription 
-      summary: Get list of supported events in registry
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
+        - Query Disability Registry API
+      summary: 'API to retrieve correspondent details of disable of person'
       description: ''
-      operationId: ''
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema: 
-                type: array
-                items:
-                  $ref: '#/components/schemas/SupportedEvents'          
-      security:
-        - spmis_auth:
-            - read:eligibity
-  /subscribe:
-    post:
-      tags:
-        - Event subscription  
-      summary: To subscribe for specific event
-      description: Response will contain eligibity details
-      operationId: ''
-      requestBody:
-        description: send details of identifier
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SubscriptionRequest'     
-        required: true
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -312,13 +259,24 @@ paths:
         - $ref: '#/components/parameters/x-message-id'
         - $ref: '#/components/parameters/x-timestamp'
         - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrespondentInfoRequest'     
+        required: true
       responses:
+        '102':
+          description: Processing 
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionResponse'     
+                $ref: '#/components/schemas/CorrespondentInfoResponse'          
         '400':
           description: Bad Request
           content:
@@ -360,158 +318,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HttpErrorResponse'                 
+                $ref: '#/components/schemas/HttpErrorResponse' 
       security:
         - spmis_auth:
-            - read:relationships
-  /unsubscribe:
-    post:
-      tags:
-        - Event subscription  
-      summary: To un-subscribe for specific event
-      description: Response will contain list of subscribed events
-      operationId: ''
-      requestBody:
-        description: 'Request to un-subscribe'
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UnSubscribeRequest'     
-        required: true
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SubscriptionResponse'     
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'                 
-      security:
-        - spmis_auth:
-            - read:relationships
-  /events:
-    post:
-      tags:
-        - Event subscription  
-      summary: The events will retrieve all events for specific subscription
-      description: Response will contain eligibity details
-      operationId: ''
-      requestBody:
-        description: send details of identifier
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/EventsRequest'     
-        required: true
-      parameters:
-        - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
-        - $ref: "#/components/parameters/authorization"
-        - $ref: '#/components/parameters/x-registry-type'
-        - $ref: '#/components/parameters/x-message-id'
-        - $ref: '#/components/parameters/x-timestamp'
-        - $ref: '#/components/parameters/x-sender-id'
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EventsResponse'     
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'                 
-      security:
-        - spmis_auth:
-            - read:relationships
+            - read:search
 
 components:
   parameters:
@@ -589,169 +399,155 @@ components:
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
   schemas:
-    SearchRequest:
+    GetDisablePersonListRequest:
       type: object
-#      example: '{"transaction_id":"0c96614c-7255-4774-b109-cd53ee851769","additionalFields":["contact","address","dob"],"filtergroups":[{"groupid":"A","operator-with-next-group":"and","fields":[{"fieldname":"identifier.type","operator":"contains","value":"NATIONAL_ID","nextfieldoperator":"and"},{"fieldname":"identifier.value","operator":"contains","value":"345678912","nextfieldoperator":""}]},{"groupid":"B","operator-with-next-group":"","fields":[{"fieldname":"name.first_name","operator":"contains","value":"john","nextfieldoperator":"or"},{"fieldname":"name.last_name","operator":"contains","value":"doe","nextfieldoperator":""}]}],"sortby":[{"fieldname":"name.first_name","order":"asc"}],"pagination":{"page_size":10,"page_number":5}}'
       properties:
-        transaction_id:
+        disability_type:
           type: string
-          example: 0c96614c-7255-4774-b109-cd53ee851769
-        filtergroups:
+          example: 'Vision'
+        location:
+          type: string
+          example: 'South-East'
+        disability_percentage:
+          type: string
+          example: '50'
+        registration_year:
+          type: string
+          example: '2023'
+    GetDisablePersonListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DisablePersonBaseInfo' 
+    CheckIsDisableRequest:
+      type: object
+      properties:
+        identifier_list:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/FilterGroupDisabilityRegistry'
-        sortby:
-          $ref: '#/components/schemas/Sort'
-        pagination:
-          type: object
-          properties:
-            page_size:
-              type: number
-              example: 10
-            page_number:
-              type: number
-              example: 5  
-    FilterGroupDisabilityRegistry:
+              - $ref: '#/components/schemas/Identifier'
+    CheckIsDisableResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      properties:
+        disable_persion_info:
+          $ref: '#/components/schemas/CheckIsDisableObject'
+    CheckIsDisableObject:
       type: object
       properties:
-        groupid:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        is_disable:
           type: string
-          format: string
-          example: "A"
-        operator-with-next-group:
-          type: string
-          description: 'Operation with next group' 
-          enum: ["and", "or"]
-        fields:
+          enum: ['yes','no']
+          example: 'yes'
+    DisabilityInfoRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    DisablePersonInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      properties:
+        data:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/IdentifierTypeField'
-              - $ref: '#/components/schemas/IdentifierValueField'
-              - $ref: '#/components/schemas/RegionField'
-              - $ref: '#/components/schemas/NameField'
-              - $ref: '#/components/schemas/DisabilityTypeField'
-    Field:
-      type: object
-      required:
-        - operator
-        - nextfieldoperator
-      properties: 
-        operator:
-          $ref: '#/components/schemas/FieldOperator'
-        nextfieldoperator: 
-          $ref: '#/components/schemas/GroupOperator'
-    IdentifierTypeField:
-      description: 'Search with identifier type'
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'identifier.type'
-              enum: ['identifier.type']
-            value: 
-              type: string
-              example: "NATIONAL_ID"
-              enum: ['NATIONAL_ID','DISABILITY_CERTIFICATE_NO']
-    IdentifierValueField:
-      description: 'Search with identifier value'
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'identifier.value'
-              enum: ['identifier.value']
-            value: 
-              type: string
-              example: "345678912"
-              description: 'Any string that contains identifier, for example for identifier.type NATIONAL_ID value may be 345678912'
-    NameField:
-      description: 'Search with first name, HumanName is response object so fields of HumanName to be sent in search'
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'name.first_name'
-              enum: ['name.first_name','name.last_name']
-            value: 
-              type: string
-              example: "John"
-              description: 'Search by first name or last name of human'
-    DisabilityTypeField:
-      description: 'Search by disability type'    
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'disabilitytype'
-              enum: ['croptype']
-            value: 
-              type: string
-              example: "Blindness"
-              enum: ['Blindness','Low Vision','Deaf','Haemophilia','Thalassemia','Sickle Cell Disease']
-              description: 'Search by crop type'
-    RegionField:
-      description: 'Search by region'        
-      allOf: 
-        - $ref: '#/components/schemas/Field'
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: 'region'
-              enum: ['location']
-            value: 
-              type: string
-              example: "SE- India"
-              enum: ['SE- India','WEST - INDIA']
-              description: 'Search by location'
-    FieldOperator:
-      type: string
-      enum:
-        - in
-        - or
-        - and
-        - contains
-        - like
-    GroupOperator:
-      type: string
-      enum:
-        - or
-        - and
-    Sort:
+              - $ref: '#/components/schemas/DisablePersonWithDisability'
+
+    DisablePersonBaseInfo:
+      properties:
+        identifier:
+          type: array
+          example: '[{"type": "NATIONAL_ID","value": "345678912"},{"type": "DISABILITY_REG_NO","value": "DR20230502002"}]'
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Identifier'      
+        name:
+          $ref: '#/components/schemas/HumanName'
+        contactno:
+          type: string
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        gender:
+          type: string
+          example: 'male'       
+          enum: ['male','female','transgender'] 
+        certificate_issue_date:
+          type: string
+          example: '11/17/1985'
+    DisablePersonWithDisability:
+      allOf:
+        - $ref: '#/components/schemas/DisablePersonBaseInfo'
+      properties:
+        disability_list:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/DisabilityInfo'      
+    DisabilityInfo:
       type: object
       properties:
-        fieldname:
+        registration_id:
           type: string
-          enum: [firstname,dob]
-        order:
+          example: 'DR20230502002-001'
+        disability_since:
           type: string
-          enum: ["asc","desc"]
-    ApiResponse:
+          example: '01-Jun-2015'
+        disability_type:
+          type: string
+          example: 'Vision | Blindness both eyes'
+        disability_percentage:
+          type: string
+          example: '100'
+        by_birth:
+          type: string
+          example: 'Yes'
+        disability_dueto:
+          type: string
+          example: 'Diseases'
+
+    CorrespondentInfoRequest:
+      type: object
+      properties:
+        identifier_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
+    CorrespondentInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      properties:
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/CorrespondentInfoObject'
+    CorrespondentInfoObject:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier' 
+        name:
+          $ref: '#/components/schemas/HumanName'        
+        relation:
+          type: string
+          enum: ['father','mother','husband','wife','daughter','son']
+        contactno:
+          type: string
+          example: '+91 999999999'
+    BaseResponse:
       type: object
       properties:
         success:
@@ -764,10 +560,6 @@ components:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
           description: The transaction_id received in request
-        data: 
-          type: array
-          items:
-            $ref: '#/components/schemas/DisabilityInfo'
     HumanName:
       type: object
       properties:
@@ -782,260 +574,35 @@ components:
           example: john
         middle_name:
           type: string
-          example: m
+          example: doe
         last_name:
           type: string
           example: doe
-    DisabilityInfo:
-      type: object
-      properties:
-        identifier:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/Identifier'
-              - $ref: '#/components/schemas/Identifier'
-        name:
-          $ref: '#/components/schemas/HumanName'
-        age:
-          type: string
-        birthday:
-          type: string
-          enum: ['Food Crops','Feed Crops','Fiber Crops','Oil Crops','Ornamental Crops','Industrial Crops']
-        gender:
-          type: string
-          enum: ['Male','Female','Transgender male','Transgender female']
-        contactno:
-          type: string
-          example: '+61-7894562317'
-        disability: 
-          type: array
-          items:
-            $ref: '#/components/schemas/Disability'
-    Disability:
-      type: object
-      properties:
-        registration_id:
-          type: string
-          format: string
-          example: 'DR20230502001-001'
-        certificate_issue_no:
-          type: string
-          description: Certificate number
-          example: '15-Jan-1986'
-        certificate_issue_date:
-          type: string
-          description: Certificate issue date 
-          example: '15-Jan-1986'
-        disability_since:
-          type: string
-          format: string
-          example: '05-Dec-1985'
-        disability_type:
-          type: string
-          format: string
-          example: 'Mobility | Spastic hemiplegic cerebral palsy'
-        disability_icd10_code:
-          type: string
-          format: string
-          example: 'G80.1'
-        disability_percentage:
-          type: string
-          format: string
-          example: '97'        
-        disability_by_birth:
-          type: string
-          format: string
-          example: 'No'        
-        identifier_institutation:
-          type: string
-          format: string
-          example: 'Village Health Center'        
-        treating_institutation:
-          type: string
-          format: string
-          example: 'Urban Health Center'          
-    SupportedEligibility:
-      type: object
-      properties:
-        eligibity_id:
-          type: string
-          format: string
-        eligibity_type:
-          type: string
-          description: Supprted eligibity checks by disability registry 
-          example: IS_DISABLE
-          enum: ['IS_DISABLE']
-        response_format:
-          type: string
-          enum: ['json','boolean','pdf','png','jpeg']
-    SupportedEvents:
-      type: object
-      properties:
-        eventlist:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/DisableRegistrationEvent'
-    DisableRegistrationEvent:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['DISABLE_PERSON_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        response_format:
-          type: string
-          enum: ['json']
-        response_sample:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/DisabilityInfo'
-    SubscriptionRequest:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['DISABLE_PERSON_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        client_id:
-          type: string
-        callback_url:
-          type: string
-          example: 'https://youdomain.com/endpoint'
-        status:
-          type: string        
-          enum: ['REGISTERED','ERROR']
-    EventsRequest:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['DISABLE_PERSON_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        client_id:
-          type: string
-          example: '15fd01b2-eff0-11ed-a05b-0242ac120003'
-        start_date:
-          type: string
-          example: '05/01/2021'
-          description: 'Date from which events to retrieve'
-        end_date:
-          type: string       
-          example: '05/31/2023' 
-          description: 'Date upto which events to retrieve'        
-    EventsResponse:
-      type: object
-      properties:
-        eventlist:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/DisableRegistrationEvent'
-    UnSubscribeRequest:
-      type: object
-      properties:
-        event_code:
-          type: string
-          enum: ['DISABLE_PERSON_REGISTRATION']
-          description: 'To subscribe this event send this code in subscription request'
-        client_id:
-          type: string
-          example: '15fd01b2-eff0-11ed-a05b-0242ac120003'
-        reason:
-          type: string
-          example: 'Opted for other service'
-    SubscriptionResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          enum: [true,false]
-        return_message:
-          type: string
-          example: 'Subscribed successfully'
-        status:
-          type: string        
-          enum: ['REGISTERED','ERROR']
-        data: 
-          type: array
-          description: 'List of all subscribed events with registry'
-          items:
-            $ref: '#/components/schemas/SubscriptionRequest'
-    EligibilityIsDisableCheck:
-      type: object
-      properties:
-        eligibity_id:
-          type: string
-          format: string
-        eligibity_type:
-          type: string
-          description: eligibity type 
-          example: IS_DISABLE
-          enum: ['IS_DISABLE']
-        response_format:
-          type: string
-          enum: ['json','boolean','pdf','png','jpeg'] 
-    EligibilityDeterminationRequest:
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-        operations:
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/EligibilityIsDisableCheck'
-        attestation:
-          $ref: '#/components/schemas/EligibilityVerifier'
-    EligibilityVerifier:
-      type: object
-      properties:
-        institutation_code:
-          type: string
-          enum: ['GOV-HEALTH-DEPT-GUJ','GOV-HEALTH-DEPT-MH']
-        institutation_name:
-          type: string
-          example: Department of Agricalture
-    EligibilityDeterminationResponse:
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-        operations:
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/EligibilityIsDisableCheck'
-        attestation:
-          $ref: '#/components/schemas/EligibilityVerifier'
-        issuance_metadata:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            'DISABILITY_CERTIFICATE_NO': 'IN-GJ-01-23456'
-            'DISABILITY_TYPE': 
-              enum: ['owner','rented']
     Identifier:
       type: object
       properties:
         type:
           type: string
-          enum: ['NATIONAL_ID','DISABILITY_CERTIFICATE_NO']
+          enum: ['NATIONAL_ID','DISABILITY_REG_NO']
         value:
           type: string
           example: 345678912
+    IdentifierWithTransactionId:
+      type: object
+      properties:
+        identifier:
+           $ref: '#/components/schemas/Identifier'
+        transaction_id:
+          type: string
+          example: '0c96614c-7255-4774-b109-cd53ee859000'
     HttpErrorResponse:
       description: HTTP layer error details
       properties:
         error_code:
           type: string
-          enum: ['ERR_001','ERR_002','ERR_001']
         error_message:
           type: string
-          example: 'This is error'
+
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
