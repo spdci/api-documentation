@@ -5,7 +5,7 @@ services:
     container_name: dci-api-ui
     ports:
     - '9999:80'
-    - '65065:443'
+    - '9998:443'
     restart: unless-stopped
     volumes:
     - ./docs:/usr/local/apache2/htdocs
