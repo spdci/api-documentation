@@ -4,7 +4,6 @@ info:
   description: ''
   version: 0.0.1
 servers:
-  # Added by API Auto Mocking Plugin
   - description: Gateway endpoint
     url: https://localhost:8081/
 paths:
@@ -628,7 +627,7 @@ paths:
     post:
       tags:
         - CRVS APIs      
-      summary: 'API that provides parents information of a person based on an ID'
+      summary: 'API that fetch childrens details of parents, either father's or mother's information is mandatory in request'
       description:  ''
       parameters:
         - $ref: "#/components/parameters/version"
