@@ -624,6 +624,84 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /crvs/getChildInfo:
+    post:
+      tags:
+        - CRVS APIs      
+      summary: 'API that provides parents information of a person based on an ID'
+      description:  ''
+      parameters:
+        - $ref: "#/components/parameters/version"
+        - $ref: "#/components/parameters/x-hmac"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: '#/components/parameters/x-registry-type'
+        - $ref: '#/components/parameters/x-message-id'
+        - $ref: '#/components/parameters/x-timestamp'
+        - $ref: '#/components/parameters/x-sender-id'
+        - $ref: '#/components/parameters/x-async'
+        - $ref: '#/components/parameters/x-callbackendpoint'
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetChildInfoRequest'
+        required: true
+      responses:
+        '102':
+          description: Processing 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChildInfoResponse'          
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse' 
+      security:
+        - spmis_auth:
+            - read:search
+
   /crvs/getVitalEventDates:
     post:
       tags:
@@ -920,7 +998,7 @@ components:
     EventInfoResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
-      example: '{"success":"string","return_message":"Success message","error_code":"Error message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"01/03/2023","birth_place_address":"Address of birth pace"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","place_of_marriage":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
+      example: '{"success":"string","return_message":"Success message","error_code":"Error message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"01/03/2023","birth_place_address":"Address of birth place"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","place_of_marriage":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
       type: object
       properties:
         data: 
@@ -944,6 +1022,25 @@ components:
               - $ref: '#/components/schemas/BirthInfo'
               - $ref: '#/components/schemas/DeathInfo'
               - $ref: '#/components/schemas/MarriageInfoObject'
+    ChildInfo:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        name:
+          $ref: '#/components/schemas/HumanName'
+        date_of_birth:
+          type: string
+          example: '11/17/1980'
+        gender:
+          type: string
+          example: 'male'    
+        birth_registration_no:
+          type: string
+          example: '01/03/2023'
+        birth_place_address:
+          type: string
+          example: 'Address of birth place'
     BirthInfo:
       type: object
       properties:
@@ -969,7 +1066,7 @@ components:
           example: '01/03/2023'
         birth_place_address:
           type: string
-          example: 'Address of birth pace'
+          example: 'Address of birth place'
           
     DeathInfo:
       type: object
@@ -1037,14 +1134,7 @@ components:
           type: string
           example: 'male'          
 
-    IDInfoLookupRequest:
-      type: object
-      properties:
-        identifier_list:
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/Identifier'
+ 
     IDInfoLookupResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -1219,7 +1309,57 @@ components:
         marriage_registration_number:
           type: string
           example: 'MRN_DC-20221205A12'     
+    GetChildInfoRequest:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859001
+          description: The transaction_id to track request response
+        request_data:
+          type: array
+          items:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/GetChildInfoRequestObject'
+    GetChildInfoRequestObject:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859002
+          description: The transaction_id to track request response
+        father_indentifier:
+          $ref: '#/components/schemas/Identifier'
+        mother_indentifier:
+          $ref: '#/components/schemas/Identifier'
 
+    GetChildInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/GetChildInfoResponseObject'
+    GetChildInfoResponseObject:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          example: 0c96614c-7255-4774-b109-cd53ee859002
+          description: The transaction_id to track request response
+        child_data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/ChildInfo'
+
+    
+    
     ApiResponse:
       type: object
       properties:
