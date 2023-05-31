@@ -627,7 +627,7 @@ paths:
     post:
       tags:
         - CRVS APIs      
-      summary: 'API that fetch childrens details of parents, either father's or mother's information is mandatory in request'
+      summary: 'API that fetch list of children with basic information, Caller must mass either father or mother uin details'
       description:  ''
       parameters:
         - $ref: "#/components/parameters/version"
