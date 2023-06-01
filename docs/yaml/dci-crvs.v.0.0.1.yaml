@@ -4,6 +4,9 @@ info:
   description: ''
   version: 0.0.1
 servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ahi-dev-dc/APIDoc/0.0.1
   - description: Gateway endpoint
     url: https://localhost:8081/
 paths:
@@ -28,7 +31,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IDRequest'     
+              $ref: '#/components/schemas/IsAliveCheckRequest'     
         required: true
       responses:
         '102':
@@ -40,47 +43,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/IsAliveCheckResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500' 
       security:
         - spmis_auth:
             - read:search
@@ -117,47 +90,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/AgeResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500'  
       security:
         - spmis_auth:
             - read:search
@@ -194,47 +137,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/MaritalStatusCheckResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500'  
       security:
         - spmis_auth:
             - read:search
@@ -271,47 +184,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/BirthInfoResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500' 
+ 
       security:
         - spmis_auth:
             - read:search
@@ -348,47 +232,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/MarriageInfoResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500'  
       security:
         - spmis_auth:
             - read:search
@@ -424,48 +278,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeathInfoResponse'          
+
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500' 
       security:
         - spmis_auth:
             - read:search
@@ -502,47 +327,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/IDInfoLookupResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500' 
       security:
         - spmis_auth:
             - read:search
@@ -579,47 +374,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ChildDemographicResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500' 
       security:
         - spmis_auth:
             - read:search
@@ -656,47 +421,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetChildInfoResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500'  
       security:
         - spmis_auth:
             - read:search
@@ -722,7 +457,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IDRequest'      
+              $ref: '#/components/schemas/IDEventDatesRequest'      
         required: true
       responses:
         '102':
@@ -734,47 +469,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/IDEventDatesResponse'          
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500' 
       security:
         - spmis_auth:
             - read:search
@@ -810,55 +515,71 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventInfoResponse'          
+                $ref: '#/components/schemas/EventInfoResponse'  
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/400'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/401'
         '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/403'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/404'
         '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/405'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse' 
+          $ref: '#/components/responses/500'
       security:
         - spmis_auth:
             - read:search
 
   
 components:
+  responses:
+        '102':
+          description: Processing 
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse400' 
+                
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse401' 
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse403' 
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse404' 
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse405'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse422' 
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse500' 
   parameters:
     authorization:
       name: Authorization
@@ -936,9 +657,20 @@ components:
 
   schemas:
 
+    IsAliveCheckRequest:
+      type: object
+      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
+      properties:
+        identifier_list:
+          type: array
+          example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'
     IsAliveCheckResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
+      example: '{"status":"success","return_message":"Success message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"is_alive":"yes"},{"identifier":{"type":"NATIONAL_ID","value":"567891011"},"is_alive":"no"}]}'
       type: object
       properties:
         data: 
@@ -957,6 +689,7 @@ components:
   
     IDEventDatesRequest:
       type: object
+      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'      
       properties:
         identifier_list:
           type: array
@@ -986,7 +719,7 @@ components:
       
     EventInfoRequest:
       type: object
-      example: '{"identifier_list":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"vital_event":"birth","txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fa"},{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"vital_event":"death","txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fb"},{"identifier":{"type":"NATIONAL_ID","value":"345678914"},"vital_event":"marriage","txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fc"}]}'
+      example: '{"identifier_list":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"vital_event":"birth","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fa"},{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"vital_event":"death","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fb"},{"identifier":{"type":"NATIONAL_ID","value":"345678914"},"vital_event":"marriage","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fc"}]}'
       properties:
         identifier_list:
           type: array
@@ -997,7 +730,7 @@ components:
     EventInfoResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
-      example: '{"success":"string","return_message":"Success message","error_code":"Error message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"01/03/2023","birth_place_address":"Address of birth place"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"txn-id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","place_of_marriage":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
+      example: '{"success":"string","return_message":"Success message","error_code":"Error message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"BRN_11234577","birth_place_address":"Address of birth place"}]},{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","place_of_marriage":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
       type: object
       properties:
         data: 
@@ -1008,7 +741,7 @@ components:
     EventInfoResponseObject:
       type: object
       properties:
-        txn-id:
+        transaction_id:
           type: string
           example: 'bb26699c-abda-45be-bdcb-7c22d13355fb'
         vital_event:
@@ -1029,17 +762,27 @@ components:
         name:
           $ref: '#/components/schemas/HumanName'
         date_of_birth:
-          type: string
-          example: '11/17/1980'
+          $ref: '#/components/schemas/DateObject'
         gender:
           type: string
-          example: 'male'    
+          example: '1'    
+          enum: ['1|male','2|female','3|transgender']
         birth_registration_no:
           type: string
-          example: '01/03/2023'
+          example: 'BRN-IN025456798'
         birth_place_address:
+          $ref: '#/components/schemas/Address'
+    DateObject:
+      type: object
+      properties:
+        day:
           type: string
-          example: 'Address of birth place'
+        month: 
+          type: string
+        year: 
+          type: string
+        
+        
     BirthInfo:
       type: object
       properties:
@@ -1055,8 +798,7 @@ components:
           type: string
           example: '+91-0000000000'
         date_of_birth:
-          type: string
-          example: '11/17/1980'
+          $ref: '#/components/schemas/DateObject'
         gender:
           type: string
           example: 'male'    
@@ -1064,8 +806,7 @@ components:
           type: string
           example: '01/03/2023'
         birth_place_address:
-          type: string
-          example: 'Address of birth place'
+          $ref: '#/components/schemas/Address'
           
     DeathInfo:
       type: object
@@ -1078,17 +819,15 @@ components:
           type: string
           example: '+91-0000000000'
         date_of_death:
-          type: string
-          example: '01/03/2023'
+          $ref: '#/components/schemas/DateObject'
         gender:
           type: string
           example: 'male'    
         death_registration_no:
           type: string
-          example: '01/03/2023'
+          example: 'DRN_2512789'
         death_place_address:
-          type: string
-          example: 'Address of death place'
+          $ref: '#/components/schemas/Address'
     EventInfoRequestObject:
       type: object
       properties:
@@ -1097,7 +836,7 @@ components:
         vital_event:
           type: string
           enum: ['birth','death','marriage']
-        txn-id:
+        transaction_id:
           type: string
           example: 'bb26699c-abda-45be-bdcb-7c22d13355fb'
     IDEventDatesResponse:
@@ -1121,14 +860,11 @@ components:
           type: string
           example: '+91-0000000000'
         date_of_birth:
-          type: string
-          example: '11/17/1980'
+          $ref: '#/components/schemas/DateObject'
         date_of_death:
-          type: string
-          example: '01/03/2023'
+          $ref: '#/components/schemas/DateObject'
         date_of_marriage:
-          type: string
-          example: '09/11/1995'
+          $ref: '#/components/schemas/DateObject'
         gender:
           type: string
           example: 'male'          
@@ -1155,8 +891,7 @@ components:
           type: string
           example: '+91-0000000000'
         date_of_birth:
-          type: string
-          example: '11/17/1980'
+          $ref: '#/components/schemas/DateObject'
         gender:
           type: string
           example: 'male'          
@@ -1185,11 +920,9 @@ components:
           type: string
           example: '+91-0000000000'
         date_of_birth:
-          type: string
-          example: '11/17/1980'
+          $ref: '#/components/schemas/DateObject'
         date_of_death:
-          type: string
-          example: '01/03/2023'
+          $ref: '#/components/schemas/DateObject'
         gender:
           type: string
           example: 'male'          
@@ -1197,6 +930,7 @@ components:
 
     IDRequest:
       type: object
+      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
       properties:
         identifier_list:
           type: array
@@ -1206,6 +940,7 @@ components:
     AgeResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
+      example: '{"status":"success","return_message":"Success message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"age":50},{"identifier":{"type":"NATIONAL_ID","value":"567891011"},"age":70}]}'
       type: object
       properties:
         data: 
@@ -1223,6 +958,7 @@ components:
           example: 50
     MaritalStatusCheckRequest:
       type: object
+      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'      
       properties:
         identifier_list:
           type: array
@@ -1246,12 +982,13 @@ components:
           $ref: '#/components/schemas/Identifier'
         marital_status:
           type: string
-          example: married
-          enum: ['single','married','annualed','widowed']
+          example: 1
+          enum: ['1|single','2|married','3|annualed','4|widowed']
 
               
     MarriageInfoRequest:
       type: object
+      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
       properties:
         identifier_list:
           type: array
@@ -1283,8 +1020,7 @@ components:
           type: string
           example: 'Dominican'
         groom_date_of_birth:
-          type: string
-          example: '12/05/1983'        
+          $ref: '#/components/schemas/DateObject'
         bride_identifier:
           type: array
           items:
@@ -1297,14 +1033,11 @@ components:
           type: string
           example: 'Dominican'
         bride_date_of_birth:
-          type: 'string'
-          example: '12/05/1983'
+          $ref: '#/components/schemas/DateObject'
         date_of_marriage:
-          type: string
-          example: '12/05/2022'          
+          $ref: '#/components/schemas/DateObject'
         place_of_marriage:
-          type: string
-          example: 'Angel Iceland'
+          $ref: '#/components/schemas/Address'
         marriage_registration_number:
           type: string
           example: 'MRN_DC-20221205A12'     
@@ -1362,14 +1095,12 @@ components:
     ApiResponse:
       type: object
       properties:
-        success:
+        status:
           type: string
+          example: 'success'
         return_message:
           type: string
           example: 'Success message'
-        error_code:
-          type: string
-          example: 'Error message'
         transaction_id:
           type: string
           example: 0c96614c-7255-4774-b109-cd53ee859000
@@ -1404,15 +1135,90 @@ components:
         value:
           type: string
           example: 345678912
-    HttpErrorResponse:
+    HttpErrorResponse400:
       description: HTTP layer error details
       properties:
         error_code:
           type: string
+          example: 'ERR-400-01'   
         error_message:
           type: string
-
-
+          example: 'Bad Request'
+    HttpErrorResponse401:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+          example: 'ERR-401-01'   
+        error_message:
+          type: string
+          example: 'Unauthorized' 
+    HttpErrorResponse403:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+          example: 'ERR-403-01'      
+        error_message:
+          type: string
+          example: 'Forbidden'   
+    HttpErrorResponse404:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+          example: 'ERR-404-01'   
+        error_message:
+          type: string
+          example: 'Not Found'
+    HttpErrorResponse422:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+          example: 'ERR-422-01'   
+        error_message:
+          type: string
+          example:    
+    HttpErrorResponse405:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+          example: 'ERR-405-01'       
+        error_message:
+          type: string
+          example: 'Method Not Allowed'
+    HttpErrorResponse500:
+      description: HTTP layer error details
+      properties:
+        error_code:
+          type: string
+          example: 'ERR-500-01'   
+        error_message:
+          type: string
+          example: 'Internal server error'  
+    Address:
+      type: object
+      properties:
+        house_no:
+          type: string
+          example: ''
+        address_line_1:
+          type: string
+          example: ''
+        address_line_2:
+          type: string
+          example: ''          
+        district:
+          type: string
+          example: ''          
+        state:
+          type: string
+          example: ''          
+        postal_code:
+          type: string
+          example: ''
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
