@@ -777,11 +777,13 @@ components:
       properties:
         day:
           type: string
+          example: ''
         month: 
           type: string
+          example: ''
         year: 
           type: string
-        
+          example: ''       
         
     BirthInfo:
       type: object
