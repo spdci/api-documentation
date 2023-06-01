@@ -362,7 +362,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IDRequest'
+              $ref: '#/components/schemas/GetParentInfoRequest'
         required: true
       responses:
         '102':
@@ -659,11 +659,11 @@ components:
 
     IsAliveCheckRequest:
       type: object
-      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
+      example: '{"beneficiary_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
       properties:
-        identifier_list:
+        beneficiary_list:
           type: array
-          example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
+          example: '{"beneficiary_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
           items:
             allOf:
               - $ref: '#/components/schemas/Identifier'
@@ -689,9 +689,9 @@ components:
   
     IDEventDatesRequest:
       type: object
-      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'      
+      example: '{"beneficiary_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'      
       properties:
-        identifier_list:
+        beneficiary_list:
           type: array
           items:
             allOf:
@@ -719,9 +719,9 @@ components:
       
     EventInfoRequest:
       type: object
-      example: '{"identifier_list":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"vital_event":"birth","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fa"},{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"vital_event":"death","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fb"},{"identifier":{"type":"NATIONAL_ID","value":"345678914"},"vital_event":"marriage","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fc"}]}'
+      example: '{"beneficiary_list":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"vital_event":"birth","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fa"},{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"vital_event":"death","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fb"},{"identifier":{"type":"NATIONAL_ID","value":"345678914"},"vital_event":"marriage","transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fc"}]}'
       properties:
-        identifier_list:
+        beneficiary_list:
           type: array
           items:
             allOf:
@@ -730,7 +730,7 @@ components:
     EventInfoResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
-      example: '{"success":"string","return_message":"Success message","error_code":"Error message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"BRN_11234577","birth_place_address":"Address of birth place"}]},{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","place_of_marriage":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
+      example: '{"success":"string","return_message":"data retrieved succesfully","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fa","vital_event":"birth","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678912"},"name":{"suffix":"","prefix":"Mr.","first_name":"robert","middle_name":"doe","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"mother_name":{"suffix":"PhD","prefix":"Mrs.","first_name":"jane","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":"11/17/1980","gender":"male","birth_registration_no":"BRN_11234577","birth_place_address":"Address of birth place"}]},{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fb","vital_event":"death","vital_event_data":[{"identifier":{"type":"NATIONAL_ID","value":"345678913"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"contactno":"+91-0000000000","date_of_death":"01/03/2023","gender":"male","death_registration_no":"01/03/2023","death_place_address":"Address of death place"}]},{"transaction_id":"bb26699c-abda-45be-bdcb-7c22d13355fc","vital_event":"marriage","vital_event_data":[{"groom_identifier":[{"type":"NATIONAL_ID","value":"345678914"}],"groom_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"doe","last_name":"doe"},"groom_nationality":"Dominican","groom_date_of_birth":"12/05/1983","bride_identifier":[{"type":"NATIONAL_ID","value":"345678916"}],"bride_name":{"suffix":"","prefix":"Mrs.","first_name":"jane","middle_name":"doe","last_name":"doe"},"bride_nationality":"Dominican","bride_date_of_birth":"12/05/1983","date_of_marriage":"12/05/2022","marriage_place_address":"Angel Iceland","marriage_registration_number":"MRN_DC-20221205A12"}]}]}'
       type: object
       properties:
         data: 
@@ -896,10 +896,22 @@ components:
           $ref: '#/components/schemas/DateObject'
         gender:
           type: string
-          example: 'male'          
+          example: 'male'
+          
+    GetParentInfoRequest:
+      type: object
+      example: '{"beneficiary_list":[{"type":"NATIONAL_ID","value":"789101112"},{"type":"NATIONAL_ID","value":"789121314"}]}'
+      properties:
+        beneficiary_list:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Identifier'        
+      
     ChildDemographicResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
+      example: '{"status":"success","return_message":"Success message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"identifier":{"type":"NATIONAL_ID","value":"789101112"},"name":{"suffix":"","prefix":"Mr.","first_name":"robert","middle_name":"","last_name":"doe"},"father_name":{"suffix":"PhD","prefix":"Mr.","first_name":"john","middle_name":"","last_name":"doe"},"mother_name":{"suffix":"","prefix":"Mr.","first_name":"jane","middle_name":"","last_name":"doe"},"contactno":"+91-0000000000","date_of_birth":{"day":"","month":"","year":""},"date_of_death":{"day":"","month":"","year":""},"gender":"male"}]}'
       type: object
       properties:
         data: 
@@ -932,9 +944,9 @@ components:
 
     IDRequest:
       type: object
-      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
+      example: '{"beneficiary_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
       properties:
-        identifier_list:
+        beneficiary_list:
           type: array
           items:
             allOf:
@@ -960,9 +972,9 @@ components:
           example: 50
     MaritalStatusCheckRequest:
       type: object
-      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'      
+      example: '{"beneficiary_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'      
       properties:
-        identifier_list:
+        beneficiary_list:
           type: array
           items:
             allOf:
@@ -990,9 +1002,9 @@ components:
               
     MarriageInfoRequest:
       type: object
-      example: '{"identifier_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
+      example: '{"beneficiary_list": [{"type": "NATIONAL_ID","value": "345678912"},{"type": "NATIONAL_ID","value": "567891011"}]}'
       properties:
-        identifier_list:
+        beneficiary_list:
           type: array
           items:
             allOf:
@@ -1045,6 +1057,7 @@ components:
           example: 'MRN_DC-20221205A12'     
     GetChildInfoRequest:
       type: object
+      example: '{"transaction_id":"0c96614c-7255-4774-b109-cd53ee859001","request_data":[{"transaction_id":"0c96614c-7255-4774-b109-cd53ee859002","father_indentifier":{"type":"NATIONAL_ID","value":"345678912"},"mother_indentifier":{"type":"NATIONAL_ID","value":"567891011"}}]}'
       properties:
         transaction_id:
           type: string
@@ -1071,6 +1084,7 @@ components:
     GetChildInfoResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
+      example: '{"status":"success","return_message":"Success message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"transaction_id":"0c96614c-7255-4774-b109-cd53ee859002","child_data":[{"identifier":{"type":"NATIONAL_ID","value":"789101112"},"name":{"suffix":"PhD","prefix":"Mr.","first_name":"robert","middle_name":"doe","last_name":"doe"},"date_of_birth":{"day":"","month":"","year":""},"gender":"1","birth_registration_no":"BRN-IN025456798","birth_place_address":{"house_no":"","address_line_1":"","address_line_2":"","district":"","state":"","postal_code":""}}]}]}'
       type: object
       properties:
         data:
