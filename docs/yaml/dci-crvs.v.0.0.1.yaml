@@ -1139,7 +1139,7 @@ components:
           example: john
         middle_name:
           type: string
-          example: doe
+          example: ''
         last_name:
           type: string
           example: doe
