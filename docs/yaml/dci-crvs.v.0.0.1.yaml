@@ -1087,7 +1087,7 @@ components:
     GetChildInfoResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
-      example: '{"status":"success","return_message":"Success message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"transaction_id":"0c96614c-7255-4774-b109-cd53ee859002","child_data":[{"identifier":{"type":"NATIONAL_ID","value":"789101112"},"name":{"suffix":"","prefix":"Mr.","first_name":"robert","middle_name":"","last_name":"doe"},"date_of_birth":{"day":"","month":"","year":""},"gender":"1","birth_registration_no":"BRN-IN025456798","birth_place_address":{"house_no":"","address_line_1":"","address_line_2":"","district":"","state":"","postal_code":""}}]}]}'
+      example: '{"status":"success","return_message":"Success message","transaction_id":"0c96614c-7255-4774-b109-cd53ee859000","data":[{"transaction_id":"0c96614c-7255-4774-b109-cd53ee859002","child_data":[{"identifier":{"type":"NATIONAL_ID","value":"789101112"},"name":{"suffix":"","prefix":"Mr.","first_name":"robert","middle_name":"","last_name":"doe"},"date_of_birth":{"day":"","month":"","year":""},"gender":"M","birth_registration_no":"BRN-IN025456798","birth_place_address":{"house_no":"","address_line_1":"","address_line_2":"","district":"","state":"","postal_code":""}}]}]}'
       type: object
       properties:
         data:
