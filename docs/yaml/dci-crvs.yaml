@@ -364,7 +364,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransactionStatusCheckRequest'     
+              $ref: '#/components/schemas/RequestStatusCheckRequest'     
         required: true
       responses:
         '200':
@@ -372,7 +372,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransactionStatusCheckResponse'     
+                $ref: '#/components/schemas/RequestStatusCheckResponse'     
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -510,6 +510,12 @@ components:
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
   schemas:
+    BaseRequestParames:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: ''
     SearchRequest:
       type: array
       items:
@@ -517,11 +523,10 @@ components:
         anyOf:
           - $ref: '#/components/schemas/SearchRequestObject'
     SearchRequestObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequestParames'
       type: object
       properties:
-        transaction_id:
-          type: string
-          example: ''
         identifiers:
           type: array
           items:
@@ -594,9 +599,6 @@ components:
           type: string
           example: 'attribute value'
 
- 
- 
- 
     ExpressionAnd:
       type: object
       properties:
@@ -668,16 +670,17 @@ components:
     BaseResponse:
       type: object
       properties:
-        success:
+        status:
           type: string
+          enum: ['success','failure']
+          example: ''
         return_message:
           type: string
-        error_code:
-          type: string
-        transaction_id:
+          example: ''
+        correlation_id:
           type: string
           example: ''
-          description: The transaction_id received in request
+          description: The request id will be returned in response as correlation_id
     ApiResponse:
       type: object
       properties:
@@ -691,6 +694,10 @@ components:
           type: string
           example: ''
           description: The transaction_id received in request
+        correlation_id:
+          type: string
+          example: ''
+          description: The request id will be returned in response as correlation_id
         data: 
           type: array
           items:
@@ -699,18 +706,10 @@ components:
               - $ref: '#/components/schemas/CRVSSearchByBRNResponse'
               - $ref: '#/components/schemas/CRVSSearchByDRNResponse'
     SearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
       type: object
       properties:
-        success:
-          type: string
-        return_message:
-          type: string
-        error_code:
-          type: string
-        transaction_id:
-          type: string
-          example: ''
-          description: The transaction_id received in request
         data: 
           type: array
           items:
@@ -723,7 +722,7 @@ components:
           type: string
           example: ''
           description: The transaction_id received in request
-        data: 
+        search_data: 
           type: array
           items:
             anyOf:
@@ -780,10 +779,10 @@ components:
           type: string
         error_code:
           type: string
-        transaction_id:
+        corellation_id:
           type: string
           example: ''
-          description: The transaction_id received in request
+          description: The corellation_id received in request
         data: 
           type: array
           items:
@@ -856,6 +855,7 @@ components:
           example: '12/05/1983'        
         groom_marital_status:
           type: string
+          example: ''
           enum: [unmarried,divorced,widowed]
         bride_identifier:
           type: array
@@ -876,6 +876,7 @@ components:
           $ref : '#/components/schemas/DateObject'
         bride_marital_status:
           type: string
+          example: ''
           enum: [unmarried,divorced,widowed]
         contactno:
           type: string
@@ -972,6 +973,8 @@ components:
           type: string
 
     SubscriptionRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequestParames'
       type: object
       properties:
         event_info:
@@ -999,27 +1002,19 @@ components:
           items:
             type: string 
     SubscriptionResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
       type: object
       properties:
-        success:
-          type: string
-        return_message:
-          type: string
-        error_code:
-          type: string
         data: 
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionResponseObject'
     UnSubscribeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
       type: object
       properties:
-        success:
-          type: string
-        return_message:
-          type: string
-        error_code:
-          type: string
         data: 
           type: array
           items:
@@ -1036,9 +1031,11 @@ components:
           example: ''
         status:
           type: string
-          example: 'success'
+          example: ''
 
     UnSubscribeRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequestParames'
       type: object
       properties:
         event_code:
@@ -1052,6 +1049,8 @@ components:
         reason:
           type: string  
     QueryRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequestParames'
       type: object
       description: '' 
       properties:
@@ -1066,26 +1065,27 @@ components:
       type: object
       description: '' 
       properties:
-        transaction_id:
-          type: string
-          example: ''
-          description: The transaction_id received in request
         codes:
           type: array
           items:
             type: string
           example: ["IS_ALIVE", "IS_MARRIED"]
           description: ''
+        transaction_id:
+          type: string
+          example: ''
         national_id:
           type: string
-          example: 345678912
+          example: 345678912@mosip
         benificiery_id:
           type: string
-          example: 345678912
+          example: 345678912@mosip
         registration_id:
           type: string
-          example: 345678912
+          example: 345678912@mosip
     QueryResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
       type: object
       description: '' 
       properties:
@@ -1095,22 +1095,22 @@ components:
             type: object
             anyOf:
               - $ref: '#/components/schemas/QueryResponseObject'
-    TransactionStatusCheckRequest:
+    RequestStatusCheckRequest:
       type: object
       properties:
-        transaction_ids:
+        request_ids:
           type: array
-          example: '["transaction_id1","transaction_id2"]'
+          example: '["request_id1","request_id2"]'
           items:
             anyOf:
-              - $ref: '#/components/schemas/TransactionIdObject'
-    TransactionIdObject:
+              - $ref: '#/components/schemas/RequestIdObject'
+    RequestIdObject:
       type: object
       properties:
         transacrion_id:
           type: string
           example: ''
-    TransactionStatusObject:
+    RequestStatusObject:
       type: object
       properties:
         transacrion_id:
@@ -1119,16 +1119,16 @@ components:
         status:
           type: string
           example: ''
-          enum: ['received','processing','processed','failed','invalidrequest']
-    TransactionStatusCheckResponse:
+          enum: ['received','processing','processed','failed','invalid_request_id']
+    RequestStatusCheckResponse:
       type: object
-      example: '{"data": [{"transacrion_id": "transaction_id1","status": "processing"},{"transacrion_id": "transaction_id1","status": "pending"}]}'
+      example: '{"data": [{"request_id": "request_id1","status": "processing"},{"request_id": "request_id2","status": "invalid_request_id"}]}'
       properties:
         data:
           type: array
           items:
             anyOf:
-              - $ref: '#/components/schemas/TransactionStatusObject'
+              - $ref: '#/components/schemas/RequestStatusObject'
     QueryResponseObject:
       type: object
       description: '' 
@@ -1147,10 +1147,10 @@ components:
           example: '[{"IS_ALIVE":"true"},{"IS_MARRIED":"false"}]'
         national_id:
           type: string
-          example: 345678912
+          example: 345678912@mosip
         benificiery_id:
           type: string
-          example: 345678912
+          example: 345678912@mosip
         registration_id:
           type: string
           example: 345678912
