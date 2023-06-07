@@ -4,7 +4,7 @@ The API documentation repository contains html and yaml files to generate swagge
 
 ## Discussion forum 
 
-To initiate any discussion please visit [discussion page](https://github.com/spdci/api-documentation/discussions).
+To initiate any discussion please visit [discussion page](https://github.com/spdci/discussions).
 
 ## Directory structure 
 
