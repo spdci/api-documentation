@@ -1,6 +1,6 @@
 # DCI API documentation
 
-The API documentation repository contains html and yaml files to generate swagger documents
+The API documentation repository contains html and yaml files to generate swagger documents. The API in swagger format accessible via website [https://spdci.github.io/api-documentation/](https://spdci.github.io/api-documentation/)
 
 ## Discussion forum 
 
