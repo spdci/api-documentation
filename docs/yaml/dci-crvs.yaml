@@ -52,6 +52,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchResponse'          
+            multipart/form-data:
+              schema:
+                $ref: '#/components/schemas/FileUploadRequest'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -1250,6 +1253,14 @@ components:
         year: 
           type: string
           example: ''
+    FileUploadRequest:
+      type: object
+      properties:
+        file_name:
+          type: string
+          format: binary
+        request_id:
+          type: string    
   securitySchemes:
     spmis_auth:            # arbitrary name for the security scheme
       type: http
