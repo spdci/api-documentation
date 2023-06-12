@@ -12,7 +12,7 @@ info:
     
     `Query APIs > ` The Query APIs facilate to accept usecases via term query and perform multiple operation in single API for multiple criteria
     
-    `Event subscription > ` The Event subscription APIs describe APIs useful to subscribe / unsubscribe events
+    `Event subscription > ` The Event subscription APIs describe APIs useful to subscribe / unsubscribe events. When any event happens in crvs registry it sends event details on notify end point
     
     `Request status checking API > ` The request status checking APIs implement to check status of request sent in any above APIs
     
@@ -29,9 +29,9 @@ tags:
   - name: Search API
     description: '' 
   - name: Query APIs
-    description: 'The query API facilate to perform all usecase specific operation on one APO based on query parameter'
+    description: ''
   - name: Event subscription
-    description: 'The event subscription APIs facilate to get notification when any event happens in crvs registry, The client application meed to register for each event seperately with provided client id and client secret'
+    description: ''
   - name: Request status checking API 
     description: ''
 paths:
@@ -39,8 +39,8 @@ paths:
     post:
       tags:
         - CRVS APIs
-      summary: 'API to check if a person is alive or not based on ID'
-      description: '' 
+      summary: ''
+      description: 'API to check if a person is alive or not based on ID' 
       parameters:
         - $ref: "#/components/parameters/version"
         - $ref: "#/components/parameters/x-hmac"
@@ -65,8 +65,6 @@ paths:
               $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -76,6 +74,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/IsAliveCheckResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -123,8 +125,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -134,6 +134,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/AgeResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -181,8 +185,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -192,6 +194,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/MaritalStatusCheckResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -238,8 +244,7 @@ paths:
               $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
-        '102':
-          description: Processing 
+ 
         '200':
           description: Successful operation
           content:
@@ -249,6 +254,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/BirthInfoResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -297,8 +306,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -308,6 +315,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/MarriageInfoResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -355,8 +366,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -366,6 +375,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/DeathInfoResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/201'
 
         '400':
           $ref: '#/components/responses/400'
@@ -413,8 +426,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -424,6 +435,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/IDInfoLookupResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -471,8 +486,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -482,6 +495,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/ChildDemographicResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -529,8 +546,6 @@ paths:
 
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -540,6 +555,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetChildInfoResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -587,8 +606,6 @@ paths:
               
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -598,6 +615,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/IDEventDatesResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -645,8 +666,6 @@ paths:
               
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -656,6 +675,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/EventInfoResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -697,8 +720,6 @@ paths:
               $ref: '#/components/schemas/SearchRequest'     
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -708,7 +729,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
-
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -745,8 +769,6 @@ paths:
               $ref: '#/components/schemas/SearchResponse'
         required: true
       responses:
-        '102':
-          description: Processing 
         '200':
           description: Successful operation
           content:
@@ -756,7 +778,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -801,7 +826,7 @@ paths:
 
       security:
         - spmis_auth:
-            - read:eligibity
+            - read:search
     post:
       tags:
         - Query APIs 
@@ -836,7 +861,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/QueryResponse'
-
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -849,6 +877,9 @@ paths:
           $ref: '#/components/responses/405'
         '500':
           $ref: '#/components/responses/500' 
+      security:
+        - spmis_auth:
+            - read:search
   /on-query:
     post:
       tags:
@@ -884,6 +915,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/BaseResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -900,7 +935,7 @@ paths:
              
       security:
         - spmis_auth:
-            - read:relationships
+            - read:search
   /subscription-list:
     get:
       tags:
@@ -931,7 +966,7 @@ paths:
 
       security:
         - spmis_auth:
-            - read:eligibity
+            - read:search
   /subscribe:
     post:
       tags:
@@ -956,6 +991,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/SubscriptionResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -972,7 +1011,7 @@ paths:
              
       security:
         - spmis_auth:
-            - read:relationships
+            - read:search
   /unsubscribe:
     post:
       tags:
@@ -997,6 +1036,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/UnSubscribeResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -1012,7 +1055,7 @@ paths:
           $ref: '#/components/responses/500'             
       security:
         - spmis_auth:
-            - read:relationships
+            - read:search
   /notify:
     post:
       tags:
@@ -1036,6 +1079,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/EventResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -1051,7 +1098,7 @@ paths:
           $ref: '#/components/responses/500'                  
       security:
         - spmis_auth:
-            - read:relationships
+            - read:search
   /status:
     post:
       tags:
@@ -1076,6 +1123,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/RequestStatusCheckResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -1091,7 +1142,7 @@ paths:
           $ref: '#/components/responses/500'             
       security:
         - spmis_auth:
-            - read:relationships
+            - read:search
   /on-status:
     post:
       tags:
@@ -1119,6 +1170,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/BaseResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
 
         '400':
           $ref: '#/components/responses/400'
@@ -1134,55 +1189,91 @@ paths:
           $ref: '#/components/responses/500'             
       security:
         - spmis_auth:
-            - read:relationships
+            - read:search
   
 components:
   responses:
-        '102':
-          description: Processing 
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpStatus201' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpStatus201'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpStatus202' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpStatus202'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse400' 
-                
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse400'                 
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse401' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse401'                 
         '403':
           description: Forbidden
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse403' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse403'                 
         '404':
           description: Not Found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse404' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse404'                 
         '405':
           description: Method Not Allowed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse405'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse405'                 
         '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse422' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse422'                 
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse500' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse500'                 
   parameters:
     authorization:
       name: Authorization
@@ -1748,6 +1839,34 @@ components:
         value:
           type: string
           example: ''
+    HttpStatus201:
+      type: object
+      description: HTTP layer error details
+      properties:
+        status:
+          type: string
+          example: ''
+        return_message:
+          type: string
+          example: ''
+        correlation_id:
+          type: string
+          example: ''
+          description: ''
+    HttpStatus202:
+      type: object
+      description: HTTP layer error details
+      properties:
+        status:
+          type: string
+          example: ''
+        return_message:
+          type: string
+          example: ''
+        correlation_id:
+          type: string
+          example: ''
+          description: ''
     HttpErrorResponse400:
       description: HTTP layer error details
       properties:
@@ -1999,7 +2118,7 @@ components:
         return_message:
           type: string
           example: ''
-        correlation_id::
+        correlation_id:
           type: string
           example: ''
           description: The request id will be returned in response as correlation_id
@@ -2025,7 +2144,6 @@ components:
           items:
             anyOf:
               - $ref: '#/components/schemas/SearchResponseObject'
-          example: ''
     SearchResponseObject:
       type: object
       properties:
@@ -2096,6 +2214,7 @@ components:
             type: object
             anyOf:
               - $ref: '#/components/schemas/QueryResponseObject'
+            example: '{}'
     RequestStatusCheckRequest:
       type: object
       properties:
@@ -2108,13 +2227,13 @@ components:
     RequestIdObject:
       type: object
       properties:
-        transacrion_id:
+        message_id:
           type: string
           example: ''
     RequestStatusObject:
       type: object
       properties:
-        transacrion_id:
+        correlation_id:
           type: string
           example: ''
         status:
@@ -2415,7 +2534,7 @@ components:
           type: string
           example: '' 
   securitySchemes:
-    spmis_auth:
+    spmis_auth:            # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT
