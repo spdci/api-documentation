@@ -74,6 +74,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/IsAliveCheckResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -134,6 +138,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/AgeResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -194,6 +202,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/MaritalStatusCheckResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -254,6 +266,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/BirthInfoResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -315,6 +331,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/MarriageInfoResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -375,6 +396,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/DeathInfoResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -435,6 +461,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/IDInfoLookupResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -495,6 +526,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/ChildDemographicResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -555,6 +591,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/GetChildInfoResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -615,6 +656,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/IDEventDatesResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -675,6 +721,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/EventInfoResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -717,7 +767,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchRequest'     
+              $ref: '#/components/schemas/SearchRequest' 
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'                   
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -729,6 +785,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -767,6 +828,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SearchResponse'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SearchResponse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -807,7 +874,6 @@ paths:
       operationId: ''
       parameters:
         - $ref: "#/components/parameters/version"
-        - $ref: "#/components/parameters/x-hmac"
         - $ref: "#/components/parameters/authorization"
         - $ref: '#/components/parameters/x-registry-type'
         - $ref: '#/components/parameters/x-message-id'
@@ -849,7 +915,10 @@ paths:
               $ref: '#/components/schemas/QueryRequest'     
           application/xml:
             schema:
-              $ref: '#/components/schemas/QueryRequest'  
+              $ref: '#/components/schemas/QueryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -861,6 +930,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/QueryResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -904,6 +977,10 @@ paths:
           application/xml:
             schema:
               $ref: '#/components/schemas/QueryResponse'  
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+
         required: true
       responses:
         '200':
@@ -980,6 +1057,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SubscriptionRequest'     
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -991,6 +1074,10 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/SubscriptionResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -1025,6 +1112,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UnSubscribeRequest'     
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UnSubscribeRequest'     
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -1036,6 +1129,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/UnSubscribeResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -1068,6 +1166,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/EventNotificationRequest'     
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/EventNotificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -1079,6 +1183,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/EventResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -1111,7 +1220,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestStatusCheckRequest'     
+              $ref: '#/components/schemas/RequestStatusCheckRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RequestStatusCheckRequest'                   
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -1123,6 +1238,11 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/RequestStatusCheckResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
         '201':
           $ref: '#/components/responses/201'
         '202':
@@ -1159,6 +1279,9 @@ paths:
           application/xml:
             schema:
               $ref: '#/components/schemas/RequestStatusCheckResponse' 
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
         required: true
       responses:
         '200':
@@ -2175,8 +2298,24 @@ components:
         file_name:
           type: string
           format: binary
+        file_type:
+          type: string
+          example: csv
+          enum: [json,csv,xml]
         message_id:
           type: string 
+    FileUploadResponse:
+      type: object
+      properties:
+        file_name:
+          type: string
+          format: binary
+        file_type:
+          type: string
+          example: csv
+          enum: [json,csv,xml]
+        message_id:
+          type: string
     QueryRequest:
       allOf:
         - $ref: '#/components/schemas/BaseRequestObject'
@@ -2215,6 +2354,16 @@ components:
             anyOf:
               - $ref: '#/components/schemas/QueryResponseObject'
             example: '{}'
+    QueryResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/QueryRequestObject'      
+      type: object
+      description: '' 
+      properties:
+        data:
+          type: string
+          example: '{field1:value,}'
+        
     RequestStatusCheckRequest:
       type: object
       properties:
@@ -2248,31 +2397,7 @@ components:
           items:
             anyOf:
               - $ref: '#/components/schemas/RequestStatusObject'
-    QueryResponseObject:
-      type: object
-      description: '' 
-      properties:
-        correlation_id:
-          type: string
-          example: ''
-          description: The transaction_id received in request
-        codes:
-          type: array
-          items:
-            type: object
-            anyOf:
-              - $ref: '#/components/schemas/Attribute'
-          description: ''
-          example: ''
-        national_id:
-          type: string
-          example: ''
-        benificiery_id:
-          type: string
-          example: ''
-        registration_id:
-          type: string
-          example: ''
+
     SubscriptionRequest:
       allOf:
         - $ref: '#/components/schemas/BaseRequestObject'
