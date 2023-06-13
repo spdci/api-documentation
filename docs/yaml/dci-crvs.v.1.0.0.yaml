@@ -1361,7 +1361,7 @@ components:
     MsgSignature:
       type: string
       description: 'Signature of {header}+{message} body verified using sender''s signing public key'
-      example: 'Signature:  namespace="interoperability", kidId="{sender_id}|{unique_key_id}|{algorithm}", algorithm="ed25519", created="1606970629", expires="1607030629", headers="(created) (expires) digest", signature="Base64(signing content)'
+      example: 'Signature:  namespace="dci", kidId="{sender_id}|{unique_key_id}|{algorithm}", algorithm="ed25519", created="1606970629", expires="1607030629", headers="(created) (expires) digest", signature="Base64(signing content)'
 
     MsgHeader:
       type: object
@@ -1391,7 +1391,7 @@ components:
         total_count:
           description: Total no of requests present in the message request
           type: integer
-          example: 21800
+          example: 10
       required:
         - message_id
         - message_ts
@@ -1635,9 +1635,6 @@ components:
           type: string
           example: ''
           enum: ['birth','death','marriage']
-        correlation_id:
-          type: string
-          example: ''
     IDEventDatesResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -1889,7 +1886,10 @@ components:
           type: string
           example: ''
           description: The transaction_id to track request response
-
+        total_count:
+          description: Total no of record present in the message
+          type: integer
+          example: 10
     HumanName:
       type: object
       properties:
@@ -2097,6 +2097,10 @@ components:
           type: string
           example: ''
           description: The request id will be returned in response as correlation_id
+        total_count:
+          description: Total no of record present in the message response
+          type: integer
+          example: 10          
     SearchResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -2492,10 +2496,6 @@ components:
           type: string
           example: ''
           enum: ["DEATH_REGISTRATION"]
-        correlation_id:
-          type: string
-          example: ''
-          description: The transaction_id received in request
         event_data:
           $ref : '#/components/schemas/CRVSSearchByDRNResponse'    
     CRVSSearchByBRNResponse:
@@ -2598,6 +2598,7 @@ components:
           type: string
           example: ''
           description: ''
+          
 
     HttpStatus202:
       type: object
