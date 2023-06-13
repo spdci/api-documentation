@@ -2901,7 +2901,7 @@ components:
           type: string
           example: 'Internal server error' 
   securitySchemes:
-    spmis_auth:            # arbitrary name for the security scheme
+    spmis_auth:            
       type: http
       scheme: bearer
       bearerFormat: JWT
