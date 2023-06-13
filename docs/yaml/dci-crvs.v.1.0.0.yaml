@@ -2572,30 +2572,46 @@ components:
         value:
           type: string
           example: ''
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ''
+        message: 
+          type: string
+          example: ''
     HttpStatus201:
       type: object
       description: HTTP layer error details
       properties:
-        status:
+        ack_status:
           type: string
           example: ''
-        return_message:
+        timestamp:       
+          description: Time of message generation in RFC3339 format
           type: string
-          example: ''
+          format: date-time
+        error:
+          $ref: '#/components/schemas/Error'
         correlation_id:
           type: string
           example: ''
           description: ''
+
     HttpStatus202:
       type: object
       description: HTTP layer error details
       properties:
-        status:
+        ack_status:
           type: string
           example: ''
-        return_message:
+        timestamp:       
+          description: Time of message generation in RFC3339 format
           type: string
-          example: ''
+          format: date-time
+        error:
+          $ref: '#/components/schemas/Error'
         correlation_id:
           type: string
           example: ''
