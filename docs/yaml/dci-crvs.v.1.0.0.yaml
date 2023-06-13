@@ -49,9 +49,117 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/IsAliveCheckRequest'
+            examples:
+              jsonExample:
+                summary: Example JSON request
+                value: '{"signature":"Signature:  namespace=\"dci\", kidId=\"{sender_id}|{unique_key_id}|{algorithm}\", algorithm=\"ed25519\", created=\"1606970629\", expires=\"1607030629\", headers=\"(created) (expires) digest\", signature=\"Base64(signing content)","headers":{"version":"1.0.0","message_id":"123456789020211216223812","message_ts":"2022-12-04T18:01:07+00:00","sender_id":"SP0001","registry_type":"OpenCRVS","total_count":10,"async":true,"callbackendpoint":"https://senderhost/callback/on-disburse"},"payload":{"beneficiary":[{"identifier_type":"national_id","identifier_value":"345678912@mosip"},{"identifier_type":"national_id","identifier_value":"567891011@mosip"},{"identifier_type":"national_id","identifier_value":"123456789@mosip"},{"identifier_type":"national_id","identifier_value":"987654321@mosip"},{"identifier_type":"national_id","identifier_value":"234567890@mosip"},{"identifier_type":"national_id","identifier_value":"456789012@mosip"},{"identifier_type":"national_id","identifier_value":"789012345@mosip"},{"identifier_type":"national_id","identifier_value":"890123456@mosip"},{"identifier_type":"national_id","identifier_value":"901234567@mosip"},{"identifier_type":"national_id","identifier_value":"123457890@mosip"},{"identifier_type":"national_id","identifier_value":"234568901@mosip"},{"identifier_type":"national_id","identifier_value":"345679012@mosip"},{"identifier_type":"national_id","identifier_value":"456790123@mosip"},{"identifier_type":"national_id","identifier_value":"567801234@mosip"},{"identifier_type":"national_id","identifier_value":"678912345@mosip"},{"identifier_type":"national_id","identifier_value":"789023456@mosip"},{"identifier_type":"national_id","identifier_value":"890134567@mosip"},{"identifier_type":"national_id","identifier_value":"901245678@mosip"},{"identifier_type":"national_id","identifier_value":"123456789@mosip"}]},"sortby":{"fieldname":"is_alive","order":"desc"},"pagination":{"page_size":10,"page_number":1}}'
           application/xml:
             schema:
               $ref: '#/components/schemas/IsAliveCheckRequest'
+            examples:
+              xmlExample:
+                summary: Example XML request
+                value: |
+                  <?xml version="1.0" encoding="UTF-8" ?>
+                  <root>
+                  	<signature>Signature:  namespace="dci", kidId="{sender_id}|{unique_key_id}|{algorithm}", algorithm="ed25519", created="1606970629", expires="1607030629", headers="(created) (expires) digest", signature="Base64(signing content)</signature>
+                  	<headers>
+                  		<version>1.0.0</version>
+                  		<message_id>123456789020211216223812</message_id>
+                  		<message_ts>2022-12-04T18:01:07+00:00</message_ts>
+                  		<sender_id>SP0001</sender_id>
+                  		<registry_type>OpenCRVS</registry_type>
+                  		<total_count>10</total_count>
+                  		<async>true</async>
+                  		<callbackendpoint>https://senderhost/callback/on-disburse</callbackendpoint>
+                  	</headers>
+                  	<payload>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>345678912@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>567891011@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>123456789@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>987654321@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>234567890@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>456789012@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>789012345@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>890123456@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>901234567@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>123457890@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>234568901@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>345679012@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>456790123@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>567801234@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>678912345@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>789023456@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>890134567@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>901245678@mosip</identifier_value>
+                  		</beneficiary>
+                  		<beneficiary>
+                  			<identifier_type>national_id</identifier_type>
+                  			<identifier_value>123456789@mosip</identifier_value>
+                  		</beneficiary>
+                  	</payload>
+                  	<sortby>
+                  		<fieldname>is_alive</fieldname>
+                  		<order>desc</order>
+                  	</sortby>
+                  	<pagination>
+                  		<page_size>10</page_size>
+                  		<page_number>1</page_number>
+                  	</pagination>
+                  </root>           
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/FileUploadRequest'
@@ -63,9 +171,102 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IsAliveCheckResponse'          
+              examples:
+                jsonExample:
+                  summary: 'Example json response'
+                  value: '{"status":"success","return_message":"Data retrieved successfully","correlation_id":"123456789020211216223812","total_count":20,"payload":{"beneficiary":[{"identifier":{"identifier_type":"national_id","identifier_value":"345678912@mosip"},"is_alive":"yes"},{"identifier":{"identifier_type":"national_id","identifier_value":"567891011@mosip"},"is_alive":"yes"},{"identifier":{"identifier_type":"national_id","identifier_value":"123456789@mosip"},"is_alive":"yes"},{"identifier":{"identifier_type":"national_id","identifier_value":"987654321@mosip"},"is_alive":"yes"},{"identifier":{"identifier_type":"national_id","identifier_value":"234567890@mosip"},"is_alive":"yes"},{"identifier":{"identifier_type":"national_id","identifier_value":"456789012@mosip"},"is_alive":"no"},{"identifier":{"identifier_type":"national_id","identifier_value":"789012345@mosip"},"is_alive":"no"},{"identifier":{"identifier_type":"national_id","identifier_value":"890123456@mosip"},"is_alive":"no"},{"identifier":{"identifier_type":"national_id","identifier_value":"901234567@mosip"},"is_alive":"no"},{"identifier":{"identifier_type":"national_id","identifier_value":"123457890@mosip"},"is_alive":"no"}]},"pagination":{"page_size":10,"page_number":1,"total_records":15}}'
             application/xml:
               schema:
                 $ref: '#/components/schemas/IsAliveCheckResponse'
+              examples:
+                xmlExample:
+                  summary: 'Example xml response'
+                  value: |
+                    <?xml version="1.0" encoding="UTF-8" ?>
+                          <root>
+                          	<status>success</status>
+                          	<return_message>Data retrieved successfully</return_message>
+                          	<correlation_id>123456789020211216223812</correlation_id>
+                          	<total_count>20</total_count>
+                          	<payload>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>345678912@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>yes</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>567891011@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>yes</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>123456789@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>yes</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>987654321@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>yes</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>234567890@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>yes</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>456789012@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>no</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>789012345@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>no</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>890123456@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>no</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>901234567@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>no</is_alive>
+                          		</beneficiary>
+                          		<beneficiary>
+                          			<identifier>
+                          				<identifier_type>national_id</identifier_type>
+                          				<identifier_value>123457890@mosip</identifier_value>
+                          			</identifier>
+                          			<is_alive>no</is_alive>
+                          		</beneficiary>
+                          	</payload>
+                          	<pagination>
+                          		<page_size>10</page_size>
+                          		<page_number>1</page_number>
+                          		<total_records>20</total_records>
+                          	</pagination>
+                          </root>'
+              
             application/octet-stream:
               schema:
                 type: string
@@ -780,7 +981,7 @@ paths:
             application/json:
               schema: 
                 type: array
-                example: ['IS_ALIVE','GET_AGE','GET_MARITAL_STATUS','GET_BIRTH_INFO','GET_MARRIAGE_INFO','GET_DEATH_INFO','GET_PERSON_INFO','GET_PARENT_INFO','GET_VITAL_EVENT_DATES','GET_VITAL_EVENTS']
+                example: ['is_alive','get_age','get_marital_status','get_birth_info','get_marriage_info','get_death_info','get_person_info','get_parent_info','get_vital_event_dates','get_vital_events']
                 items:
                   type: string
 
@@ -1442,6 +1643,10 @@ components:
               items:
                 anyOf:
                   - $ref: '#/components/schemas/Identifier'
+        sortby:
+          $ref: '#/components/schemas/Sort'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     IsAliveCheckResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -1454,7 +1659,9 @@ components:
               type: array
               items:
                 anyOf:
-                  - $ref: '#/components/schemas/IsAliveCheckObject'            
+                  - $ref: '#/components/schemas/IsAliveCheckObject'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoInResponse'
     IsAliveCheckObject:
       type: object
       properties:
@@ -2074,7 +2281,20 @@ components:
           example: 10
         page_number:
           type: number
-          example: 5  
+          example: 1  
+    PaginationInfoInResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 10
+        page_number:
+          type: number
+          example: 1
+        total_records:
+          type: number
+          example: 20
+          
     EventResponse:
       type: object
       properties:
@@ -2565,11 +2785,11 @@ components:
     Identifier:
       type: object
       properties:
-        type:
+        identifier_type:
           type: string
           example: ''
           enum: ['0|Foundational ID Number','1|Birth Registration Number','2|Marriage Registration Number','3|Death Registration Number']
-        value:
+        identifier_value:
           type: string
           example: ''
     Error:
