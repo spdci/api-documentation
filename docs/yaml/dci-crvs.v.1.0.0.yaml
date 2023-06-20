@@ -5,10 +5,10 @@ info:
     The CRVS interoperability APIs describes different APIs some of them are usecase specific and other are generalized APIs to perform interoperable operations between CRVS registry and SP system.  !
     You can now help us improve the API whether it's by making changes to the definition itself or to the code.
     That way, with time, we can improve the API in general, and expose some of the new features in upcoming version.
-    
-    `CRVS APIs > ` The CRVS APIs section defines APIs that are usecase specific and suitable to implement scenario of where minimum data to be exposed via APIs 
-    
+
     `Search API > ` The Search API provides functionality to search based on demographic, identifiers and custom query
+
+    `CRVS APIs > ` The CRVS APIs section defines APIs that are usecase specific and suitable to implement scenario of where minimum data to be exposed via APIs 
     
     `Query APIs > ` The Query APIs facilate to accept usecases via term query and perform multiple operation in single API for multiple criteria
     
@@ -24,9 +24,9 @@ servers:
   - description: API host endpoint
     url: https://apihost/
 tags:
-  - name: CRVS APIs
-    description: '' 
   - name: Search API
+    description: '' 
+  - name: CRVS APIs
     description: '' 
   - name: Query APIs
     description: ''
@@ -35,6 +35,113 @@ tags:
   - name: Request status checking API 
     description: ''
 paths:
+  /search:
+    post:
+      tags:
+        - Search API
+      summary: To perform search operation in registry
+      description: The Search operation perfromed for registry 
+      parameters:
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequestObject' 
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SearchRequestObject'                   
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '500':
+          $ref: '#/components/responses/500' 
+      security:
+        - spmis_auth:
+            - read:search
+  /on-search:
+    post:
+      tags:
+        - Search API 
+      summary: Search request call back, this end point to be implemented at SP system or any system which retieving data from registry
+      description: The requester will pass information submitted in search and if response prepared then it will send content
+      parameters:
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        description: Search request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchResponse'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SearchResponse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '500':
+          $ref: '#/components/responses/500' 
+
+      security:
+        - spmis_auth:
+            - read:search
+
   /isAlive:
     post:
       tags:
@@ -859,112 +966,6 @@ paths:
         - spmis_auth:
             - read:search
 
-  /search:
-    post:
-      tags:
-        - Search API
-      summary: To perform search operation in registry
-      description: The Search operation perfromed for registry 
-      parameters:
-        - $ref: "#/components/parameters/authorization"
-      requestBody:
-        description: Search request body
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SearchRequestObject' 
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SearchRequestObject'                   
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/FileUploadRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SearchResponse'          
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/SearchResponse'
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary                
-
-        '201':
-          $ref: '#/components/responses/201'
-        '202':
-          $ref: '#/components/responses/202'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '405':
-          $ref: '#/components/responses/405'
-        '500':
-          $ref: '#/components/responses/500' 
-      security:
-        - spmis_auth:
-            - read:search
-  /on-search:
-    post:
-      tags:
-        - Search API 
-      summary: Search request call back, this end point to be implemented at SP system or any system which retieving data from registry
-      description: The requester will pass information submitted in search and if response prepared then it will send content
-      parameters:
-        - $ref: "#/components/parameters/authorization"
-      requestBody:
-        description: Search request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SearchResponse'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/SearchResponse'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/FileUploadRequest'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'          
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        '201':
-          $ref: '#/components/responses/201'
-        '202':
-          $ref: '#/components/responses/202'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '405':
-          $ref: '#/components/responses/405'
-        '500':
-          $ref: '#/components/responses/500' 
-
-      security:
-        - spmis_auth:
-            - read:search
   /query:
     get:
       tags:
