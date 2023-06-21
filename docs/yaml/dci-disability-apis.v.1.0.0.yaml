@@ -9,14 +9,15 @@ servers:
 tags:
   - name: Search API
     description: ''
-  - name: Disability Registry API
+  - name: Request status checking API 
     description: ''
   - name: Query APIs
     description: ''
   - name: Event subscription
     description: ''
-  - name: Request status checking API 
-    description: ''
+  - name: Disability Registry API
+    description: 'Use case specific APIs'
+
 paths:
   /search:
     post:
@@ -434,6 +435,138 @@ paths:
       security:
         - spmis_auth:
             - read:search
+  /query:
+    get:
+      tags:
+        - Query APIs 
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/authorization"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                example: ['is_alive','get_age','get_marital_status','get_birth_info','get_marriage_info','get_death_info','get_person_info','get_parent_info','get_vital_event_dates','get_vital_events']
+                items:
+                  type: string
+
+      security:
+        - spmis_auth:
+            - read:search
+    post:
+      tags:
+        - Query APIs 
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'     
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'     
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '500':
+          $ref: '#/components/responses/500' 
+      security:
+        - spmis_auth:
+            - read:search
+  /on-query:
+    post:
+      tags:
+        - Query APIs 
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryResponse'     
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/QueryResponse'  
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'     
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        '201':
+          $ref: '#/components/responses/201'
+        '202':
+          $ref: '#/components/responses/202'
+
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '405':
+          $ref: '#/components/responses/405'
+        '500':
+          $ref: '#/components/responses/500' 
+             
+      security:
+        - spmis_auth:
+            - read:search
+
   /subscription-list:
     get:
       tags:
@@ -1509,7 +1642,76 @@ components:
             reason:
               type: string  
               example: ''
-
+    QueryRequest:
+      allOf:
+        - $ref: '#/components/schemas/AsyncBaseRequestObject'
+      type: object
+      description: '' 
+      properties:
+        payload:
+          type: array
+          items:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/QueryRequestObject'              
+    QueryRequestObject:
+      type: object
+      properties:
+        query_object:
+          type: array
+          items:
+            $ref: '#/components/schemas/Query'    
+    Query:  
+      type: object
+      description: '' 
+      properties:
+        type:
+          type: string
+          example: ''
+        value:
+          type: string
+          example: ''
+        query:
+          type: string
+          example: ''
+    QueryResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+      type: object
+      description: '' 
+      properties:
+        payload:
+          type: array
+          items:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/QueryResponseObject'            
+    QueryResponseObject:
+      type: object
+      properties:
+        query_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryResObject'
+    QueryResObject:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/Query'
+        result:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/KeyValueMap'
+    KeyValueMap:
+      type: object
+      properties:
+        key: 
+          type: string
+          example: ''
+        value: 
+          type: string
+          example: ''
     UnSubscribeResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
