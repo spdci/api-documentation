@@ -1,0 +1,58 @@
+components:
+  parameters:
+    authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: Access token which was issued after successful login with gateway auth server.
+      schema:
+        type: string
+        example: Bearer <...>        
+  schemas:
+    MsgHeader:
+      type: object
+      description: Message header
+      properties:
+        version:
+          description: Messaing protocol specification version being used
+          type: string
+          example: 1.0.0
+        message_id:
+          description: 'Unique message id to communicate between sender and receiver systems to realiable deliver the message over any transport layer i.e https, pub/sub, sftp etc.,'
+          type: string
+          example: '123456789020211216223812'
+        message_ts:
+          description: Time of message generation in RFC3339 format
+          type: string
+          format: date-time
+          example: '2022-12-04T18:01:07+00:00'
+        sender_id:
+          description: 'send id registered with the receiving system. Used for authorization, encryption, digital sign verfication, etc., functions.'
+          type: string
+          example: '10089'
+        registry_type:
+          description: 'The targeted resistry to which request to send'
+          type: string
+          example: 'OpenCRVS'
+        total_count:
+          description: Total no of requests present in the message request
+          type: integer
+          example: 10
+      required:
+        - message_id
+        - message_ts
+        - action    
+    AsyncHeaders:
+      type: object
+      description: Message header
+      properties:
+        async:
+          description: It indiacte if true then async request else sender will expect response in same request , default is true.
+          type: boolean
+          format: uri
+          example: true
+        callbackendpoint:
+          description: The callback url for async call
+          type: string
+          format: uri
+          example: 'https://senderhost/callback/on-disburse'

@@ -1,0 +1,75 @@
+components:
+  schemas:
+    SubscriptionRequest:
+      allOf:
+        - $ref: './common.yaml#/components/schemas/BaseRequestObject'
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            events:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/EventInfo'
+            client_id:
+              type: string
+              example: ''
+            custom_filter:
+              type: object
+              example:
+                region: ''
+    EventInfo:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ''
+          enum: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
+        frequency:
+          type: string
+          example: ''
+          enum: ['immediate','hourly','daily','weekly']
+        response_fields:
+          type: array
+          example: '[]'
+          items:
+            type: string 
+            enum: ['name', 'birthdate','birth_registration_number']
+        callback_url:
+          type: string
+          example: ''
+    SubscriptionResponse:
+      allOf:
+        - $ref: './responses.yaml#/components/schemas/BaseResponse'
+      type: object
+      properties:
+        payload: 
+          type: array
+          items:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/SubscriptionList'
+    SubscriptionList:
+      type: object
+      properties:
+        subscription:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionObject'
+    SubscriptionObject:
+      type: object
+      properties:
+        event_code:
+          type: string
+          example: ''
+          enum: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
+        registration_id:
+          type: string
+          example: ''
+        status:
+          type: string
+          example: ''
+   

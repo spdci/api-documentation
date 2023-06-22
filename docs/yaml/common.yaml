@@ -1,0 +1,86 @@
+components:
+  schemas:
+    BaseRequestObject:
+      type: object
+      properties:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/MsgHeader'                  
+
+    AsyncBaseRequestObject:
+      type: object
+      properties:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/MsgHeader'
+            - $ref: './headers.yaml#/components/schemas/AsyncHeaders'
+    HumanName:
+      type: object
+      properties:
+        suffix:
+          type: string
+          example: ''
+        prefix:
+          type: string
+          example: ''
+        first_name:
+          type: string
+          example: ''
+        middle_name:
+          type: string
+          example: ''
+        last_name:
+          type: string
+          example: ''
+    DateObject:
+      type: object
+      properties:
+        day:
+          type: string
+          example: ''
+        month: 
+          type: string
+          example: ''
+        year: 
+          type: string
+          example: '' 
+    Address:
+      type: object
+      properties:
+        house_no:
+          type: string
+          example: ''
+        address_line_1:
+          type: string
+          example: ''
+        address_line_2:
+          type: string
+          example: ''          
+        district:
+          type: string
+          example: ''          
+        state:
+          type: string
+          example: ''          
+        postal_code:
+          type: string
+          example: ''                    
+    Identifier:
+      type: object
+      properties:
+        identifier_type:
+          type: string
+          example: ''
+          enum: ['0|Foundational ID Number']
+        identifier_value:
+          type: string
+          example: ''
+    TransactionId:
+      type: string
+      example: ''
