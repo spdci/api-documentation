@@ -1,0 +1,49 @@
+components:
+  schemas:
+    RequestStatusCheckRequest:
+      allOf:
+        - $ref: './common.yaml#/components/schemas/RequestObject'
+      type: object
+      properties:
+        payload:
+          type: object
+          properties:
+            request_ids:
+              type: array
+              example: ''
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/RequestIdObject'
+    RequestIdObject:
+      type: object
+      properties:
+        message_id:
+          type: string
+          example: ''
+    RequestStatusObject:
+      type: object
+      properties:
+        correlation_id:
+          type: string
+          example: ''
+        status:
+          type: string
+          example: ''
+          enum: ['received','processing','processed','failed','invalid_request_id']
+    RequestStatusCheckResponse:
+      type: object
+      properties:
+        payload:
+          type: array
+          items:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/RequestStatusObjectList'
+    RequestStatusObjectList:
+      type: object
+      properties:
+        status:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestStatusObject'       
+   

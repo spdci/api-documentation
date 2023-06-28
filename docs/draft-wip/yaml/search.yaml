@@ -1,0 +1,86 @@
+components:
+  schemas:
+    SearchCriteria:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ''
+        given_name:
+          type: string
+          example: ''
+        family_name:
+          type: string
+          example: ''
+        middle_name:
+          type: string
+          example: ''
+        gender:
+          type: string
+          example: ''
+        birthdate:
+          type: string
+          example: ''
+        place_of_birth:
+          type: string
+          example: ''
+        status:
+          type: string
+          example: ''
+        nationality:
+          type: string
+          example: ''
+        attributes:
+          type: array
+          items:
+            anyOf:
+              - $ref: './common.yaml#/components/schemas/Attribute'
+
+    ExpressionAnd:
+      type: object
+      properties:
+        expression:
+          type: string
+          enum: [and]
+        
+    NameField:
+      description: 'Search by name'        
+      allOf: 
+        - type: object
+          required:
+            - fieldname
+            - value
+          properties: 
+            fieldname:
+              type: string
+              example: ''
+              enum: ['firstname']
+            operator:
+              $ref: '#/components/schemas/FieldOperatorAnd'
+            value: 
+              type: string
+              example: ''
+              description: 'Search by firstname'
+ 
+    Repositories:
+      allOf: 
+        - type: object
+          required:
+            - fieldname
+            - value
+          properties: 
+            fieldname:
+              type: string
+              example: ''
+              enum: ['repository_type']
+            operator:
+              $ref: '#/components/schemas/FieldOperatorAnd'
+            value: 
+              type: string
+              example: ''
+              enum: ['Birth', 'Death', 'Marriage']
+              description: 'Search by repository_type type'
+    FieldOperatorAnd:
+      type: string
+      enum:
+        - and

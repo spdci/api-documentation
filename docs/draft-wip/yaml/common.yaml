@@ -1,0 +1,268 @@
+components:
+  schemas:
+    RequestObject:
+      type: object
+      properties:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/MsgHeader'
+
+    HumanName:
+      type: object
+      properties:
+        suffix:
+          type: string
+          example: ''
+        prefix:
+          type: string
+          example: ''
+        first_name:
+          type: string
+          example: ''
+        middle_name:
+          type: string
+          example: ''
+        last_name:
+          type: string
+          example: ''
+    Relationship:
+      type: object       
+      properties:
+        relation_code:
+          type: string
+          example: ''
+          description: 'Refer relationship code directory' 
+          enum: ['1:brother','2:sister','3:mother','4:father','spouse']
+        person_info:
+          $ref: '#/components/schemas/HumanName'
+    Gender:
+      type: object
+      description: 'Refer code directory all gender codes'
+      properties:
+        code:
+          type: string
+          example: ''
+          enum: ['1','2','3']          
+        display_text: 
+          type: string
+          example: ''
+          enum: ['male','female','transgender']          
+    MaritalStatus:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ''
+          enum: ['1','2','3','4','5']
+        display_text: 
+          type: string
+          example: ''
+          enum: ['Never Married','Currently Married','Widow / Widower','Divorced','Separated']
+    Repositories:
+      type: object
+      properties:
+        code:
+          type: string
+          example: ''
+          enum: ['1','2','3','4','5']          
+        display_text: 
+          type: string
+          example: ''          
+          enum: ['birth','death','crvs','farmer','disability']          
+    DateObject:
+      type: object
+      description: 'Date object'
+      properties:
+        day:
+          type: string
+          example: ''
+        month: 
+          type: string
+          example: ''
+        year: 
+          type: string
+          example: ''
+    DateTimeObject:
+      allOf:
+        $ref: '#/components/schemas/DateObject'
+      description: 'DateTime object'
+      properties:
+        hour:
+          type: integer
+          example: ''
+        minute:
+          type: integer
+          example: ''
+        second:
+          type: integer
+          example: ''
+        timezone:
+          type: string
+          example: ''
+         
+    Address:
+      type: object
+      properties:
+        house_no:
+          type: string
+          example: ''
+        address_line_1:
+          type: string
+          example: ''
+        address_line_2:
+          type: string
+          example: ''          
+        district:
+          type: string
+          example: ''          
+        state:
+          type: string
+          example: ''          
+        postal_code:
+          type: string
+          example: '' 
+    ContactDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          example: ''
+          enum: ['personal','offical']
+        country_code:
+          type: string
+          example: ''
+        landline_no:
+          type: string
+          example: ''          
+        mobile_no:
+          type: string
+          example: ''          
+                             
+    Identifier:
+      type: object
+      properties:
+        identifier_type:
+          type: string
+          example: ''
+          enum: ['0|Foundational ID Number']
+        identifier_value:
+          type: string
+          example: ''
+    TransactionId:
+      type: string
+      example: ''
+      description: ' Unique transaction_id set by txn initiating system (i.e sender) to co-relate requests across processing systems/service end points'
+    ReferenceId:
+      type: string
+      example: ''   
+      description: 'Unique reference_id to co-relate each requests'   
+    TimeStamp:
+      type: string
+      description: datetime in RFC3339 format
+      format: date-time
+      example: '2022-12-04T17:20:07-04:00'      
+    Sort:
+      type: object
+      properties:
+        fieldname:
+          type: string
+          example: ''
+          enum: [firstname,dob]
+        order:
+          type: string
+          example: ''
+          enum: ["asc","desc"]
+    Pagination:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 10
+        page_number:
+          type: number
+          example: 1  
+    PaginationInfoInResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 10
+        page_number:
+          type: number
+          example: 1
+        total_records:
+          type: number
+          example: 20      
+    KeyValueMap:
+      type: object
+      properties:
+        key: 
+          type: string
+          example: ''
+        value: 
+          type: string
+          example: ''          
+    FileUploadRequest:
+      type: object
+      properties:
+        file_name:
+          type: string
+          format: binary
+        file_type:
+          type: string
+          example: csv
+          enum: [json,csv,xml]
+        message_id:
+          type: string          
+    StatusInfo:
+      type: object
+      properties:
+        type: 
+          type: string
+          example: ''
+          enum: ['is_alive','marital_status']
+        code: 
+          type: string
+          example: ''          
+        display_text: 
+          type: string
+          example: ''          
+    VitalEventInfo:
+      type: object
+      properties:
+        event_code: 
+          type: string
+          description: 'Refer code directory'
+          example: ''
+          enum: ['1','2']
+        registration_number: 
+          type: string
+          example: ''          
+        registration_date: 
+          $ref: '#/components/schemas/DateObject'
+        event_occured_at: 
+          $ref: '#/components/schemas/Address'           
+        registration_address: 
+          $ref: '#/components/schemas/Address' 
+    VitalEventDate:
+      type: object
+      properties:
+        type: 
+          type: string
+          example: ''
+          enum: ['birth','death','marriage','divorce']
+        registration_date: 
+          $ref: '#/components/schemas/DateObject'           
+            
+    Attribute:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'attribute name'
+        value:
+          type: string
+          example: 'attribute value'          

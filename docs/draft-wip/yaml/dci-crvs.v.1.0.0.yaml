@@ -1,0 +1,632 @@
+openapi: 3.0.3
+info:
+  title: CRVS interoperability APIs.
+  description: |-
+    The CRVS interoperability APIs describes different APIs some of them are usecase specific and other are generalized APIs to perform interoperable operations between CRVS registry and SP system.  !
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in upcoming version.
+
+    `Search API > ` The Search API provides functionality to search based on demographic, identifiers and custom query
+
+    `Event subscription > ` The Event subscription APIs describe APIs useful to subscribe / unsubscribe events. When any event happens in crvs registry it sends event details on notify end point
+    
+    `Request status checking API > ` The request status checking APIs implement to check status of request sent in any above APIs
+    
+    Gitbook reference link:
+    - [CRVS - V1.0 ](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/dci/readme)
+
+    Code directory links:
+    - [Identifiers](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.4-cd.04-vital-events)
+          
+    - [Marital Status](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.2-cd.02-marital-status)
+          
+    - [Gender](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.3-cd.03-gender)
+          
+    - [Vital Events](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.4-cd.04-vital-events)   
+    
+  version: 1.0.0
+servers:
+  - description: API host endpoint
+    url: https://apihost/
+tags:
+  - name: Search API
+    description: '' 
+  - name: Event subscription
+    description: ''
+  - name: Request status
+    description: ''
+paths:
+  /search:
+    post:
+      tags:
+        - Search API
+      summary: Search data in registry
+      description: '' 
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: Search request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest' 
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'                   
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500' 
+      security:
+        - x-access-token:
+            - read:search
+  /on-search:
+    post:
+      tags:
+        - Search API 
+      summary: Search request call back
+      description: The requester will pass information submitted in search and if response prepared then it will send content
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: Search response to SP system
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchResponse'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SearchResponse'
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './responses.yaml#/components/schemas/ApiResponse'          
+            application/xml:
+              schema:
+                $ref: './responses.yaml#/components/schemas/ApiResponse'
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500' 
+
+      security:
+        - x-access-token:
+            - read:search
+  /subscription-list:
+    get:
+      tags:
+        - Event subscription 
+      summary: Event list
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema: 
+                type: array
+                example: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
+                items:
+                  type: string         
+
+      security:
+        - x-access-token:
+            - read:search
+  /subscribe:
+    post:
+      tags:
+        - Event subscription  
+      summary: Subscribe
+      description: Response will contain details of subscription
+      operationId: ''
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: './subscriptions.yaml#/components/schemas/SubscriptionRequest'     
+          application/xml:
+            schema:
+              $ref: './subscriptions.yaml#/components/schemas/SubscriptionRequest'
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './subscriptions.yaml#/components/schemas/SubscriptionResponse'     
+            application/xml:
+              schema:
+                $ref: './subscriptions.yaml#/components/schemas/SubscriptionResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500' 
+             
+      security:
+        - x-access-token:
+            - read:search
+  /unsubscribe:
+    post:
+      tags:
+        - Event subscription  
+      summary: Unsubscribe
+      description: 'To un-subscribe for events'
+      operationId: ''
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: 'Request to un-subscribe'
+        content:
+          application/json:
+            schema:
+              $ref: './subscriptions.yaml#/components/schemas/UnSubscribeRequest'     
+          application/xml:
+            schema:
+              $ref: './subscriptions.yaml#/components/schemas/UnSubscribeRequest'     
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './subscriptions.yaml#/components/schemas/UnSubscribeResponse'     
+            application/xml:
+              schema:
+                $ref: './subscriptions.yaml#/components/schemas/UnSubscribeResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500'             
+      security:
+        - x-access-token:
+            - read:search
+  /notify:
+    post:
+      tags:
+        - Event subscription
+      summary: Event notification (to SP system)
+      description: 'The notify end point to be implemented at subscriber system. The registry will send event data on this end point.'
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventNotificationRequest'     
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/EventNotificationRequest'
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'     
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500'                  
+      security:
+        - x-access-token:
+            - read:search
+  /status:
+    post:
+      tags:
+        - Request status
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: 'Request to un-subscribe'
+        content:
+          application/json:
+            schema:
+              $ref: './req-status.yaml#/components/schemas/RequestStatusCheckRequest'
+          application/xml:
+            schema:
+              $ref: './req-status.yaml#/components/schemas/RequestStatusCheckRequest'                   
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './req-status.yaml#/components/schemas/RequestStatusCheckResponse'     
+            application/xml:
+              schema:
+                $ref: './req-status.yaml#/components/schemas/RequestStatusCheckResponse'
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary                
+
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500'             
+      security:
+        - x-access-token:
+            - read:search
+  /on-status:
+    post:
+      tags:
+        - Request status
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - $ref: "./headers.yaml#/components/parameters/authorization"
+      requestBody:
+        description: 'Request to un-subscribe'
+        content:
+          application/json:
+            schema:
+              $ref: './req-status.yaml#/components/schemas/RequestStatusCheckResponse'     
+          application/xml:
+            schema:
+              $ref: './req-status.yaml#/components/schemas/RequestStatusCheckResponse' 
+          multipart/form-data:
+            schema:
+              $ref: './common.yaml#/components/schemas/FileUploadRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './responses.yaml#/components/schemas/BaseResponse'     
+            application/xml:
+              schema:
+                $ref: './responses.yaml#/components/schemas/BaseResponse'
+        '201':
+          $ref: './responses.yaml#/components/responses/201'
+        '202':
+          $ref: './responses.yaml#/components/responses/202'
+
+        '400':
+          $ref: './responses.yaml#/components/responses/400'
+        '401':
+          $ref: './responses.yaml#/components/responses/401'
+        '403':
+          $ref: './responses.yaml#/components/responses/403'
+        '404':
+          $ref: './responses.yaml#/components/responses/404'
+        '405':
+          $ref: './responses.yaml#/components/responses/405'
+        '500':
+          $ref: './responses.yaml#/components/responses/500'             
+      security:
+        - x-access-token:
+            - read:search
+
+components:
+  schemas:  
+    SearchRequest:
+      allOf:
+        - $ref: './common.yaml#/components/schemas/RequestObject'
+      type: object
+      properties:
+        payload:
+          type: object
+          description: 'The search data using which search to be performed'
+          properties:
+            transaction_id:
+              $ref : './common.yaml#/components/schemas/TransactionId'
+            search_request:
+              type: array
+              items:
+                $ref: '#/components/schemas/SearchRequestObject'
+
+    SearchRequestObject:
+      type: object
+      properties:
+        reference_id:
+          $ref : './common.yaml#/components/schemas/ReferenceId'
+        query: 
+          type: string
+          example: ''
+          enum: ['person_info','is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','parent_info','vital_event_dates','vital_events_info']
+        timestamp:
+          $ref : './common.yaml#/components/schemas/TimeStamp'          
+        identifiers:
+          type: array
+          description: Refer code directory for supported identifier. The Code from data directory should be in identifier_type
+          items:
+              $ref: './common.yaml#/components/schemas/Identifier'
+        demographic:
+          $ref : './search.yaml#/components/schemas/SearchCriteria'
+        custom_query:
+          type: array
+          items:
+            anyOf:
+              - $ref: './search.yaml#/components/schemas/NameField'
+              - $ref: './search.yaml#/components/schemas/ExpressionAnd'
+              - $ref: './search.yaml#/components/schemas/Repositories'
+        sortby:
+          $ref: './common.yaml#/components/schemas/Sort'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
+
+          
+    EventResponse:
+      type: object
+      properties:
+        event_status:
+          type: array
+          items:
+            anyOf:
+              - $ref: './responses.yaml#/components/schemas/BaseResponse'
+         
+    SearchResponse:
+      type: object
+      properties:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/MsgRequestHeader'
+        payload: 
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/SearchResponseObject'
+    SearchResponseObject:
+      type: object
+      properties:
+        reference_id:
+          $ref : './common.yaml#/components/schemas/ReferenceId'
+        query: 
+          type: string
+          example: ''
+          enum: ['is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','person_info','parent_info','vital_event_dates','vital_events_info']
+        timestamp:
+          $ref : './common.yaml#/components/schemas/TimeStamp'          
+        beneficiary: 
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/Person'
+              - $ref: '#/components/schemas/PersonWithVitalInfo'
+              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
+              - $ref: '#/components/schemas/MarriageInfo' 
+
+    EventNotificationRequest:
+      type: object
+      properties:
+        success:
+          type: string
+          example: ''
+        return_message:
+          type: string
+          example: ''
+        error_code:
+          type: string
+          example: ''        
+        corellation_id:
+          type: string
+          example: ''
+          description: The corellation_id received in request
+        payload: 
+
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/PersonWithVitalInfo'
+              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
+              - $ref: '#/components/schemas/MarriageInfo' 
+    
+    MarriageInfo:
+      type: object
+      properties:
+        parties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+        event_registration_info:
+            $ref: './common.yaml#/components/schemas/VitalEventInfo'        
+     
+    Person:
+      type: object
+      properties:
+        identifier:
+          type: array
+          items:
+              $ref: './common.yaml#/components/schemas/Identifier'
+        name:
+          $ref: './common.yaml#/components/schemas/HumanName'
+        related_persons:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/Relationship'
+        contactno:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/ContactDetails'
+        gender:
+          $ref: './common.yaml#/components/schemas/Gender'
+    PersonWithVitalInfo:
+      allOf:
+        - $ref: '#/components/schemas/Person'    
+      type: object
+      properties:
+        is_alive:
+          type: boolean
+        age:
+          type: integer
+        marital_status:
+          $ref: './common.yaml#/components/schemas/MaritalStatus'
+        related_persons:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/Relationship'
+        contactno:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/ContactDetails'
+        gender:
+          $ref: './common.yaml#/components/schemas/Gender'
+    PersonWithVitalEventsDetails:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+      type: object
+      properties:
+        vital_event_dates:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/VitalEventDate'
+        vital_event_registration_info:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/VitalEventInfo'
+            
+  securitySchemes:
+    x-access-token:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+      description: Authenticating using session token issued by platform/system API gateway or auth services issuing session token APIs using client id & secret      
