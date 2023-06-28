@@ -30,7 +30,7 @@ servers:
     url: https://apihost/
 tags:
   - name: Search API
-    description: '' 
+    description: 'The Search API section includes /search and /on-search end points ' 
   - name: Event subscription
     description: ''
   - name: Request status
@@ -40,8 +40,8 @@ paths:
     post:
       tags:
         - Search API
-      summary: Search data in registry
-      description: '' 
+      summary: Search request
+      description: 'The search request build up of three section 1) Singnature 2) headers 3) payload' 
       parameters:
         - $ref: "./headers.yaml#/components/parameters/authorization"
       requestBody:
