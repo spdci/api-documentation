@@ -9,7 +9,24 @@ components:
         headers:
           allOf:
             - $ref: './headers.yaml#/components/schemas/MsgHeader'
-
+    SearchRequestObject:
+      type: object
+      properties:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/SearchMsgHeader'          
+    SubscribeRequestObject:
+      type: object
+      properties:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/SubscribeMsgHeader'                
     HumanName:
       type: object
       properties:
@@ -196,6 +213,19 @@ components:
         total_records:
           type: number
           example: 20      
+      required:
+        - page_size           
+        - page_number
+        - total_records    
+    Locale:
+      type: object
+      properties:
+        code: 
+          type: string
+          example: ''
+        language: 
+          type: string
+          example: '' 
     KeyValueMap:
       type: object
       properties:

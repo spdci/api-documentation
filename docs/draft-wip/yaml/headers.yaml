@@ -71,11 +71,6 @@ components:
           type: boolean
           format: uri
           example: true
-        callbackendpoint:
-          description: The callback url for async call
-          type: string
-          format: uri
-          example: 'https://senderhost/callback/on-disburse'
       required:
         - version
         - message_id
@@ -86,3 +81,45 @@ components:
         - total_count
         - is_encrypted
         - encryption_algorithm
+    SearchMsgHeader:
+      allOf:
+        - $ref: '#/components/schemas/MsgHeader' 
+      type: object
+      description: Message header
+      properties:
+        callbackendpoint:
+          description: The callback url for async call
+          type: string
+          format: uri
+          example: 'https://{server_url}/on-search'
+      required:
+        - version
+        - message_id
+        - message_ts
+        - action
+        - sender_id
+        - receiver_id
+        - total_count
+        - is_encrypted
+        - encryption_algorithm      
+    SubscribeMsgHeader:
+      allOf:
+        - $ref: '#/components/schemas/MsgHeader' 
+      type: object
+      description: Message header
+      properties:
+        callbackendpoint:
+          description: The callback url for async call
+          type: string
+          format: uri
+          example: 'https://{server_url}/notify'
+      required:
+        - version
+        - message_id
+        - message_ts
+        - action
+        - sender_id
+        - receiver_id
+        - total_count
+        - is_encrypted
+        - encryption_algorithm           

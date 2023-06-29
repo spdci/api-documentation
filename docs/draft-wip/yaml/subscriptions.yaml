@@ -2,7 +2,7 @@ components:
   schemas:
     SubscriptionRequest:
       allOf:
-        - $ref: './common.yaml#/components/schemas/RequestObject'
+        - $ref: './common.yaml#/components/schemas/SubscribeRequestObject'
       type: object
       properties:
         headers:
@@ -14,7 +14,10 @@ components:
         payload:
           type: object
           properties:
-            events:
+            registry_type:
+              type: string
+              example: ''
+            event_type:
               type: array
               items:
                 type: object

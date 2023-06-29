@@ -389,7 +389,7 @@ components:
       name: x-callbackendpoint
       schema:
         type: string
-        example: "https://senderhost/callback/on-disburse"
+        example: "https://{server_url}/notify"
       required: false
       description: If async response requested then this param to be supplied for receiving data in SP system, this is usually endpoint active in SP env
   schemas:
