@@ -30,6 +30,7 @@ components:
               type: object
               example:
                 region: ''
+                
     EventInfo:
       type: object
       properties:
@@ -46,10 +47,9 @@ components:
           example: '[]'
           items:
             type: string 
-            enum: ['name', 'birthdate','birth_registration_number']
-        callback_url:
-          type: string
-          example: ''
+            enum: []
+            example: '[]'
+
     SubscriptionResponse:
       allOf:
         - $ref: './responses.yaml#/components/schemas/BaseResponse'

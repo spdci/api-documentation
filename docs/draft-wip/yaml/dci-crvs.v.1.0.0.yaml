@@ -495,7 +495,7 @@ components:
         pagination:
           $ref: './common.yaml#/components/schemas/Pagination'
         filter:
-          description: Demographics attribute(s) to send in response
+          description: Attribute(s) to send in response
           items:
             type: string
           
