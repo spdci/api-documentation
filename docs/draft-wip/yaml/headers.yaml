@@ -9,16 +9,16 @@ components:
         type: string
         example: Bearer <...>        
   schemas:
-    MsgRequestHeader:
+    CommonHeaders:
       type: object
       description: Message header
       properties:
         version:
-          description: Messaing protocol specification version being used
+          description: Messaging protocol specification version being used
           type: string
           example: 1.0.0
         message_id:
-          description: 'Unique message id to communicate between sender and receiver systems to realiable deliver the message over any transport layer i.e https, pub/sub, sftp etc.,'
+          description: 'Unique message id to communicate between sender and receiver systems to deliver the message over any transport layer i.e https, pub/sub, sftp etc.,'
           type: string
           example: '123456789020211216223812'
         message_ts:
@@ -27,7 +27,7 @@ components:
           format: date-time
           example: '2022-12-04T18:01:07+00:00'
         sender_id:
-          description: 'send id registered with the receiving system. Used for authorization, encryption, digital sign verfication, etc., functions.'
+          description: 'The ID of sender system registered with the receiving system. Used for authorization, encryption, digital sign verification, etc., functions.'
           type: string
           example: '10089'
         receiver_id:
@@ -39,17 +39,18 @@ components:
           type: string
           example: 'search'
         total_count:
-          description: Total no of requests present in the message request
+          description: Total count of requests present in the message
           type: integer
           example: 10
         is_encrypted:
-          description: Is payload encrypted?
+          description: If is_encrypted true then receiving system will expect message part of request in encrypted format also receiving system will expect  encryption_algorithm param.  
           type: boolean
-          example: true          
+          example: true 
+          default: false   
         encryption_algorithm:
-          description: Encryption algorithm used to encrypt payload
-          type: integer
-          example: "DH-2048"
+          description: Encryption algorithm used to encrypt message part of request
+          type: string
+          example: "DH-2048"                
       required:
         - version
         - message_id
@@ -58,53 +59,33 @@ components:
         - sender_id
         - receiver_id
         - total_count
-        - is_encrypted
-        - encryption_algorithm
-    MsgHeader:
-      allOf:
-        - $ref: '#/components/schemas/MsgRequestHeader' 
+        - is_encrypted 
+    AsyncHeaders:
       type: object
       description: Message header
       properties:
         async:
-          description: It indiacte if true then async request else sender will expect response in same request , default is true.
-          type: boolean
-          format: uri
+          description: If true then async request else sender will expect response in same request , default is true.
+          type: boolean 
           example: true
-      required:
-        - version
-        - message_id
-        - message_ts
-        - action
-        - sender_id
-        - receiver_id
-        - total_count
-        - is_encrypted
-        - encryption_algorithm
-    SearchMsgHeader:
-      allOf:
-        - $ref: '#/components/schemas/MsgHeader' 
+          default: true
+    SearchCallbackHeader:
       type: object
-      description: Message header
       properties:
         callbackendpoint:
-          description: The callback url for async call
+          description: The callback url for async call, if async param is true then we callbackendpoint is required.
           type: string
           format: uri
           example: 'https://{server_url}/on-search'
-      required:
-        - version
-        - message_id
-        - message_ts
-        - action
-        - sender_id
-        - receiver_id
-        - total_count
-        - is_encrypted
-        - encryption_algorithm      
+    NotifyCallbackHeader:
+      type: object
+      properties:
+        callbackendpoint:
+          description: The callback url for async call, if async param is true then we callbackendpoint is required.
+          type: string
+          format: uri
+          example: 'https://{server_url}/notify'
     SubscribeMsgHeader:
-      allOf:
-        - $ref: '#/components/schemas/MsgHeader' 
       type: object
       description: Message header
       properties:

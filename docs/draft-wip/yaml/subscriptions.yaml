@@ -1,11 +1,14 @@
 components:
   schemas:
     SubscriptionRequest:
-      allOf:
-        - $ref: './common.yaml#/components/schemas/SubscribeRequestObject'
       type: object
       properties:
+        signature: 
+          $ref: './signature.yaml#/components/schemas/MsgSignature'
         headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/NotifyCallbackHeader'
           properties:
             action:
               enum:

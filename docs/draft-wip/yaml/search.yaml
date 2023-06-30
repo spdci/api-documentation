@@ -62,24 +62,23 @@ components:
               example: ''
               description: 'Search by firstname'
  
-    Repositories:
-      allOf: 
-        - type: object
-          required:
-            - fieldname
-            - value
-          properties: 
-            fieldname:
-              type: string
-              example: ''
-              enum: ['repository_type']
-            operator:
-              $ref: '#/components/schemas/FieldOperatorAnd'
-            value: 
-              type: string
-              example: ''
-              enum: ['Birth', 'Death', 'Marriage']
-              description: 'Search by repository_type type'
+    Repositories: 
+      type: object
+      required:
+        - fieldname
+        - value
+      properties: 
+        fieldname:
+          type: string
+          example: ''
+          enum: ['repository_type']
+        operator:
+          $ref: '#/components/schemas/FieldOperatorAnd'
+        value: 
+          type: string
+          example: ''
+          enum: ['Birth', 'Death', 'Marriage']
+          description: 'Search by repository_type type'
     FieldOperatorAnd:
       type: string
       enum:

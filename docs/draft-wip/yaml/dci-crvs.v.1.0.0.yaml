@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: CRVS interoperability APIs.
   description: |-
-    The CRVS interoperability APIs describes different APIs some of them are usecase specific and other are generalized APIs to perform interoperable operations between CRVS registry and SP system.  !
+    The CRVS interoperability APIs describes different APIs some of them are usecase specific and other are generalized APIs to perform interoperable operations between CRVS registry and SP system.
     You can now help us improve the API whether it's by making changes to the definition itself or to the code.
     That way, with time, we can improve the API in general, and expose some of the new features in upcoming version.
 
@@ -24,24 +24,33 @@ info:
           
     - [Vital Events](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.4-cd.04-vital-events)   
     
+    Each request build up of three section 
+    - Signature 
+    - headers 
+    - message
   version: 1.0.0
 servers:
   - description: API host endpoint
-    url: https://apihost/
+    url: https://apihost
 tags:
   - name: Search API
     description: 'The Search API section includes /search and /on-search end points ' 
   - name: Event subscription
-    description: ''
+    description: 'The event subscription section describes APIs of subscribe / unsubscribe / subscription-list / notify'
   - name: Request status
-    description: ''
+    description: '.'
 paths:
   /search:
     post:
       tags:
         - Search API
-      summary: Search request
-      description: 'The search request build up of three section 1) Singnature 2) headers 3) message' 
+      summary: 'Search request: /search'
+      description: |-
+       The search request build up of three section 
+       <br>1) Signature 
+       <br>2) headers 
+       <br>3) message' 
+ 
       parameters:
         - $ref: "./headers.yaml#/components/parameters/authorization"
       requestBody:
@@ -94,7 +103,7 @@ paths:
     post:
       tags:
         - Search API 
-      summary: Search request call back
+      summary: 'Search request call back: /on-search'
       description: The requester will pass information submitted in search and if response prepared then it will send content
       parameters:
         - $ref: "./headers.yaml#/components/parameters/authorization"
@@ -145,7 +154,7 @@ paths:
     get:
       tags:
         - Event subscription 
-      summary: Event list
+      summary: 'Event list: /subscription-list'
       parameters:
         - $ref: "./headers.yaml#/components/parameters/authorization"
       description: ''
@@ -168,7 +177,7 @@ paths:
     post:
       tags:
         - Event subscription  
-      summary: Subscribe
+      summary: 'Subscribe: /subscribe'
       description: Response will contain details of subscription
       operationId: ''
       parameters:
@@ -225,7 +234,7 @@ paths:
     post:
       tags:
         - Event subscription  
-      summary: Unsubscribe
+      summary: 'Unsubscribe: /unsubscribe'
       description: 'To un-subscribe for events'
       operationId: ''
       parameters:
@@ -453,7 +462,9 @@ components:
             - $ref: './signature.yaml#/components/schemas/MsgSignature'      
         headers:
           allOf:
-            - $ref: './headers.yaml#/components/schemas/SearchMsgHeader'      
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'   
+            - $ref: './headers.yaml#/components/schemas/AsyncHeaders'    
+            - $ref: './headers.yaml#/components/schemas/SearchCallbackHeader'   
         message:
           type: object
           description: 'The search data using which search to be performed'
@@ -485,10 +496,19 @@ components:
           $ref : './search.yaml#/components/schemas/SearchCriteria'
         custom_query:
           type: array
+          description: |-
+            The custom_query facilate to prepare conditions on data. The NameField and Repositories are just example. There may be any combination other than this two, please refer documentation for supported fields. 
+            Structure for each item shall be in following format.
+            ```
+            {
+              "fieldname": "",
+              "operator": "",
+              "value": ""
+            }
+            ```
           items:
             anyOf:
-              - $ref: './search.yaml#/components/schemas/NameField'
-              - $ref: './search.yaml#/components/schemas/ExpressionAnd'
+              - $ref: './search.yaml#/components/schemas/NameField' 
               - $ref: './search.yaml#/components/schemas/Repositories'
         sortby:
           $ref: './common.yaml#/components/schemas/Sort'
@@ -516,7 +536,9 @@ components:
             - $ref: './signature.yaml#/components/schemas/MsgSignature'      
         headers:
           allOf:
-            - $ref: './headers.yaml#/components/schemas/MsgRequestHeader'
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'   
+            - $ref: './headers.yaml#/components/schemas/AsyncHeaders'    
+            - $ref: './headers.yaml#/components/schemas/SearchCallbackHeader'
         message: 
           type: array
           items:
