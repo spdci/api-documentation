@@ -141,6 +141,39 @@ components:
         postal_code:
           type: string
           example: '' 
+    Location:
+      type: object
+      properties:
+        house_no:
+          type: string
+          example: ''
+        address_line_1:
+          type: string
+          example: ''
+        address_line_2:
+          type: string
+          example: ''          
+        district:
+          type: string
+          example: ''          
+        state:
+          type: string
+          example: ''          
+        region:
+          type: string
+          example: ''
+          description: 'state and region can be used alternatively as some cuntry may not have concept of state'
+        postal_code:
+          type: string
+          example: '' 
+        latitude:
+          type: string
+          format: float
+          example: ''
+        longitude:
+          type: string
+          format: float
+          example: ''          
     ContactDetails:
       type: object
       properties:

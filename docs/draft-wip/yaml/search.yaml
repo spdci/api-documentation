@@ -56,7 +56,7 @@ components:
               example: ''
               enum: ['firstname']
             operator:
-              $ref: '#/components/schemas/FieldOperatorAnd'
+              $ref: '#/components/schemas/FieldOperator'
             value: 
               type: string
               example: ''
@@ -73,13 +73,16 @@ components:
           example: ''
           enum: ['repository_type']
         operator:
-          $ref: '#/components/schemas/FieldOperatorAnd'
+          $ref: '#/components/schemas/FieldOperator'
         value: 
           type: string
           example: ''
           enum: ['Birth', 'Death', 'Marriage']
           description: 'Search by repository_type type'
-    FieldOperatorAnd:
+    FieldOperator:
       type: string
       enum:
-        - and
+        - eq
+        - not eq
+        - lt
+        - gt

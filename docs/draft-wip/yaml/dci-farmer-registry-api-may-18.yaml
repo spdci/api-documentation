@@ -1085,7 +1085,7 @@ components:
     EligibilityDeterminationRequest:
       type: object
       properties:
-        payload:
+        message:
           type: array
           items:
             anyOf:

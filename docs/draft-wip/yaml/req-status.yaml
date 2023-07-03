@@ -1,11 +1,15 @@
 components:
   schemas:
     RequestStatusCheckRequest:
-      allOf:
-        - $ref: './common.yaml#/components/schemas/RequestObject'
       type: object
       properties:
-        payload:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+        message:
           type: object
           properties:
             request_ids:
@@ -33,7 +37,7 @@ components:
     RequestStatusCheckResponse:
       type: object
       properties:
-        payload:
+        message:
           type: array
           items:
             type: object

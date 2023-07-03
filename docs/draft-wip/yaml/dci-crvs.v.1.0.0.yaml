@@ -481,10 +481,6 @@ components:
       properties:
         reference_id:
           $ref : './common.yaml#/components/schemas/ReferenceId'
-        query: 
-          type: string
-          example: ''
-          enum: ['person_info','is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','parent_info','vital_event_dates','vital_events_info']
         timestamp:
           $ref : './common.yaml#/components/schemas/TimeStamp'          
         identifiers:
@@ -494,11 +490,13 @@ components:
               $ref: './common.yaml#/components/schemas/Identifier'
         demographic:
           $ref : './search.yaml#/components/schemas/SearchCriteria'
+        location:
+          $ref : './common.yaml#/components/schemas/Location'
         custom_query:
           type: array
           description: |-
             The custom_query facilate to prepare conditions on data. The NameField and Repositories are just example. There may be any combination other than this two, please refer documentation for supported fields. 
-            Structure for each item shall be in following format.
+            Structure for each item shall be in following format. 
             ```
             {
               "fieldname": "",
@@ -514,11 +512,10 @@ components:
           $ref: './common.yaml#/components/schemas/Sort'
         pagination:
           $ref: './common.yaml#/components/schemas/Pagination'
-        filter:
-          description: Attribute(s) to send in response
-          items:
-            type: string
-          
+        filter: 
+          type: string
+          example: ''
+          enum: ['person_info','is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','parent_info','vital_event_dates','vital_events_info']
     EventResponse:
       type: object
       properties:
@@ -581,27 +578,26 @@ components:
     EventNotificationRequest:
       type: object
       properties:
-        success:
-          type: string
-          example: ''
-        return_message:
-          type: string
-          example: ''
-        error_code:
-          type: string
-          example: ''        
-        correlation_id:
-          type: string
-          example: ''
-          description: The correlation_id received in request
-        message: 
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/PersonWithVitalInfo'
-              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
-              - $ref: '#/components/schemas/MarriageInfo' 
-    
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'        
+        message:
+          type: object
+          properties:
+            transaction_id:
+              type: string
+              example: ''
+            notify_event:
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/PersonWithVitalInfo'
+                  - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
+                  - $ref: '#/components/schemas/MarriageInfo'
+        
     MarriageInfo:
       type: object
       properties:
