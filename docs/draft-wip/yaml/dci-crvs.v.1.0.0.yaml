@@ -489,39 +489,63 @@ components:
           $ref : './common.yaml#/components/schemas/ReferenceId'
         timestamp:
           $ref : './common.yaml#/components/schemas/TimeStamp'          
-        identifiers:
-          type: array
-          description: Refer code directory for supported identifier. The Code from data directory should be in identifier_type
+        registry_type:
+          $ref : './common.yaml#/components/schemas/RegistryType'
+        event_type:
+          anyOf:
+          - description: Functional registry event types
+            type: string
+            enum:
+            - read
+          - $ref: "./common.yaml#/components/schemas/CREventType"
+        search_criteria:
+          type: object
+          properties:
+            query:
+              anyOf:
+              - $ref: "./common.yaml#/components/schemas/RegistryRecord"
+              - $ref: "./common.yaml#/components/schemas/CRRecordBirth"
+              - $ref: "./common.yaml#/components/schemas/CRRecordDeath"
+              - $ref: "./common.yaml#/components/schemas/CRRecordUnion"
+            custom_query:
+              $ref: "common.yaml#/components/schemas/ExpressionWithConditionList" 
+        filter:
+          description: Attribute(s) to send in response
           items:
-              $ref: './common.yaml#/components/schemas/Identifier'
-        demographic:
-          $ref : './search.yaml#/components/schemas/SearchCriteria'
-        location:
-          $ref : './common.yaml#/components/schemas/Location'
-        custom_query:
-          type: array
-          description: |-
-            The custom_query facilate to prepare conditions on data. The NameField and Repositories are just example. There may be any combination other than this two, please refer documentation for supported fields. 
-            Structure for each item shall be in following format. 
-            ```
-            {
-              "fieldname": "",
-              "operator": "",
-              "value": ""
-            }
-            ```
-          items:
-            anyOf:
-              - $ref: './search.yaml#/components/schemas/NameField' 
-              - $ref: './search.yaml#/components/schemas/Repositories'
-        sortby:
-          $ref: './common.yaml#/components/schemas/Sort'
+            type: string                       
+#        identifiers:
+#          type: array
+#          description: Refer code directory for supported identifier. The Code from data directory should be in identifier_type
+#          items:
+#              $ref: './common.yaml#/components/schemas/Identifier'
+#        demographic:
+#          $ref : './search.yaml#/components/schemas/SearchCriteria'
+#        location:
+#          $ref : './common.yaml#/components/schemas/Location'
+#        custom_query:
+#          type: array
+#          description: |-
+#            The custom_query facilate to prepare conditions on data. The NameField and Repositories are just example. There may be any combination other than this two, please refer documentation for supported fields. 
+#            Structure for each item shall be in following format. 
+#            ```
+#            {
+#              "fieldname": "",
+#              "operator": "",
+#              "value": ""
+#            }
+#            ```
+#          items:
+#            anyOf:
+#              - $ref: './search.yaml#/components/schemas/NameField' 
+#              - $ref: './search.yaml#/components/schemas/Repositories'
+        sort:
+          $ref: './common.yaml#/components/schemas/SearchSortList'
         pagination:
-          $ref: './common.yaml#/components/schemas/Pagination'
-        filter: 
-          type: string
-          example: ''
-          enum: ['person_info','is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','parent_info','vital_event_dates','vital_events_info']
+          $ref: "./common.yaml#/components/schemas/PaginationRequest"
+#        filter: 
+#          type: string
+#          example: ''
+#          enum: ['person_info','is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','parent_info','vital_event_dates','vital_events_info']
     EventResponse:
       type: object
       properties:

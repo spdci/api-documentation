@@ -201,6 +201,11 @@ components:
         identifier_value:
           type: string
           example: ''
+    Identifiers:
+      type: array
+      description: Refer code directory for supported identifier. The Code from data directory should be in identifier_type
+      items:
+          $ref: '#/components/schemas/Identifier'          
     TransactionId:
       type: string
       example: ''
@@ -225,6 +230,21 @@ components:
           type: string
           example: ''
           enum: ["asc","desc"]
+    SearchSort:
+      description: Sorting definition
+      type: object
+      properties:
+        attribute_name:
+          type: string
+          description: attribute name
+        sort_order:
+          type: string
+          enum:
+          - asc
+          - desc          
+    SearchSortList:
+      items:
+        "$ref": "#/components/schemas/SearchSort"
     Pagination:
       type: object
       properties:
@@ -341,3 +361,438 @@ components:
         iv:
           type: string
           description:  The base64-url encoded
+    RegistryType:
+      type: string
+      description: "1. Registry types like civil, population, family, household, school,
+        college, farmer, land, utitlity, etc., \n2. Country specific implementations
+        should extend and allow custom types.\n"
+      enum:
+      - civil
+      - population
+      - family
+      - household
+      - school
+      - college
+      - farmer
+      - land
+      - utility
+      - other     
+    CREventType:
+      description: Civil registry event types
+      type: string
+      enum:
+      - birth
+      - death
+      - marriage
+      - divorce
+      - annulment
+      - seperation
+      - adoption
+      - demographic_change
+      - unregister      
+    RegistryRecord:
+      description: |
+        1. Attributes of a person to create fetch records, create verifiable credentials or use in search criteria.
+        3. Allowes Country/Registry specific implementation extensions using Attribute Name/Value pairs.
+      properties:
+        id:
+          $ref: '#/components/schemas/PersonId'
+        issue_date:
+          type: string
+          format: date-time
+        status:
+          description: Registry status
+          type: string
+        name:
+          description: End-User's full name in displayable form including all name
+            parts, possibly including titles and suffixes, ordered according to the
+            End-User's locale and preferences.
+          type: string
+        given_name:
+          description: Given name(s) or first name(s) of the End-User. Note that in
+            some cultures, people can have multiple given names; all can be present,
+            with the names being separated by space characters.
+          type: string
+        family_name:
+          description: Surname(s) or last name(s) of the End-User. Note that in some
+            cultures, people can have multiple family names or no family name; all
+            can be present, with the names being separated by space characters.
+          type: string
+        middle_name:
+          description: Middle name(s) of the End-User. Note that in some cultures,
+            people can have multiple middle names; all can be present, with the names
+            being separated by space characters. Also note that in some cultures,
+            middle names are not used.
+          type: string
+        email:
+          description: End-User's preferred e-mail address. Its value MUST conform
+            to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon
+            this value being unique, as discussed in Section 5.7.
+          type: string
+        email_verified:
+          description: address was controlled by the End-User at the time the verification
+            was performed. The means by which an e-mail address is verified is context-specific,
+            and dependent upon the trust framework or contractual agreements within
+            which the parties are operating.
+          type: boolean
+        gender:
+          description: End-User's gender. Values defined by this specification are
+            female and male. Other values MAY be used when neither of the defined
+            values are applicable.
+          type: string
+        birthdate:
+          description: YYYY format is allowed. Note that depending on the underlying
+            platform's date related function, providing just year can result in varying
+            month and day, so the implementers need to take this factor into account
+            to correctly process the dates.
+          type: string
+        place_of_birth:
+          description: End-User's place of birth. The value of this member is a JSON
+            structure containing some or all of the following members
+          type: object
+        phone_number:
+          description: number contains an extension, it is RECOMMENDED that the extension
+            be represented using the RFC 3966 [RFC3966] extension syntax, for example,
+            +1 (604) 555-1234;ext=5678.
+          type: string
+        phone_number_verified:
+          description: True if the End-User's phone number has been verified; otherwise
+            false. When this Claim Value is true, this means that the OP took affirmative
+            steps to ensure that this phone number was controlled by the End-User
+            at the time the verification was performed. The means by which a phone
+            number is verified is context-specific, and dependent upon the trust framework
+            or contractual agreements within which the parties are operating. When
+            true, the phone_number Claim MUST be in E.164 format and any extensions
+            MUST be represented in RFC 3966 format.
+          type: string
+        address:
+          - $ref : "#/components/schemas/PersonAddress"
+        nationalities:
+          description: End-User's nationalities using ICAO 3-letter codes [ICAO-Doc9303],
+            e.g., "USA" or "JPN". 2-letter ICAO codes MAY be used in some circumstances
+            for compatibility reasons.
+          type: array
+          items:
+            type: string
+        updated_at:
+          description: Time the End-User's information was last updated. Its value
+            is a JSON number representing the number of seconds from 1970-01-01T0:0:0Z
+            as measured in UTC until the date/time
+          type: number
+        additional_attributes:
+          - $ref : "#/components/schemas/AttributeNameValue"
+    PersonAddress:
+      description: Person address info as per OpenID <a href="https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim">specs</a>
+      properties:
+        formatted:
+          description: Full mailing address, formatted for display or use on a mailing
+            label. This field MAY contain multiple lines, separated by newlines. Newlines
+            can be represented either as a carriage return/line feed pair ("\r\n")
+            or as a single line feed character ("\n").
+          type: string
+        street_address:
+          description: Full street address component, which MAY include house number,
+            street name, Post Office Box, and multi-line extended street address information.
+            This field MAY contain multiple lines, separated by newlines. Newlines
+            can be represented either as a carriage return/line feed pair ("\r\n")
+            or as a single line feed character ("\n").
+          type: string
+        locality:
+          description: City or locality component.
+          type: string
+        region:
+          description: State, province, prefecture, or region component.
+          type: string
+        postal_code:
+          description: Zip code or postal code component.
+          type: string
+        country:
+          description: state, province, region
+          type: string
+        country_code:
+          description: OPTIONAL. country part of an address represented using an ISO
+            3-letter code [ISO3166-3], e.g., "USA" or "JPN". 2-letter ISO codes [ISO3166-1]
+            MAY be used for compatibility reasons. country_code MAY be used as alternative
+            to the existing country field.
+          type: string
+    AttributeNameValue:
+      type: object
+      description: Attribute name value object
+      properties:
+        attribute_name:
+          type: string
+          maxLength: 99
+        attribute_value:
+          type: string
+          maxLength: 999
+      required:
+      - attribute_name
+      - attribute_value          
+    PersonId:
+      type: string
+      description: "<br> 1. Beneficiary id is case insensitve normative represenation
+        as id-type:id@provider <br> 2. This will enumerate foundational and functioanl
+        id's to easily resolvable addressess <br> 3. This property is intended to
+        unambiguously refer to an object, such as a person, organization, etc., <br>
+        4. Few examples: <br> - id@identifier-type.id-provider e.g token:12345@mosip,
+        vid:12345@philid <br> - id@civil-registry.issuing-agency e.g id:12345@rwanda,
+        id:12345@ejanma.karnataka <br> - id@functional-identifier.issuing-agency e.g
+        id:12345@voter.Rwanda, id:12345@DL.karnataka, mobile:12345@fruits.karnataka
+        <br> Note: id provider should be made configurable and solutions should adapt
+        to the local jurisdiction and policies.<br> e.g fruits.karnataka represents
+        farmer registry in karnataka state govt.<br>"
+      format: "^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$"
+      example: vid:12345@mosip      
+    CRRecord:
+      description: |
+        1. Civil registry specific extensions based on entities derived from OpenID PersonInfo and PersonAdditionalInfo entities
+        2. Additional checks using conditioanl expressions is possible.
+        3. Allows Country/Registry specific implementation extensions using key/value pairs.
+      allOf:
+      - properties:
+          id:
+            "$ref": "#/components/schemas/PersonId"
+          issue_date:
+            type: string
+            format: date-time
+          status:
+            description: Civil registry status
+            type: string
+      - "$ref": "#/components/schemas/RegistryRecord"
+    CRRecordBirth:
+      description: |
+        1. Civil registry birth and adoption type record
+        2. Allows Country/Registry specific implementation extensions using key/value pairs.
+      allOf:
+      - properties:
+          registration_type:
+            type: string
+            enum:
+            - birth
+            - adoption
+          registration_number:
+            description: Registration number
+            type: string
+          registration_date:
+            description: Registration date
+          link_registration_number:
+            description: Registration number to related record. e.g birth registration
+              no for death, marriage registration no for divorce/annulment, etc.,
+            type: string
+          related_persons:
+            items:
+              allOf:
+              - "$ref": "#/components/schemas/CRRelatedPerson"
+              - properties:
+                  relationship:
+                    enum:
+                    - mother
+                    - father
+                    - other
+      - "$ref": "#/components/schemas/CRRecord"
+    CRRecordDeath:
+      description: |
+        1. Civil registry death record
+        2. Allows Country/Registry specific implementation extensions using key/value pairs.
+      allOf:
+      - properties:
+          egistration_type:
+            type: string
+            enum:
+            - death
+          registration_number:
+            description: Registration number
+            type: string
+          registration_date:
+            description: Registration date
+          link_registration_number:
+            description: Registration number to related record. e.g birth registration
+              no for death, marriage registration no for divorce/annulment, etc.,
+            type: string
+          deathdate:
+            description: YYYY format is allowed. Note that depending on the underlying
+              platform's date related function, providing just year can result in
+              varying month and day, so the implementers need to take this factor
+              into account to correctly process the dates.
+            type: string
+          place_of_death:
+            description: End-User's place of birth. The value of this member is a
+              JSON structure containing some or all of the following members
+            type: object
+      - "$ref": "#/components/schemas/CRRecord"
+    CRRecordUnion:
+      description: |
+        1. Civil registry marriage, divorce, seperation, annulment type records
+        2. Allows Country/Registry specific implementation extensions using key/value pairs.
+      allOf:
+      - properties:
+          registration_type:
+            type: string
+            enum:
+            - marriage
+            - divorce
+            - seperation
+            - annulment
+          registration_number:
+            description: Registration number
+            type: string
+          registration_date:
+            description: Registration date
+          link_registration_number:
+            description: Registration number to related record. e.g birth registration
+              no for death, marriage registration no for divorce/annulment, etc.,
+            type: string
+          related_person:
+            allOf:
+            - $ref: "#/components/schemas/CRRelatedPerson"
+            - properties:
+                relationship:
+                  enum:
+                  - wife
+                  - husband
+      - $ref: "#/components/schemas/CRRecord"      
+
+    CRRelatedPerson:
+      type: object
+      description: 'Related person details '
+      properties:
+        identifier:
+          $ref: "#/components/schemas/Identifiers"
+        name:
+          $ref: "#/components/schemas/HumanName"
+        relationship:
+          type: string
+          enum:
+          - mother
+          - father
+          - gaurdian
+          - bride
+          - groom
+          - wife
+          - husband
+          - spouse
+          - partner
+          - other      
+    ExpressionWithCondition:
+      description: Expression with a condition
+      type: object
+      properties:
+        expression1:
+          "$ref": "#/components/schemas/Expression"
+        condition:
+          "$ref": "#/components/schemas/ExpCondition"
+        expression2:
+          "$ref": "#/components/schemas/Expression"
+      required:
+      - expression1
+    ExpressionWithConditionList:
+      items: 
+        $ref: "#/components/schemas/ExpressionWithCondition"          
+    Error:
+      description: |
+        Describes an error object that is returned to standard post call request. <br>
+        1. This object shall be sent when any request received by a participant is not parsable or message integrity check fails. <br>
+        2. This object may be used across all transport protocols to acknowledge the receipt of a message i.e HTTPS, FTP, Messaging etc., <br>"
+      type: object
+      properties:
+        code:
+          type: string
+          description: Standard error code
+          enum:
+          - err.request.bad
+          - err.request.unauthorized
+          - err.request.forbidden
+          - err.request.not_found
+          - err.request.timeout
+          - err.version.not_supported
+          - err.request.too_many_requests
+          - err.sender_id.invalid
+          - err.sender_uri.invalid
+          - err.receiver_id.invalid
+          - err.signature.missing
+          - err.signature.invalid
+          - err.encryption.invalid
+          - err.service.unavailable
+        message:
+          type: string
+          description: message to describe above error code
+          maxLength: 999
+    ExpCondition:
+      description: Condition in an expression
+      type: string
+      enum:
+      - and
+      - or
+      - not
+      example: and
+    ExpOperator:
+      description: Operator in an expression
+      type: string
+      enum:
+      - gt
+      - lt
+      - eq
+      - ge
+      - le
+      example: eq
+    Expression:
+      description: Expression
+      properties:
+        seq_num:
+          description: expression seq number for correlation
+          type: number
+          example: 1
+        attribute_name:
+          type: string
+          description: attribute name
+        operator:
+          "$ref": "#/components/schemas/ExpOperator"
+        attribute_value:
+          oneOf:
+          - type: string
+          - type: integer
+          - type: number
+          - type: boolean
+      required:
+      - seq_num
+      - attribute_name
+      - operator
+      - attribute_value
+    ExpressionList:
+      description: list of attributes with matching conditions
+      items:
+        "$ref": "#/components/schemas/Expression"
+    ExpressionResult:
+      description: Expression result
+      properties:
+        seq_num:
+          description: expression seq number for correlation
+          type: number
+          example: 1
+        result:
+          type: string
+          enum:
+          - y
+          - n
+          example: y
+      required:
+      - seq_num
+      - result
+    ExpressionResultList:
+      items:
+        "$ref": "#/components/schemas/ExpressionResult"        
+    PaginationRequest:
+      description: Pagination definition, count starts with 1
+      type: object
+      properties:
+        page_size:
+          type: number
+          format: int32
+          example: 2000
+        page_number:
+          type: number
+          format: int32
+          default: 1
+          example: 5
+      required:
+      - page_size        
