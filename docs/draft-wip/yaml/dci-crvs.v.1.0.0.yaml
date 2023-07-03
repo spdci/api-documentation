@@ -582,7 +582,7 @@ components:
       properties:
         transaction_id:
           $ref : './common.yaml#/components/schemas/TransactionId'
-        search_request:
+        search_response:
           type: array
           items:
             $ref: '#/components/schemas/SearchResponseObject'
@@ -592,20 +592,39 @@ components:
       properties:
         reference_id:
           $ref : './common.yaml#/components/schemas/ReferenceId'
-        query: 
-          type: string
-          example: ''
-          enum: ['is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','person_info','parent_info','vital_event_dates','vital_events_info']
         timestamp:
           $ref : './common.yaml#/components/schemas/TimeStamp'          
-        beneficiary: 
-          type: array
+        status:
+          $ref: "./common.yaml#/components/schemas/RequestStatus"
+        status_reason_code:
+          $ref: "./common.yaml#/components/schemas/SearchStatusReasonCode"
+        status_reason_message:
+          description: Status reason code message. Helps actionanble messaging for
+            systems/end users
+          type: string
+          maxLength: 999
+        registry_type:
+          $ref: "./common.yaml#/components/schemas/RegistryType"
+        event_type:
+          anyOf:
+          - $ref: "#/components/schemas/SearchRequestObject/properties/event_type/anyOf/0"
+          - $ref: "./common.yaml#/components/schemas/CREventType"
+        registry_data:
           items:
-            anyOf:
-              - $ref: '#/components/schemas/Person'
-              - $ref: '#/components/schemas/PersonWithVitalInfo'
-              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
-              - $ref: '#/components/schemas/MarriageInfo' 
+            oneOf:
+            - "$ref": "#/components/schemas/Person"
+            - "$ref": "./common.yaml#/components/schemas/CRRecordBirth"
+            - "$ref": "./common.yaml#/components/schemas/CRRecordDeath"
+            - "$ref": "./common.yaml#/components/schemas/CRRecordUnion"
+            - "$ref": "./common.yaml#/components/schemas/RegistryRecord"
+#        beneficiary: 
+#          type: array
+#          items:
+#            anyOf:
+#              - $ref: '#/components/schemas/Person'
+#              - $ref: '#/components/schemas/PersonWithVitalInfo'
+#              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
+#              - $ref: '#/components/schemas/MarriageInfo' 
         pagination:
           $ref: './common.yaml#/components/schemas/PaginationInfoInResponse'
         locale:

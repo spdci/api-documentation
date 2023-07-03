@@ -193,6 +193,19 @@ components:
                              
     Identifier:
       type: object
+      description: "<br> 1. Beneficiary id is case insensitve normative represenation
+        as id-type:id@provider <br> 2. This will enumerate foundational and functioanl
+        id's to easily resolvable addressess <br> 3. This property is intended to
+        unambiguously refer to an object, such as a person, organization, etc., <br>
+        4. Few examples: <br> - id@identifier-type.id-provider e.g token:12345@mosip,
+        vid:12345@philid <br> - id@civil-registry.issuing-agency e.g id:12345@rwanda,
+        id:12345@ejanma.karnataka <br> - id@functional-identifier.issuing-agency e.g
+        id:12345@voter.Rwanda, id:12345@DL.karnataka, mobile:12345@fruits.karnataka
+        <br> Note: id provider should be made configurable and solutions should adapt
+        to the local jurisdiction and policies.<br> e.g fruits.karnataka represents
+        farmer registry in karnataka state govt.<br>"
+      format: "^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$"
+      example: vid:12345@mosip
       properties:
         identifier_type:
           type: string
@@ -352,15 +365,33 @@ components:
     EncryptedRequest:
       type: object
       properties:
+        encrypted_header:
+          $ref: '#/components/schemas/ProtectedHeader'            
         data:
           type: string
-          description: The base64-url encoded protected data 
+          description: This is the result of encrypting the plaintext using the CEK and the IV. It's Base64Url-encoded.
         encrypted_key:
           type: string
           description: The base64-url encoded encrypted key
+        auth_tag:
+          type: string
+          description: This is a Base64Url-encoded value that provides evidence of the integrity and authenticity of the ciphertext, Initialization Vector, and Additional Authenticated Data
         iv:
           type: string
-          description:  The base64-url encoded
+          description:  This is a Base64Url-encoded random bit string to be used as the Initialization Vector (IV) when encrypting the plaintext to produce the ciphertext. The size of the IV depends on the encryption algorithm used.
+    ProtectedHeader:
+      type: object
+      description: JWE Header-  This is a Base64Url-encoded JSON object that contains the parameters describing the cryptographic operations applied to the JWE Protected Header and the JWE Encrypted Key
+      properties:
+        alg:
+          type: string
+          description: The JWE algorithm used for encryption
+        enc:
+          type: string
+          description: The encryption algorithm used for encrypting the plaintext
+        kid:
+          type: string
+          description: The key identifier for the encryption key    
     RegistryType:
       type: string
       description: "1. Registry types like civil, population, family, household, school,
@@ -395,8 +426,8 @@ components:
         1. Attributes of a person to create fetch records, create verifiable credentials or use in search criteria.
         3. Allowes Country/Registry specific implementation extensions using Attribute Name/Value pairs.
       properties:
-        id:
-          $ref: '#/components/schemas/PersonId'
+        identifier:
+          $ref: '#/components/schemas/Identifiers'
         issue_date:
           type: string
           format: date-time
@@ -528,21 +559,7 @@ components:
       required:
       - attribute_name
       - attribute_value          
-    PersonId:
-      type: string
-      description: "<br> 1. Beneficiary id is case insensitve normative represenation
-        as id-type:id@provider <br> 2. This will enumerate foundational and functioanl
-        id's to easily resolvable addressess <br> 3. This property is intended to
-        unambiguously refer to an object, such as a person, organization, etc., <br>
-        4. Few examples: <br> - id@identifier-type.id-provider e.g token:12345@mosip,
-        vid:12345@philid <br> - id@civil-registry.issuing-agency e.g id:12345@rwanda,
-        id:12345@ejanma.karnataka <br> - id@functional-identifier.issuing-agency e.g
-        id:12345@voter.Rwanda, id:12345@DL.karnataka, mobile:12345@fruits.karnataka
-        <br> Note: id provider should be made configurable and solutions should adapt
-        to the local jurisdiction and policies.<br> e.g fruits.karnataka represents
-        farmer registry in karnataka state govt.<br>"
-      format: "^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$"
-      example: vid:12345@mosip      
+     
     CRRecord:
       description: |
         1. Civil registry specific extensions based on entities derived from OpenID PersonInfo and PersonAdditionalInfo entities
@@ -550,8 +567,8 @@ components:
         3. Allows Country/Registry specific implementation extensions using key/value pairs.
       allOf:
       - properties:
-          id:
-            "$ref": "#/components/schemas/PersonId"
+          identifier:
+            $ref: '#/components/schemas/Identifiers'
           issue_date:
             type: string
             format: date-time
@@ -796,3 +813,38 @@ components:
           example: 5
       required:
       - page_size        
+    RequestStatus:
+      type: string
+      description: 'Request (e.g disburse, link, unlink, resolve, issue, search, verify,
+        etc.,) status: <br> 1. rcvd: Received; Request received <br> 2. pdng: Pending;
+        Request initiated <br> 3. succ: Success; Request successful <br> 4. rjct:
+        Rejected; Request rejected'
+      enum:
+      - rcvd
+      - pdng
+      - succ
+      - rjct
+    SearchStatusReasonCode:
+      type: string
+      description: Identity verification request status reason codes
+      enum:
+        - rjct.action.invalid
+        - rjct.action.not_supported
+        - rjct.encryption_algorithm.invalid
+        - rjct.encryption_algorithm.missing
+        - rjct.errors.too_many
+        - rjct.filter.invalid
+        - rjct.message_id.duplicate
+        - rjct.message_ts.invalid
+        - rjct.pagination.invalid
+        - rjct.reference_id.duplicate
+        - rjct.reference_id.invalid
+        - rjct.search_criteria.invalid
+        - rjct.search.too_many_records_found
+        - rjct.signature_key.missing
+        - rjct.sort.invalid
+        - rjct.timestamp.invalid
+        - rjct.total_count.invalid
+        - rjct.total_count.limit_exceeded
+        - rjct.version.invalid    
+      
