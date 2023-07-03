@@ -471,7 +471,9 @@ components:
           anyOf:
             - $ref: '#/components/schemas/SearchMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'
-
+      required: 
+        - headers
+        - message
     SearchMessage:
       type: object
       properties:
@@ -481,6 +483,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SearchRequestObject'
+      required: 
+        - transaction_id
+        - search_request
     
     SearchRequestObject:
       type: object
@@ -574,7 +579,6 @@ components:
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'
  
       required:
-        - signature           
         - headers
         - message
     SearchResponseMessage:
@@ -631,6 +635,8 @@ components:
           anyOf:
             - $ref: '#/components/schemas/EventNotificationMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+      required:
+        - headers
     EventNotificationMessage:
       properties:
         transaction_id:
@@ -643,6 +649,8 @@ components:
               - $ref: '#/components/schemas/PersonWithVitalInfo'
               - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
               - $ref: '#/components/schemas/MarriageInfo'
+      required:
+        - transaction_id
         
     MarriageInfo:
       type: object
