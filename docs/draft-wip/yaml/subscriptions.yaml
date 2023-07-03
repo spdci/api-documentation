@@ -16,23 +16,28 @@ components:
               example: 'subscribe'      
         message:
           type: object
-          properties:
-            registry_type:
-              type: string
-              example: ''
-            event_type:
-              type: array
-              items:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/EventInfo'
-            client_id:
-              type: string
-              example: ''
-            custom_filter:
-              type: object
-              example:
-                region: ''
+          anyOf:
+            - $ref: '#/components/schemas/SubscriptionMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'          
+    SubscriptionMessage: 
+      type: object
+      properties:
+        registry_type:
+          type: string
+          example: ''
+        event_type:
+          type: array
+          items:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/EventInfo'
+        client_id:
+          type: string
+          example: ''
+        custom_filter:
+          type: object
+          example:
+            region: ''
                 
     EventInfo:
       type: object
@@ -95,19 +100,25 @@ components:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders'      
         message:
           type: object
-          properties:
-            event_code:
-              type: array
-              items:
-                type: string
-              example: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
-              description: 'To un-subscribe this event send this code in subscription request'
-            client_id:
-              type: string
-              example: ''
-            reason:
-              type: string  
-              example: ''
+          anyOf:
+            - $ref: '#/components/schemas/UnSubscribeMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+
+    UnSubscribeMessage:
+      type: object
+      properties:
+        event_code:
+          type: array
+          items:
+            type: string
+          example: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
+          description: 'To un-subscribe this event send this code in subscription request'
+        client_id:
+          type: string
+          example: ''
+        reason:
+          type: string  
+          example: ''
     UnSubscribeResponse:
       allOf:
         - $ref: './responses.yaml#/components/schemas/BaseResponse'

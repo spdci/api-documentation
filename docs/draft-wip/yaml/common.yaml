@@ -328,4 +328,16 @@ components:
           example: 'attribute name'
         value:
           type: string
-          example: 'attribute value'          
+          example: 'attribute value'  
+    EncryptedRequest:
+      type: object
+      properties:
+        data:
+          type: string
+          description: The base64-url encoded protected data 
+        encrypted_key:
+          type: string
+          description: The base64-url encoded encrypted key
+        iv:
+          type: string
+          description:  The base64-url encoded

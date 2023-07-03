@@ -9,15 +9,22 @@ components:
         headers:
           allOf:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders'
-        message:
+        message: 
           type: object
-          properties:
-            request_ids:
-              type: array
-              example: ''
-              items:
-                anyOf:
-                  - $ref: '#/components/schemas/RequestIdObject'
+          anyOf:
+            - $ref: '#/components/schemas/RequestStatusCheckMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'            
+   
+    RequestStatusCheckMessage:
+      type: object
+      properties:
+        request_ids:
+          type: array
+          example: ''
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/RequestIdObject'
+
     RequestIdObject:
       type: object
       properties:
@@ -38,11 +45,14 @@ components:
       type: object
       properties:
         message:
-          type: array
-          items:
-            type: object
-            anyOf:
-              - $ref: '#/components/schemas/RequestStatusObjectList'
+          anyOf:
+            - $ref: '#/components/schemas/RequestStatusCheckResponseMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+
+    RequestStatusCheckResponseMessage:
+      type: array
+      items:
+        $ref: '#/components/schemas/RequestStatusObjectList'    
     RequestStatusObjectList:
       type: object
       properties:

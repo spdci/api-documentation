@@ -49,7 +49,7 @@ paths:
        The search request build up of three section 
        <br>1) Signature 
        <br>2) headers 
-       <br>3) message' 
+       <br>3) message
  
       parameters:
         - $ref: "./headers.yaml#/components/parameters/authorization"
@@ -468,14 +468,20 @@ components:
         message:
           type: object
           description: 'The search data using which search to be performed'
-          properties:
-            transaction_id:
-              $ref : './common.yaml#/components/schemas/TransactionId'
-            search_request:
-              type: array
-              items:
-                $ref: '#/components/schemas/SearchRequestObject'
+          anyOf:
+            - $ref: '#/components/schemas/SearchMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
 
+    SearchMessage:
+      type: object
+      properties:
+        transaction_id:
+          $ref : './common.yaml#/components/schemas/TransactionId'
+        search_request:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchRequestObject'
+    
     SearchRequestObject:
       type: object
       properties:
@@ -537,14 +543,26 @@ components:
             - $ref: './headers.yaml#/components/schemas/AsyncHeaders'    
             - $ref: './headers.yaml#/components/schemas/SearchCallbackHeader'
         message: 
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/SearchResponseObject'
+          type: object
+          description: 'sad'
+          anyOf:
+            - $ref: '#/components/schemas/SearchResponseMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+ 
       required:
         - signature           
         - headers
         - message
+    SearchResponseMessage:
+      type: object
+      properties:
+        transaction_id:
+          $ref : './common.yaml#/components/schemas/TransactionId'
+        search_request:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResponseObject'
+ 
     SearchResponseObject:
       type: object
       properties:
@@ -585,18 +603,22 @@ components:
           allOf:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders'        
         message:
-          type: object
-          properties:
-            transaction_id:
-              type: string
-              example: ''
-            notify_event:
-              type: array
-              items:
-                anyOf:
-                  - $ref: '#/components/schemas/PersonWithVitalInfo'
-                  - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
-                  - $ref: '#/components/schemas/MarriageInfo'
+          type: object 
+          anyOf:
+            - $ref: '#/components/schemas/EventNotificationMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+    EventNotificationMessage:
+      properties:
+        transaction_id:
+          type: string
+          example: ''
+        notify_event:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/PersonWithVitalInfo'
+              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
+              - $ref: '#/components/schemas/MarriageInfo'
         
     MarriageInfo:
       type: object
