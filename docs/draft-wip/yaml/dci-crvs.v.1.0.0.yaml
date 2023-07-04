@@ -290,7 +290,7 @@ paths:
     post:
       tags:
         - Event subscription
-      summary: Event notification (to SP system)
+      summary: Event notification (to SP system) /notify
       description: 'The notify end point to be implemented at subscriber system. The registry will send event data on this end point.'
       parameters:
         - $ref: "./headers.yaml#/components/parameters/authorization"
@@ -611,7 +611,7 @@ components:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
           anyOf:
-          - $ref: "#/components/schemas/SearchRequestObject/properties/event_type/anyOf/0"
+          - $ref: "./dci-crvs.v.1.0.0.yaml#/components/schemas/SearchRequestObject/properties/event_type/anyOf/0"
           - $ref: "./common.yaml#/components/schemas/CREventType"
         registry_data:
           items:
@@ -654,23 +654,30 @@ components:
           anyOf:
             - $ref: '#/components/schemas/EventNotificationMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+        
       required:
         - headers
+        - message
     EventNotificationMessage:
       properties:
+#        notify_event:
+#          type: array
+#          items:
+#            anyOf:
+#              - $ref: '#/components/schemas/PersonWithVitalInfo'
+#              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
+#              - $ref: '#/components/schemas/MarriageInfo'
         transaction_id:
-          type: string
-          example: ''
+          $ref : "./common.yaml#/components/schemas/TransactionId"
         notify_event:
           type: array
           items:
-            anyOf:
-              - $ref: '#/components/schemas/PersonWithVitalInfo'
-              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
-              - $ref: '#/components/schemas/MarriageInfo'
+            $ref: './subscriptions.yaml#/components/schemas/NotifyEventRequest'                            
       required:
         - transaction_id
+        - notify_event
         
+
     MarriageInfo:
       type: object
       properties:
@@ -685,9 +692,7 @@ components:
       type: object
       properties:
         identifier:
-          type: array
-          items:
-              $ref: './common.yaml#/components/schemas/Identifier'
+          $ref: './common.yaml#/components/schemas/Identifiers'              
         name:
           $ref: './common.yaml#/components/schemas/HumanName'
         related_persons:

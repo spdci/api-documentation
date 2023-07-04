@@ -284,14 +284,12 @@ components:
         - page_number
         - total_records    
     Locale:
-      type: object
-      properties:
-        code: 
-          type: string
-          example: ''
-        language: 
-          type: string
-          example: '' 
+      $ref: '#/components/schemas/LanguageCode'          
+    LanguageCode:
+      description: Indicates language code as per ISO 639.3 standard
+      type: string
+      pattern: "^[a-z]{3,3}$"
+      example: en          
     KeyValueMap:
       type: object
       properties:
