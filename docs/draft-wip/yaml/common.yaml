@@ -173,7 +173,39 @@ components:
         longitude:
           type: string
           format: float
-          example: ''          
+          example: ''
+        google_plus_code:
+          $ref: '#/components/schemas/GooglePlusCode'          
+    GooglePlusCode:
+      type: object
+      properties:
+        global_code:
+          type: string
+          example: ''
+        geometry: 
+          type: object
+          properties:
+            bounds: 
+              type: object
+              properties:
+                northeast:
+                  $ref: '#/components/schemas/LatLong'
+                southwest:
+                  $ref: '#/components/schemas/LatLong'
+            location:
+              $ref: '#/components/schemas/LatLong'
+    LatLong:
+      type: object
+      properties:
+        latitude:
+          type: string
+          format: float
+          example: ''
+        longitude:
+          type: string
+          format: float
+          example: '' 
+
     ContactDetails:
       type: object
       properties:
@@ -478,7 +510,7 @@ components:
         place_of_birth:
           description: End-User's place of birth. The value of this member is a JSON
             structure containing some or all of the following members
-          type: object
+          $ref: '#/components/schemas/Location'
         phone_number:
           description: number contains an extension, it is RECOMMENDED that the extension
             be represented using the RFC 3966 [RFC3966] extension syntax, for example,
@@ -509,7 +541,7 @@ components:
             as measured in UTC until the date/time
           type: number
         additional_attributes:
-          - $ref : "#/components/schemas/AttributeNameValue"
+          $ref : "#/components/schemas/AttributeNameValue"
     PersonAddress:
       description: Person address info as per OpenID <a href="https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim">specs</a>
       properties:
@@ -578,9 +610,10 @@ components:
       description: |
         1. Civil registry birth and adoption type record
         2. Allows Country/Registry specific implementation extensions using key/value pairs.
+      title: CRRecordBirth
       allOf:
       - properties:
-          registration_type:
+          type:
             type: string
             enum:
             - birth
@@ -609,9 +642,10 @@ components:
       description: |
         1. Civil registry death record
         2. Allows Country/Registry specific implementation extensions using key/value pairs.
+      title: CRRecordDeath
       allOf:
       - properties:
-          egistration_type:
+          type:
             type: string
             enum:
             - death
@@ -639,9 +673,10 @@ components:
       description: |
         1. Civil registry marriage, divorce, seperation, annulment type records
         2. Allows Country/Registry specific implementation extensions using key/value pairs.
+      title: CRRecordUnion
       allOf:
       - properties:
-          registration_type:
+          type:
             type: string
             enum:
             - marriage
@@ -669,6 +704,7 @@ components:
 
     CRRelatedPerson:
       type: object
+      title: CRRelatedPerson
       description: 'Related person details '
       properties:
         identifier:
@@ -830,7 +866,7 @@ components:
         - rjct.action.not_supported
         - rjct.encryption_algorithm.invalid
         - rjct.encryption_algorithm.missing
-        - rjct.errors.too_many
+        - rjct.errors.too_many_requests
         - rjct.filter.invalid
         - rjct.message_id.duplicate
         - rjct.message_ts.invalid

@@ -165,11 +165,11 @@ paths:
           content:
             application/json:
               schema: 
-                type: array
-                example: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
-                items:
-                  type: string         
-
+                $ref: "./common.yaml#/components/schemas/CREventType"
+#                type: array
+#                example: ["BIRTH_REGISTRATION", "DEATH_REGISTRATION","MARRIAGE_REGISTRATION","DIVORCE_REGISTRATION","DEMOGRAPHIC_UPDATE"]
+#                items:
+#                  type: string     
       security:
         - x-access-token:
             - read:search
@@ -462,7 +462,9 @@ components:
             - $ref: './signature.yaml#/components/schemas/MsgSignature'      
         headers:
           allOf:
-            - $ref: './headers.yaml#/components/schemas/CommonHeaders'   
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'   
             - $ref: './headers.yaml#/components/schemas/AsyncHeaders'    
             - $ref: './headers.yaml#/components/schemas/SearchCallbackHeader'   
         message:
@@ -481,6 +483,7 @@ components:
           $ref : './common.yaml#/components/schemas/TransactionId'
         search_request:
           type: array
+          title:  SearchRequestObject V 1.0.0
           items:
             $ref: '#/components/schemas/SearchRequestObject'
       required: 
@@ -547,10 +550,18 @@ components:
           $ref: './common.yaml#/components/schemas/SearchSortList'
         pagination:
           $ref: "./common.yaml#/components/schemas/PaginationRequest"
+        locale:
+          $ref: './common.yaml#/components/schemas/Locale'
 #        filter: 
 #          type: string
 #          example: ''
 #          enum: ['person_info','is_alive','marital_status','birth_info','marriage_registration','divorce_registration','death_info','parent_info','vital_event_dates','vital_events_info']
+      required: 
+        - reference_id
+        - timestamp
+        - registry_type
+        - search_criteria
+        - filter  
     EventResponse:
       type: object
       properties:
@@ -568,16 +579,18 @@ components:
             - $ref: './signature.yaml#/components/schemas/MsgSignature'      
         headers:
           allOf:
-            - $ref: './headers.yaml#/components/schemas/CommonHeaders'   
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'  
+            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/CompletedCountHeader'  
+            - $ref: './headers.yaml#/components/schemas/EncHeaders' 
             - $ref: './headers.yaml#/components/schemas/AsyncHeaders'    
             - $ref: './headers.yaml#/components/schemas/SearchCallbackHeader'
         message: 
           type: object
-          description: 'sad'
+          description: ''
           anyOf:
             - $ref: '#/components/schemas/SearchResponseMessage'
-            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
- 
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest' 
       required:
         - headers
         - message
@@ -611,8 +624,11 @@ components:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
           anyOf:
-          - $ref: "./dci-crvs.v.1.0.0.yaml#/components/schemas/SearchRequestObject/properties/event_type/anyOf/0"
-          - $ref: "./common.yaml#/components/schemas/CREventType"
+          - description: Functional registry event types
+            type: string
+            enum:
+            - read
+          - $ref: "./common.yaml#/components/schemas/CREventType"        
         registry_data:
           items:
             oneOf:
