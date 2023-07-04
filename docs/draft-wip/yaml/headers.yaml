@@ -32,10 +32,55 @@ components:
           description: 'The targeted system to which request to send'
           type: string
           example: 'crvs'
+    SearchAction:
+      type: object
+      properties:
         action:
           description: 'Action to be performed'
           type: string
           example: 'search'
+    OnSearchAction:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed'
+          type: string
+          example: 'on-search'
+    SubscribeAction:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed'
+          type: string
+          example: 'subscribe'
+    UnsubscribeAction:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed'
+          type: string
+          example: 'unsubscribe'
+    NotifyAction1:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed-'
+          type: string
+          example: 'notify'
+    StatusAction:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed'
+          type: string
+          example: 'status'
+    OnStatusAction:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed'
+          type: string
+          example: 'on-status'
     TotalCountHeader:
       type: object
       properties:
@@ -106,6 +151,15 @@ components:
           type: string
           format: uri
           example: 'https://{server_url}/notify'
+    OnStatusMsgHeader:
+      type: object
+      description: Message header
+      properties:
+        callbackendpoint:
+          description: The callback url for async call
+          type: string
+          format: uri
+          example: 'https://{server_url}/on-status'
       required:
         - version
         - message_id
@@ -114,5 +168,4 @@ components:
         - sender_id
         - receiver_id
         - total_count
-        - is_encrypted
-        - encryption_algorithm           
+        - is_encrypted           

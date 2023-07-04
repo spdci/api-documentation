@@ -8,6 +8,7 @@ components:
         headers:
           allOf:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/SubscribeAction'
             - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
             - $ref: './headers.yaml#/components/schemas/EncHeaders'            
             - $ref: './headers.yaml#/components/schemas/NotifyCallbackHeader'
@@ -138,7 +139,12 @@ components:
             - $ref: './signature.yaml#/components/schemas/MsgSignature'      
         headers:
           allOf:
-            - $ref: './headers.yaml#/components/schemas/CommonHeaders'      
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/UnsubscribeAction'
+            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'   
+            - $ref: './headers.yaml#/components/schemas/AsyncHeaders'    
+            - $ref: './headers.yaml#/components/schemas/SearchCallbackHeader'                  
         message:
           type: object
           anyOf:

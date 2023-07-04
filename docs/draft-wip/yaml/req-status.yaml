@@ -9,22 +9,52 @@ components:
         headers:
           allOf:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/StatusAction'
+            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'
+            - $ref: './headers.yaml#/components/schemas/AsyncHeaders'
+            - $ref: './headers.yaml#/components/schemas/OnStatusMsgHeader'
         message: 
           type: object
           anyOf:
             - $ref: '#/components/schemas/RequestStatusCheckMessage'
-            - $ref: './common.yaml#/components/schemas/EncryptedRequest'            
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'     
+      required:
+        - headers
+        - message 
    
     RequestStatusCheckMessage:
       type: object
       properties:
-        request_ids:
-          type: array
-          example: ''
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/RequestIdObject'
-
+        transaction_id:
+          "$ref": "./common.yaml#/components/schemas/TransactionId"
+        txnstatus_request:
+          "$ref": "#/components/schemas/TxnStatusRequest"
+      required:
+      - transaction_id
+      - txnstatus_request
+    TxnStatusRequest:
+      type: object
+      description: Request to search identity service requests
+      properties:
+        reference_id:
+          $ref: "./common.yaml#/components/schemas/ReferenceId"
+        search_type:
+          type: string
+          enum:
+          - transaction_id
+          - reference_id_list
+        search_attribute:
+          description: 'asdf'
+          anyOf:
+            - $ref: "./common.yaml#/components/schemas/TransactionId"
+            - $ref: "./common.yaml#/components/schemas/ReferenceIdList"
+        locale:
+          $ref: "./common.yaml#/components/schemas/Locale"
+      required:
+      - reference_id
+      - search_type
+      - search_attribute
     RequestIdObject:
       type: object
       properties:
@@ -44,11 +74,26 @@ components:
     RequestStatusCheckResponse:
       type: object
       properties:
-        message:
+        signature:
+          allOf:
+            - $ref: './signature.yaml#/components/schemas/MsgSignature'      
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/OnStatusAction'
+            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/CompletedCountHeader'
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'
+            - $ref: './headers.yaml#/components/schemas/AsyncHeaders'
+            - $ref: './headers.yaml#/components/schemas/OnStatusMsgHeader'
+        message: 
+          type: object
           anyOf:
-            - $ref: '#/components/schemas/RequestStatusCheckResponseMessage'
-            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
-
+            - $ref: '#/components/schemas/StatusCheckMessageResponse'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'     
+      required:
+        - headers
+        - message 
     RequestStatusCheckResponseMessage:
       type: array
       items:
@@ -59,5 +104,16 @@ components:
         status:
           type: array
           items:
-            $ref: '#/components/schemas/RequestStatusObject'       
+            $ref: '#/components/schemas/RequestStatusObject'   
+    StatusCheckMessageResponse:
+      type: object
+      properties:
+        transaction_id:
+          "$ref": "./common.yaml#/components/schemas/TransactionId"
+        txnstatus_response:        
+          "$ref": "#/components/schemas/TxnStatusResponse"
+    TxnStatusResponse:
+      items:
+        oneOf:
+        - "$ref": "./search.yaml#/components/schemas/SearchResponseObject" 
    

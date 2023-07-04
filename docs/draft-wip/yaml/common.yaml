@@ -234,10 +234,16 @@ components:
       type: string
       example: ''
       description: ' Unique transaction_id set by txn initiating system (i.e sender) to co-relate requests across processing systems/service end points'
+    
     ReferenceId:
       type: string
       example: ''   
       description: 'Unique reference_id to co-relate each requests'   
+    ReferenceIdList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReferenceId'
+
     TimeStamp:
       type: string
       description: datetime in RFC3339 format
@@ -867,4 +873,20 @@ components:
       description: "The version format should use semantic versioning, which means dividing each version identifier into three parts: MAJOR, MINOR, and PATCH. These parts are then combined using the format 'MAJOR.MINOR.PATCH' "
       type: string
       example: 1.0.0
-       
+    Person:
+      type: object
+      properties:
+        identifier:
+          $ref: './common.yaml#/components/schemas/Identifiers'              
+        name:
+          $ref: './common.yaml#/components/schemas/HumanName'
+        related_persons:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/Relationship'
+        contactno:
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/ContactDetails'
+        gender:
+          $ref: './common.yaml#/components/schemas/Gender'
