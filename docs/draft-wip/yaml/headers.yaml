@@ -14,9 +14,7 @@ components:
       description: Message header
       properties:
         version:
-          description: Messaging protocol specification version being used, format should be semantic version structuring each version identifier into three parts, MAJOR, MINOR, and PATCH, and them putting these together using the familiar “MAJOR.MINOR.PATCH” notation
-          type: string
-          example: 1.0.0
+          $ref: './common.yaml#/components/schemas/Version'
         message_id:
           description: 'Unique message id to communicate between sender and receiver systems to deliver the message over any transport layer i.e https, pub/sub, sftp etc.,'
           type: string

@@ -119,28 +119,7 @@ components:
         timezone:
           type: string
           example: ''
-         
-    Address:
-      type: object
-      properties:
-        house_no:
-          type: string
-          example: ''
-        address_line_1:
-          type: string
-          example: ''
-        address_line_2:
-          type: string
-          example: ''          
-        district:
-          type: string
-          example: ''          
-        state:
-          type: string
-          example: ''          
-        postal_code:
-          type: string
-          example: '' 
+ 
     Location:
       type: object
       properties:
@@ -225,7 +204,7 @@ components:
                              
     Identifier:
       type: object
-      description: "<br> 1. Beneficiary id is case insensitve normative represenation
+      description: "Refer code directory for supported identifier. The Code from data directory should be in identifier_type <br> 1. Beneficiary id is case insensitve normative represenation
         as id-type:id@provider <br> 2. This will enumerate foundational and functioanl
         id's to easily resolvable addressess <br> 3. This property is intended to
         unambiguously refer to an object, such as a person, organization, etc., <br>
@@ -248,7 +227,7 @@ components:
           example: ''
     Identifiers:
       type: array
-      description: Refer code directory for supported identifier. The Code from data directory should be in identifier_type
+      description: 
       items:
           $ref: '#/components/schemas/Identifier'          
     TransactionId:
@@ -370,9 +349,9 @@ components:
         registration_date: 
           $ref: '#/components/schemas/DateObject'
         event_occured_at: 
-          $ref: '#/components/schemas/Address'           
+          $ref: '#/components/schemas/PersonAddress'           
         registration_address: 
-          $ref: '#/components/schemas/Address' 
+          $ref: '#/components/schemas/PersonAddress' 
     VitalEventDate:
       type: object
       properties:
@@ -527,7 +506,8 @@ components:
             MUST be represented in RFC 3966 format.
           type: string
         address:
-          - $ref : "#/components/schemas/PersonAddress"
+          description: 'sda'
+          $ref : "#/components/schemas/PersonAddress"
         nationalities:
           description: End-User's nationalities using ICAO 3-letter codes [ICAO-Doc9303],
             e.g., "USA" or "JPN". 2-letter ICAO codes MAY be used in some circumstances
@@ -543,7 +523,8 @@ components:
         additional_attributes:
           $ref : "#/components/schemas/AttributeNameValue"
     PersonAddress:
-      description: Person address info as per OpenID <a href="https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim">specs</a>
+      title: Address
+      description: Address info as per OpenID <a href="https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim">specs</a>
       properties:
         formatted:
           description: Full mailing address, formatted for display or use on a mailing
@@ -667,7 +648,8 @@ components:
           place_of_death:
             description: End-User's place of birth. The value of this member is a
               JSON structure containing some or all of the following members
-            type: object
+            $ref: '#/components/schemas/Location'
+
       - "$ref": "#/components/schemas/CRRecord"
     CRRecordUnion:
       description: |
@@ -881,4 +863,8 @@ components:
         - rjct.total_count.invalid
         - rjct.total_count.limit_exceeded
         - rjct.version.invalid    
-      
+    Version:  
+      description: "The version format should use semantic versioning, which means dividing each version identifier into three parts: MAJOR, MINOR, and PATCH. These parts are then combined using the format 'MAJOR.MINOR.PATCH' "
+      type: string
+      example: 1.0.0
+       

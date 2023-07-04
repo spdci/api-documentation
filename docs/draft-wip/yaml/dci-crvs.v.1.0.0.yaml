@@ -482,10 +482,14 @@ components:
         transaction_id:
           $ref : './common.yaml#/components/schemas/TransactionId'
         search_request:
-          type: array
-          title:  SearchRequestObject V 1.0.0
-          items:
-            $ref: '#/components/schemas/SearchRequestObject'
+          type: object
+          properties:
+            version:
+              $ref: './common.yaml#/components/schemas/Version'
+            data: 
+              type: array
+              items:
+                $ref: '#/components/schemas/SearchRequestObject'
       required: 
         - transaction_id
         - search_request
@@ -600,9 +604,14 @@ components:
         transaction_id:
           $ref : './common.yaml#/components/schemas/TransactionId'
         search_response:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResponseObject'
+          type: object
+          properties:
+            version:
+              $ref: './common.yaml#/components/schemas/Version'
+            data: 
+              type: array
+              items:
+                $ref: '#/components/schemas/SearchResponseObject'
  
     SearchResponseObject:
       type: object
