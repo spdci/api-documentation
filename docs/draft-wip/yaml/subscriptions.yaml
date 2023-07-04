@@ -19,6 +19,9 @@ components:
           anyOf:
             - $ref: '#/components/schemas/SubscriptionMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'          
+      required:
+        - headers
+        - message
     SubscriptionMessage: 
       type: object
       properties:
@@ -38,6 +41,9 @@ components:
           type: object
           example:
             region: ''
+      required:
+        - registry_type
+        - custom_filter
                 
     EventInfo:
       type: object
@@ -102,7 +108,10 @@ components:
           type: object
           anyOf:
             - $ref: '#/components/schemas/UnSubscribeMessage'
-            - $ref: './common.yaml#/components/schemas/EncryptedRequest'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'      
+      required:
+        - headers
+        - message
 
     UnSubscribeMessage:
       type: object
