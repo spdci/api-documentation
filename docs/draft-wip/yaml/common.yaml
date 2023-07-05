@@ -846,9 +846,10 @@ components:
       - pdng
       - succ
       - rjct
-    SearchStatusReasonCode:
+
+    StatusReasonCode:
       type: string
-      description: Identity verification request status reason codes
+      description: Status code list for search request        
       enum:
         - rjct.action.invalid
         - rjct.action.not_supported
@@ -861,14 +862,39 @@ components:
         - rjct.pagination.invalid
         - rjct.reference_id.duplicate
         - rjct.reference_id.invalid
-        - rjct.search_criteria.invalid
-        - rjct.search.too_many_records_found
         - rjct.signature_key.missing
         - rjct.sort.invalid
         - rjct.timestamp.invalid
         - rjct.total_count.invalid
         - rjct.total_count.limit_exceeded
-        - rjct.version.invalid    
+        - rjct.version.invalid
+    SearchStatusReasonCode:
+      allOf:
+        - $ref: "#/components/schemas/StatusReasonCode"
+      type: string
+      description: Status code list for search request
+      enum:
+        - rjct.search_criteria.invalid
+        - rjct.search.too_many_records_found
+
+    SubscriptionStatusReasonCode:
+      allOf:
+        - $ref: "#/components/schemas/StatusReasonCode"
+      type: string
+      description: Status code list for subscription request
+      enum:
+        - rjct.search_attribute.invalid
+        - rjct.search_attribute.too_many_records_found
+        - rjct.search_type.invalid
+        - rjct.search_type.too_many_records_found           
+    NotifyStatusReasonCode:
+      allOf:
+        - $ref: "#/components/schemas/StatusReasonCode"
+      type: string
+      description: Status code list for notifications
+      enum:
+        - rjct.notify_endpint.invalid
+
     Version:  
       description: "The version format should use semantic versioning, which means dividing each version identifier into three parts: MAJOR, MINOR, and PATCH. These parts are then combined using the format 'MAJOR.MINOR.PATCH' "
       type: string
