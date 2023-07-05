@@ -100,7 +100,7 @@ components:
         total_count:
           description: Total no of record present in the message response
           type: integer
-          example: 10   
+          example: ''   
     ApiResponse:
       type: object
       properties:

@@ -18,102 +18,102 @@ components:
         message_id:
           description: 'Unique message id to communicate between sender and receiver systems to deliver the message over any transport layer i.e https, pub/sub, sftp etc.,'
           type: string
-          example: '123456789020211216223812'
+          example: ''
         message_ts:
           description: Time of message generation in RFC3339 format
           type: string
           format: date-time
-          example: '2022-12-04T18:01:07+00:00'
+          example: ''
         sender_id:
           description: 'The ID of sender system registered with the receiving system. Used for authorization, encryption, digital sign verification, etc., functions.'
           type: string
-          example: '10089'
+          example: ''
         receiver_id:
           description: 'The targeted system to which request to send'
           type: string
-          example: 'crvs'
+          example: ''
     SearchAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'search'
+          example: ''
     OnSearchAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'on-search'
+          example: ''
     SubscribeAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'subscribe'
+          example: ''
     OnSubscribeAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'on-subscribe'
+          example: ''
     UnsubscribeAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'unsubscribe'
+          example: ''
     NotifyAction:
       type: object
       properties:
         action:
           description: 'Action to be performed-'
           type: string
-          example: 'notify'
+          example: ''
     StatusAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'status'
+          example: ''
     OnStatusAction:
       type: object
       properties:
         action:
           description: 'Action to be performed'
           type: string
-          example: 'on-status'
+          example: ''
     TotalCountHeader:
       type: object
       properties:
         total_count:
           description: Total count of requests present in the message
           type: integer
-          example: 10
+          example: ''
     CompletedCountHeader:
       type: object
       properties:
         completed_count:
           description: Completed count of requests present in the message
           type: integer
-          example: 10
+          example: ''
     EncHeaders:
       type: object
       properties:
         is_encrypted:
           description: If is_encrypted true then receiving system will expect message part of request in encrypted format also receiving system will expect  encryption_algorithm param.  
           type: boolean
-          example: true 
+          example: '' 
           default: false   
         encryption_algorithm:
           description: Encryption algorithm used to encrypt message part of request
           type: string
-          example: "DH-2048"                
+          example: ""                
       required:
         - version
         - message_id

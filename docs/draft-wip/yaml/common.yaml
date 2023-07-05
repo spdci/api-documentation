@@ -223,7 +223,7 @@ components:
           enum: "NATIONAL_ID"
         identifier_value:
           type: string
-          example: 'vid:12345@mosip'
+          example: ''
     Identifiers:
       type: array
       description: 
@@ -247,7 +247,7 @@ components:
       type: string
       description: datetime in RFC3339 format
       format: date-time
-      example: '2022-12-04T17:20:07-04:00'      
+      example: ''      
     Sort:
       type: object
       properties:
@@ -279,22 +279,22 @@ components:
       properties:
         page_size:
           type: number
-          example: 10
+          example: ''
         page_number:
           type: number
-          example: 1  
+          example: ''  
     PaginationInfoInResponse:
       type: object
       properties:
         page_size:
           type: number
-          example: 10
+          example: ''
         page_number:
           type: number
-          example: 1
+          example: ''
         total_records:
           type: number
-          example: 20      
+          example: ''      
       required:
         - page_size           
         - page_number
@@ -305,7 +305,7 @@ components:
       description: Indicates language code as per ISO 639.3 standard
       type: string
       pattern: "^[a-z]{3,3}$"
-      example: en          
+      example: ''          
     KeyValueMap:
       type: object
       properties:
@@ -323,7 +323,7 @@ components:
           format: binary
         file_type:
           type: string
-          example: csv
+          example: ''
           enum: [json,csv,xml]
         message_id:
           type: string          
@@ -779,7 +779,7 @@ components:
         seq_num:
           description: expression seq number for correlation
           type: number
-          example: 1
+          example: ''
         attribute_name:
           type: string
           description: attribute name
@@ -806,13 +806,13 @@ components:
         seq_num:
           description: expression seq number for correlation
           type: number
-          example: 1
+          example: ''
         result:
           type: string
           enum:
           - y
           - n
-          example: y
+          example: ''
       required:
       - seq_num
       - result
@@ -826,12 +826,12 @@ components:
         page_size:
           type: number
           format: int32
-          example: 2000
+          example: ''
         page_number:
           type: number
           format: int32
           default: 1
-          example: 5
+          example: ''
       required:
       - page_size        
     RequestStatus:
@@ -897,7 +897,7 @@ components:
     Version:  
       description: "The version format should use semantic versioning, which means dividing each version identifier into three parts: MAJOR, MINOR, and PATCH. These parts are then combined using the format 'MAJOR.MINOR.PATCH' "
       type: string
-      example: 1.0.0
+      example: ''
     Person:
       type: object
       properties:
