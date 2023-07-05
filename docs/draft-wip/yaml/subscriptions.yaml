@@ -46,12 +46,7 @@ components:
         registry_type:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
-          anyOf:
-          - description: Functional registry event types
-            type: string
-            enum:
-            - read
-          - $ref: "./common.yaml#/components/schemas/CREventType"
+          $ref: "./common.yaml#/components/schemas/CREventType"
 
         frequency:
           type: string
@@ -101,16 +96,56 @@ components:
             example: '[]'
 
     SubscriptionResponse:
-      allOf:
-        - $ref: './responses.yaml#/components/schemas/BaseResponse'
+#      allOf:
+#        - $ref: './responses.yaml#/components/schemas/BaseResponse'
+#      type: object
+#      properties:
+#        message: 
+#          type: array
+#          items:
+#            type: object
+#            anyOf:
+#              - $ref: '#/components/schemas/SubscriptionList'
       type: object
       properties:
-        message: 
-          type: array
-          items:
-            type: object
-            anyOf:
-              - $ref: '#/components/schemas/SubscriptionList'
+        signature: 
+          $ref: './signature.yaml#/components/schemas/MsgSignature'
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders'
+            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/CompletedCountHeader'
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'          
+        message:
+          type: object
+          anyOf:
+            - $ref: '#/components/schemas/SubscribeReqStatusMsg'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'          
+      required:
+        - headers
+        - message
+    SubscribeReqStatusMsg:
+      type: object
+      properties:
+        status:
+          type: object
+          properties:
+            ack_status:
+              type: string
+              description: |
+                1. ACK: If the request is valid (for basic checks) and async callback (i.e webhook) will be invoked by reciever back to the sender.
+                2. NACK: If the request is valid (for basic checks) and there is no futher updates from reciever back to the sender.
+                3. ERR: If the reuqest is invalid and reciver can't process the request. error object holds error code, message.
+              enum:
+              - ACK
+              - NACK
+              - ERR
+            timestamp:
+              $ref: "./common.yaml#/components/schemas/TimeStamp"
+            error:
+              $ref: "./common.yaml#/components/schemas/Error"
+        request:  
+          $ref: '#/components/schemas/SubscriptionMessage'
     SubscriptionList:
       type: object
       properties:
@@ -173,12 +208,7 @@ components:
         registry_type:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
-          anyOf:
-          - description: Functional registry event types
-            type: string
-            enum:
-            - read
-          - $ref: "./common.yaml#/components/schemas/CREventType"
+          $ref: "./common.yaml#/components/schemas/CREventType"
         reason:
           type: string  
           example: ''
@@ -217,11 +247,10 @@ components:
         registry_type:
           "$ref": "./common.yaml#/components/schemas/RegistryType"
         event_type:
-          anyOf:
-          - "$ref": "./common.yaml#/components/schemas/CREventType"
+          "$ref": "./common.yaml#/components/schemas/CREventType"
         registry_data:
           oneOf:
-          - "$ref": "./common.yaml#/components/schemas/HumanName"
+          - "$ref": "./common.yaml#/components/schemas/Person"
           - "$ref": "./common.yaml#/components/schemas/CRRecordBirth"
           - "$ref": "./common.yaml#/components/schemas/CRRecordDeath"
           - "$ref": "./common.yaml#/components/schemas/CRRecordUnion"

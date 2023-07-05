@@ -53,6 +53,13 @@ components:
           description: 'Action to be performed'
           type: string
           example: 'subscribe'
+    OnSubscribeAction:
+      type: object
+      properties:
+        action:
+          description: 'Action to be performed'
+          type: string
+          example: 'on-subscribe'
     UnsubscribeAction:
       type: object
       properties:
@@ -60,7 +67,7 @@ components:
           description: 'Action to be performed'
           type: string
           example: 'unsubscribe'
-    NotifyAction1:
+    NotifyAction:
       type: object
       properties:
         action:
@@ -134,6 +141,15 @@ components:
           type: string
           format: uri
           example: 'https://{server_url}/on-search'
+    SubscribeCallbackHeader:
+      type: object
+      properties:
+        callbackendpoint:
+          description: The callback url for async call, if async param is true then we callbackendpoint is required.
+          type: string
+          format: uri
+          example: 'https://{server_url}/on-subscribe'
+
     NotifyCallbackHeader:
       type: object
       properties:

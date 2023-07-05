@@ -120,12 +120,7 @@ components:
         registry_type:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
-          anyOf:
-          - description: Functional registry event types
-            type: string
-            enum:
-            - read
-          - $ref: "./common.yaml#/components/schemas/CREventType"        
+          $ref: "./common.yaml#/components/schemas/CREventType"        
         registry_data:
           items:
             oneOf:

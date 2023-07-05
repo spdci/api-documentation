@@ -505,12 +505,7 @@ components:
         registry_type:
           $ref : './common.yaml#/components/schemas/RegistryType'
         event_type:
-          anyOf:
-          - description: Functional registry event types
-            type: string
-            enum:
-            - read
-          - $ref: "./common.yaml#/components/schemas/CREventType"
+          $ref: "./common.yaml#/components/schemas/CREventType"
         search_criteria:
           type: object
           properties:
@@ -609,8 +604,9 @@ components:
         headers:
           allOf:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders' 
-            - $ref: './headers.yaml#/components/schemas/NotifyAction1'
+            - $ref: './headers.yaml#/components/schemas/NotifyAction'
             - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
+            - $ref: './headers.yaml#/components/schemas/CompletedCountHeader'
             - $ref: './headers.yaml#/components/schemas/EncHeaders'   
         message:
           type: object 
