@@ -27,9 +27,11 @@ components:
       type: object
       properties:
         transaction_id:
-          "$ref": "./common.yaml#/components/schemas/TransactionId"
+          $ref : "./common.yaml#/components/schemas/TransactionId"
         txnstatus_request:
-          "$ref": "#/components/schemas/TxnStatusRequest"
+          type: array
+          items:
+            $ref : "#/components/schemas/TxnStatusRequest"
       required:
       - transaction_id
       - txnstatus_request
@@ -109,11 +111,15 @@ components:
       type: object
       properties:
         transaction_id:
-          "$ref": "./common.yaml#/components/schemas/TransactionId"
-        txnstatus_response:        
-          "$ref": "#/components/schemas/TxnStatusResponse"
-    TxnStatusResponse:
-      items:
-        oneOf:
-        - "$ref": "./search.yaml#/components/schemas/SearchResponseObject" 
+          $ref: './common.yaml#/components/schemas/TransactionId'
+        txnstatus_response: 
+          type: array      
+          description: 'dc'
+          items: 
+            anyOf: 
+              - $ref: './search.yaml#/components/schemas/SearchResponseObject'
+              - $ref: './subscriptions.yaml#/components/schemas/SubscribeReqStatusMsg'
+              - $ref: './subscriptions.yaml#/components/schemas/NotifyEventRequest' 
+     
+      
    
