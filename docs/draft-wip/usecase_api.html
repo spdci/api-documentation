@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>DCI API's home page</title>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
     <link href="./assets/js/json-viewer/jquery.json-viewer.css" type="text/css" rel="stylesheet">
 </head>
@@ -86,6 +87,30 @@
 <script src="./assets/js/json-viewer/jquery.json-viewer.js"></script>
 
 <style type="text/css">
+    ::-webkit-scrollbar {
+         width: 8px;
+    }
+
+    ::-webkit-scrollbar-button {
+        /* display: none; */
+    }
+    ::-webkit-scrollbar-corner {
+        /* display: none; */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(51,51,51,.3);
+        border-radius: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: #e5e5e5;
+        border-radius: 8px;
+    }
+
+    ::-webkit-scrollbar:horizontal{
+        height: 8px; 
+        }         
+
     
     p.options label {
       margin-right: 10px;
@@ -113,85 +138,7 @@
     height: 500px;
 }
         </style>
-    
-        <script>
-    var optionsrenderJson = {
-            collapsed: false,
-            rootCollapsable: true,
-            withQuotes: true,
-            withLinks: true
-        };
-    $(function() {
-
-        $.getJSON('./assets/example_files/crvsusecase.json', function(data) {
-            
-            $.each(data, function(index, val) {
-                var usecaseid = val["processflow_id"]
-                var usecase_name = val["processflow_name"]
-                var usecaseDiv = '<div class="col-sm-12 mainusecasediv">'+
-                    ' <div class="card">'+
-                        '     <div class="card-header collapsed " id="collapseCardheader'+usecaseid+'" data-toggle="collapse" data-target="#collapseCardBody'+usecaseid+'" aria-expanded="false" aria-controls="collapseCardBody'+usecaseid+'">'+
-                            '       <span class="arrow"></span> <span style="margin-left: 10px;">'+usecase_name+ 
-                            '</span></div>'+
-                            '  <div id="collapseCardBody'+usecaseid+'" class="collapse ">'+
-                                '     <div class="card-body">'+
-                                    '  <div class="row">'+
-                                        '      <div class="col-sm-6"> '+
-                                            ' <h5>Request Json</h5>      <pre class="reqjsonpre" id="req'+usecaseid+'"></pre>'+
-                                            '  </div>'+
-                                            '  <div class="col-sm-6">'+
-                                                '<h5>Response Json</h5>     <pre class="resjsonpre" id="res'+usecaseid+'"></pre>'+
-                                                ' </div>'+
-                                                '  </div>'+
-                                '</div>'+
-                            '</div>'+
-                        ' </div>'+ '</div>';
-                $("#usecasesDiv").append(usecaseDiv);
-                $.getJSON('./assets/example_files/'+usecaseid+"req.json", function(data) {
-                    renderJson('req'+usecaseid,data)
-                });
-                $.getJSON('./assets/example_files/'+usecaseid+"res.json", function(data) {
-                    renderJson('res'+usecaseid,data)
-                });
-
-             
-              
-            });
-
-                let hash = window.location.hash;
-
-                // Remove the leading # symbol from the hash
-                let value = hash.substring(1);
-
-                // Log the value to the console
-                console.log(value);
-                $("#collapseCardBody"+value).addClass("show");
-                $("#collapseCardheader"+value).removeClass("collapsed");
-
-                $('html, body').animate({
-                scrollTop: $("#collapseCardheader"+value).offset().top
-            }, 2000);
-
-        });
-
-
-       
-
-      
-    });
-
-    function renderJson(divid,jsoninput) {
-        
-        try {
-            var input = eval('(' + JSON.stringify(jsoninput)+ ')');
-        }
-        catch (error) {
-          return alert("Cannot eval JSON: " + error);
-        }
-       
-        $('#'+divid).jsonViewer(input, optionsrenderJson);
-      }
-        </script>
+ <script src="./assets/js/usecase_api.js"></script>
 
 </body>
 </html>
