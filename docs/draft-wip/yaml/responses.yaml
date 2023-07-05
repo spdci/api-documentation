@@ -133,7 +133,14 @@ components:
       properties:
         ack_status:
           type: string
-          example: ''
+          description: |
+            1. ACK: If the request is valid (for basic checks) and async callback (i.e webhook) will be invoked by reciever back to the sender.
+            2. NACK: If the request is valid (for basic checks) and there is no futher updates from reciever back to the sender.
+            3. ERR: If the reuqest is invalid and reciver can't process the request. error object holds error code, message.
+          enum:
+          - ACK
+          - NACK
+          - ERR
         timestamp:       
           description: Time of message generation in RFC3339 format
           type: string
@@ -150,7 +157,14 @@ components:
       properties:
         ack_status:
           type: string
-          example: ''
+          description: |
+            1. ACK: If the request is valid (for basic checks) and async callback (i.e webhook) will be invoked by reciever back to the sender.
+            2. NACK: If the request is valid (for basic checks) and there is no futher updates from reciever back to the sender.
+            3. ERR: If the reuqest is invalid and reciver can't process the request. error object holds error code, message.
+          enum:
+          - ACK
+          - NACK
+          - ERR
         timestamp:       
           description: Time of message generation in RFC3339 format
           type: string

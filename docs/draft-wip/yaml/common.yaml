@@ -216,15 +216,14 @@ components:
         to the local jurisdiction and policies.<br> e.g fruits.karnataka represents
         farmer registry in karnataka state govt.<br>"
       format: "^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+$"
-      example: vid:12345@mosip
       properties:
         identifier_type:
           type: string
           example: ''
-          enum: ['0|Foundational ID Number']
+          enum: "NATIONAL_ID"
         identifier_value:
           type: string
-          example: ''
+          example: 'vid:12345@mosip'
     Identifiers:
       type: array
       description: 
