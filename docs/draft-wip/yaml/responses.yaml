@@ -138,13 +138,15 @@ components:
             2. NACK: If the request is valid (for basic checks) and there is no futher updates from reciever back to the sender.
             3. ERR: If the reuqest is invalid and reciver can't process the request. error object holds error code, message.
           enum:
-          - ACK
-          - NACK
-          - ERR
+            - ACK
+            - NACK
+            - ERR
+          example: ''
         timestamp:       
           description: Time of message generation in RFC3339 format
           type: string
           format: date-time
+          example: ''
         error:
           $ref: '#/components/schemas/Error'
         correlation_id:
@@ -162,13 +164,15 @@ components:
             2. NACK: If the request is valid (for basic checks) and there is no futher updates from reciever back to the sender.
             3. ERR: If the reuqest is invalid and reciver can't process the request. error object holds error code, message.
           enum:
-          - ACK
-          - NACK
-          - ERR
+            - ACK
+            - NACK
+            - ERR
+          example: ''
         timestamp:       
           description: Time of message generation in RFC3339 format
           type: string
           format: date-time
+          example: ''
         error:
           $ref: '#/components/schemas/Error'
         correlation_id:

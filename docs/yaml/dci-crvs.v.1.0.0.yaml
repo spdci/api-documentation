@@ -34,6 +34,7 @@ tags:
     description: ''
   - name: Request status checking API 
     description: ''
+
 paths:
   /search:
     post:
@@ -2145,6 +2146,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/AsyncBaseRequestObject'
       type: object
+      x-tags: Search API
       properties:
         payload:
           type: object

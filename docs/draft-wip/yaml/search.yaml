@@ -117,6 +117,7 @@ components:
             systems/end users
           type: string
           maxLength: 999
+          example: ''
         registry_type:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
@@ -124,11 +125,11 @@ components:
         registry_data:
           items:
             oneOf:
-            - "$ref": "./common.yaml#/components/schemas/Person"
-            - "$ref": "./common.yaml#/components/schemas/CRRecordBirth"
-            - "$ref": "./common.yaml#/components/schemas/CRRecordDeath"
-            - "$ref": "./common.yaml#/components/schemas/CRRecordUnion"
-            - "$ref": "./common.yaml#/components/schemas/RegistryRecord"
+              - $ref: "./common.yaml#/components/schemas/Person"
+              - $ref: "./common.yaml#/components/schemas/CRRecordBirth"
+              - $ref: "./common.yaml#/components/schemas/CRRecordDeath"
+              - $ref: "./common.yaml#/components/schemas/CRRecordUnion"
+              - $ref: "./common.yaml#/components/schemas/RegistryRecord"
 #        beneficiary: 
 #          type: array
 #          items:

@@ -68,6 +68,7 @@ components:
             events
           items:
             type: string
+            example: ''
         locale:
           $ref: "./common.yaml#/components/schemas/Locale"
       required:
@@ -140,6 +141,7 @@ components:
             systems/end users
           type: string
           maxLength: 999
+          example: ''
         registry_type:
           $ref: "./common.yaml#/components/schemas/RegistryType"
         event_type:
@@ -160,10 +162,7 @@ components:
             custom_query:
               "$ref": "./common.yaml#/components/schemas/ExpressionWithConditionList"
         filter:
-          description: Record attribute(s) to send in response thorugh callback notification
-            events
-          items:
-            type: string
+          $ref: "./common.yaml#/components/schemas/Filter"  
         locale:
           $ref: "./common.yaml#/components/schemas/Locale"
       required:
@@ -284,7 +283,8 @@ components:
           description: Status reason code message. Helps actionanble messaging for
             systems/end users
           type: string
-          maxLength: 999        
+          maxLength: 999 
+          example: ''       
         registry_type:
           "$ref": "./common.yaml#/components/schemas/RegistryType"
         event_type:

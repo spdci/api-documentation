@@ -32,19 +32,19 @@ components:
       properties:
         suffix:
           type: string
-          example: ''
+          example: ""
         prefix:
           type: string
-          example: ''
+          example: ""
         first_name:
           type: string
-          example: ''
+          example: ""
         middle_name:
           type: string
-          example: ''
+          example: ""
         last_name:
           type: string
-          example: ''
+          example: ""
     Relationship:
       type: object       
       properties:
@@ -52,9 +52,8 @@ components:
           type: string
           example: ''
           description: 'Refer relationship code directory' 
-          enum: ['1:brother','2:sister','3:mother','4:father','spouse']
         person_info:
-          $ref: '#/components/schemas/HumanName'
+          $ref: './common.yaml#/components/schemas/HumanName'
     Gender:
       type: object
       description: 'Refer code directory all gender codes'
@@ -198,6 +197,9 @@ components:
         landline_no:
           type: string
           example: ''          
+        extension:
+          type: string
+          example: ''
         mobile_no:
           type: string
           example: ''          
@@ -226,9 +228,9 @@ components:
           example: ''
     Identifiers:
       type: array
-      description: 
+      description: ''
       items:
-          $ref: '#/components/schemas/Identifier'          
+        - $ref: '#/components/schemas/Identifier'          
     TransactionId:
       type: string
       example: ''
@@ -241,7 +243,7 @@ components:
     ReferenceIdList:
       type: array
       items:
-        $ref: '#/components/schemas/ReferenceId'
+        - $ref: '#/components/schemas/ReferenceId'
 
     TimeStamp:
       type: string
@@ -266,14 +268,16 @@ components:
         attribute_name:
           type: string
           description: attribute name
+          example: ''
         sort_order:
           type: string
           enum:
-          - asc
-          - desc          
+            - asc
+            - desc    
+          example: ''
     SearchSortList:
       items:
-        "$ref": "#/components/schemas/SearchSort"
+        - $ref: "#/components/schemas/SearchSort"
     Pagination:
       type: object
       properties:
@@ -412,29 +416,31 @@ components:
         college, farmer, land, utitlity, etc., \n2. Country specific implementations
         should extend and allow custom types.\n"
       enum:
-      - civil
-      - population
-      - family
-      - household
-      - school
-      - college
-      - farmer
-      - land
-      - utility
-      - other     
+        - civil
+        - population
+        - family
+        - household
+        - school
+        - college
+        - farmer
+        - land
+        - utility
+        - other
+      example: ''     
     CREventType:
       description: Civil registry event types
       type: string
       enum:
-      - birth
-      - death
-      - marriage
-      - divorce
-      - annulment
-      - seperation
-      - adoption
-      - demographic_change
-      - unregister      
+        - birth
+        - death
+        - marriage
+        - divorce
+        - annulment
+        - seperation
+        - adoption
+        - demographic_change
+        - unregister      
+      example: ''
     RegistryRecord:
       description: |
         1. Attributes of a person to create fetch records, create verifiable credentials or use in search criteria.
@@ -445,61 +451,72 @@ components:
         issue_date:
           type: string
           format: date-time
+          example: ''
         status:
           description: Registry status
           type: string
+          example: ''
         name:
           description: End-User's full name in displayable form including all name
             parts, possibly including titles and suffixes, ordered according to the
             End-User's locale and preferences.
           type: string
+          example: ''
         given_name:
           description: Given name(s) or first name(s) of the End-User. Note that in
             some cultures, people can have multiple given names; all can be present,
             with the names being separated by space characters.
           type: string
+          example: ''
         family_name:
           description: Surname(s) or last name(s) of the End-User. Note that in some
             cultures, people can have multiple family names or no family name; all
             can be present, with the names being separated by space characters.
           type: string
+          example: ''
         middle_name:
           description: Middle name(s) of the End-User. Note that in some cultures,
             people can have multiple middle names; all can be present, with the names
             being separated by space characters. Also note that in some cultures,
             middle names are not used.
           type: string
+          example: ''
         email:
           description: End-User's preferred e-mail address. Its value MUST conform
             to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon
             this value being unique, as discussed in Section 5.7.
           type: string
+          example: ''
         email_verified:
           description: address was controlled by the End-User at the time the verification
             was performed. The means by which an e-mail address is verified is context-specific,
             and dependent upon the trust framework or contractual agreements within
             which the parties are operating.
           type: boolean
+          example: ''
         gender:
           description: End-User's gender. Values defined by this specification are
             female and male. Other values MAY be used when neither of the defined
             values are applicable.
           type: string
+          example: ''
         birthdate:
           description: YYYY format is allowed. Note that depending on the underlying
             platform's date related function, providing just year can result in varying
             month and day, so the implementers need to take this factor into account
             to correctly process the dates.
           type: string
+          example: ''
         place_of_birth:
           description: End-User's place of birth. The value of this member is a JSON
             structure containing some or all of the following members
           $ref: '#/components/schemas/Location'
         phone_number:
-          description: number contains an extension, it is RECOMMENDED that the extension
-            be represented using the RFC 3966 [RFC3966] extension syntax, for example,
-            +1 (604) 555-1234;ext=5678.
-          type: string
+          description: The value of this member is a JSON
+            structure containing some or all of the following members in array of ContactDetails object
+          type: array
+          items:
+            $ref: './common.yaml#/components/schemas/ContactDetails'          
         phone_number_verified:
           description: True if the End-User's phone number has been verified; otherwise
             false. When this Claim Value is true, this means that the OP took affirmative
@@ -510,8 +527,8 @@ components:
             true, the phone_number Claim MUST be in E.164 format and any extensions
             MUST be represented in RFC 3966 format.
           type: string
+          example: ''
         address:
-          description: 'sda'
           $ref : "#/components/schemas/PersonAddress"
         nationalities:
           description: End-User's nationalities using ICAO 3-letter codes [ICAO-Doc9303],
@@ -520,11 +537,13 @@ components:
           type: array
           items:
             type: string
+            example: ''
         updated_at:
           description: Time the End-User's information was last updated. Its value
             is a JSON number representing the number of seconds from 1970-01-01T0:0:0Z
             as measured in UTC until the date/time
           type: number
+          example: ''
         additional_attributes:
           $ref : "#/components/schemas/AttributeNameValue"
     PersonAddress:
@@ -537,6 +556,7 @@ components:
             can be represented either as a carriage return/line feed pair ("\r\n")
             or as a single line feed character ("\n").
           type: string
+          example: ''
         street_address:
           description: Full street address component, which MAY include house number,
             street name, Post Office Box, and multi-line extended street address information.
@@ -544,24 +564,29 @@ components:
             can be represented either as a carriage return/line feed pair ("\r\n")
             or as a single line feed character ("\n").
           type: string
+          example: ''
         locality:
           description: City or locality component.
           type: string
+          example: ''
         region:
           description: State, province, prefecture, or region component.
           type: string
         postal_code:
           description: Zip code or postal code component.
           type: string
+          example: ''
         country:
           description: state, province, region
           type: string
+          example: ''
         country_code:
           description: OPTIONAL. country part of an address represented using an ISO
             3-letter code [ISO3166-3], e.g., "USA" or "JPN". 2-letter ISO codes [ISO3166-1]
             MAY be used for compatibility reasons. country_code MAY be used as alternative
             to the existing country field.
           type: string
+          example: ''
     AttributeNameValue:
       type: object
       description: Attribute name value object
@@ -569,12 +594,14 @@ components:
         attribute_name:
           type: string
           maxLength: 99
+          example: ''
         attribute_value:
           type: string
           maxLength: 999
+          example: ''
       required:
-      - attribute_name
-      - attribute_value          
+        - attribute_name
+        - attribute_value          
      
     CRRecord:
       description: |
@@ -588,9 +615,11 @@ components:
           issue_date:
             type: string
             format: date-time
+            example: ''
           status:
             description: Civil registry status
             type: string
+            example: ''
       - "$ref": "#/components/schemas/RegistryRecord"
     CRRecordBirth:
       description: |
@@ -602,13 +631,16 @@ components:
           type:
             type: string
             enum:
-            - birth
-            - adoption
+              - birth
+              - adoption
+            example: ''
           registration_number:
             description: Registration number
             type: string
+            example: ''
           registration_date:
             description: Registration date
+            example: ''
           link_registration_number:
             description: Registration number to related record. e.g birth registration
               no for death, marriage registration no for divorce/annulment, etc.,
@@ -616,13 +648,17 @@ components:
           related_persons:
             items:
               allOf:
-              - "$ref": "#/components/schemas/CRRelatedPerson"
-              - properties:
-                  relationship:
-                    enum:
-                    - mother
-                    - father
-                    - other
+                - "$ref": "#/components/schemas/CRRelatedPerson"
+                - properties:
+                    relationship:
+                      enum:
+                      - mother
+                      - father
+                      - husband
+                      - wife
+                      - son
+                      - daughter
+                      - other
       - "$ref": "#/components/schemas/CRRecord"
     CRRecordDeath:
       description: |
@@ -634,27 +670,30 @@ components:
           type:
             type: string
             enum:
-            - death
+              - death
+            example: ''
           registration_number:
             description: Registration number
             type: string
+            example: ''
           registration_date:
             description: Registration date
           link_registration_number:
             description: Registration number to related record. e.g birth registration
               no for death, marriage registration no for divorce/annulment, etc.,
             type: string
+            example: ''
           deathdate:
             description: YYYY format is allowed. Note that depending on the underlying
               platform's date related function, providing just year can result in
               varying month and day, so the implementers need to take this factor
               into account to correctly process the dates.
             type: string
+            example: ''
           place_of_death:
             description: End-User's place of birth. The value of this member is a
               JSON structure containing some or all of the following members
             $ref: '#/components/schemas/Location'
-
       - "$ref": "#/components/schemas/CRRecord"
     CRRecordUnion:
       description: |
@@ -666,19 +705,23 @@ components:
           type:
             type: string
             enum:
-            - marriage
-            - divorce
-            - seperation
-            - annulment
+              - marriage
+              - divorce
+              - seperation
+              - annulment
+            example: ''
           registration_number:
             description: Registration number
             type: string
+            example: ''
           registration_date:
             description: Registration date
+            example: ''
           link_registration_number:
             description: Registration number to related record. e.g birth registration
               no for death, marriage registration no for divorce/annulment, etc.,
             type: string
+            example: ''
           related_person:
             allOf:
             - $ref: "#/components/schemas/CRRelatedPerson"
@@ -701,16 +744,17 @@ components:
         relationship:
           type: string
           enum:
-          - mother
-          - father
-          - gaurdian
-          - bride
-          - groom
-          - wife
-          - husband
-          - spouse
-          - partner
-          - other      
+            - mother
+            - father
+            - gaurdian
+            - bride
+            - groom
+            - wife
+            - husband
+            - spouse
+            - partner
+            - other
+          example: ''                
     ExpressionWithCondition:
       description: Expression with a condition
       type: object
@@ -737,24 +781,26 @@ components:
           type: string
           description: Standard error code
           enum:
-          - err.request.bad
-          - err.request.unauthorized
-          - err.request.forbidden
-          - err.request.not_found
-          - err.request.timeout
-          - err.version.not_supported
-          - err.request.too_many_requests
-          - err.sender_id.invalid
-          - err.sender_uri.invalid
-          - err.receiver_id.invalid
-          - err.signature.missing
-          - err.signature.invalid
-          - err.encryption.invalid
-          - err.service.unavailable
+            - err.request.bad
+            - err.request.unauthorized
+            - err.request.forbidden
+            - err.request.not_found
+            - err.request.timeout
+            - err.version.not_supported
+            - err.request.too_many_requests
+            - err.sender_id.invalid
+            - err.sender_uri.invalid
+            - err.receiver_id.invalid
+            - err.signature.missing
+            - err.signature.invalid
+            - err.encryption.invalid
+            - err.service.unavailable
+          example: ''  
         message:
           type: string
           description: message to describe above error code
           maxLength: 999
+          example: ''
     ExpCondition:
       description: Condition in an expression
       type: string
@@ -762,7 +808,7 @@ components:
       - and
       - or
       - not
-      example: and
+      example: ''
     ExpOperator:
       description: Operator in an expression
       type: string
@@ -772,7 +818,7 @@ components:
       - eq
       - ge
       - le
-      example: eq
+      example: ''
     Expression:
       description: Expression
       properties:
@@ -783,14 +829,16 @@ components:
         attribute_name:
           type: string
           description: attribute name
+          example: ''
         operator:
           "$ref": "#/components/schemas/ExpOperator"
         attribute_value:
           oneOf:
-          - type: string
-          - type: integer
-          - type: number
-          - type: boolean
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          example: ''
       required:
       - seq_num
       - attribute_name
@@ -841,11 +889,11 @@ components:
         Request initiated <br> 3. succ: Success; Request successful <br> 4. rjct:
         Rejected; Request rejected'
       enum:
-      - rcvd
-      - pdng
-      - succ
-      - rjct
-
+        - rcvd
+        - pdng
+        - succ
+        - rjct
+      example: ''
     StatusReasonCode:
       type: string
       description: Status code list for search request        
@@ -867,6 +915,7 @@ components:
         - rjct.total_count.invalid
         - rjct.total_count.limit_exceeded
         - rjct.version.invalid
+      example: ''
     SearchStatusReasonCode:
       allOf:
         - $ref: "#/components/schemas/StatusReasonCode"
@@ -875,7 +924,7 @@ components:
       enum:
         - rjct.search_criteria.invalid
         - rjct.search.too_many_records_found
-
+      example: ''
     SubscriptionStatusReasonCode:
       allOf:
         - $ref: "#/components/schemas/StatusReasonCode"
@@ -886,6 +935,7 @@ components:
         - rjct.search_attribute.too_many_records_found
         - rjct.search_type.invalid
         - rjct.search_type.too_many_records_found           
+      example: ''
     NotifyStatusReasonCode:
       allOf:
         - $ref: "#/components/schemas/StatusReasonCode"
@@ -893,7 +943,7 @@ components:
       description: Status code list for notifications
       enum:
         - rjct.notify_endpint.invalid
-
+      example: ''
     Version:  
       description: "The version format should use semantic versioning, which means dividing each version identifier into three parts: MAJOR, MINOR, and PATCH. These parts are then combined using the format 'MAJOR.MINOR.PATCH' "
       type: string
@@ -908,10 +958,17 @@ components:
         related_persons:
           type: array
           items:
-            $ref: './common.yaml#/components/schemas/Relationship'
+            - $ref: './common.yaml#/components/schemas/Relationship'
         contactno:
           type: array
           items:
             $ref: './common.yaml#/components/schemas/ContactDetails'
         gender:
           $ref: './common.yaml#/components/schemas/Gender'
+    Filter:           
+      type: object
+      description: Record attribute(s) to send in response thorugh callback notification
+        events
+      items:
+        type: string
+      example: ''      
