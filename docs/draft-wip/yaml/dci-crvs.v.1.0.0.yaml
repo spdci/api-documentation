@@ -20,7 +20,7 @@ info:
           
     - [Marital Status](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.2-cd.02-marital-status)
           
-    - [Gender](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.3-cd.03-gender)
+    - [Sex](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.3-cd.03-gender)
           
     - [Vital Events](https://app.gitbook.com/o/0iSqNDBWH70sLmGExne0/s/qxauqL1oEtZWtHYd2Uzz/standards/1.-crvs/1.2-data-elements-and-code-directories#3.4-cd.04-vital-events)   
     
@@ -39,6 +39,62 @@ tags:
     description: 'The event subscription section describes APIs of subscribe / unsubscribe / subscription-list / notify'
   - name: Request status
     description: '.'
+  - name: SearchRequest
+    x-displayName: SearchRequest
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/SearchRequest" />    
+  - name: SearchResponse
+    x-displayName: SearchResponse
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/SearchResponse" />
+  - name: SubscriptionRequest
+    x-displayName: SubscriptionRequest
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/SubscriptionRequest" />
+  - name: SubscriptionResponse
+    x-displayName: SubscriptionResponse
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/SubscriptionResponse" />
+  - name: UnSubscribeRequest
+    x-displayName: UnSubscribeRequest
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/UnSubscribeRequest" /> 
+  - name: UnSubscribeResponse
+    x-displayName: UnSubscribeResponse
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/UnSubscribeResponse" /> 
+  - name: RequestStatusCheckRequest
+    x-displayName: RequestStatusCheckRequest
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/RequestStatusCheckRequest" /> 
+  - name: EventNotificationRequest
+    x-displayName: EventNotificationRequest
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/EventNotificationRequest" /> 
+  - name: EventResponse
+    x-displayName: EventResponse
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/EventResponse" />                        
+x-tagGroups:
+  - name: API Definition
+    tags:
+      - Search API
+      - Event subscription
+      - Request status
+
+  - name: Schema Objects
+    tags:
+      - SearchRequest
+      - SearchResponse 
+      - SubscriptionRequest
+      - SubscriptionResponse
+      - UnSubscribeRequest
+      - UnSubscribeResponse
+      - RequestStatusCheckRequest
+      - EventNotificationRequest
+      - EventResponse   
+
+
 paths:
   /search:
     post:
@@ -522,31 +578,6 @@ components:
           items:
             type: string
           example: ''                       
-#        identifiers:
-#          type: array
-#          description: Refer code directory for supported identifier. The Code from data directory should be in identifier_type
-#          items:
-#              $ref: './common.yaml#/components/schemas/Identifier'
-#        demographic:
-#          $ref : './search.yaml#/components/schemas/SearchCriteria'
-#        location:
-#          $ref : './common.yaml#/components/schemas/Location'
-#        custom_query:
-#          type: array
-#          description: |-
-#            The custom_query facilate to prepare conditions on data. The NameField and Repositories are just example. There may be any combination other than this two, please refer documentation for supported fields. 
-#            Structure for each item shall be in following format. 
-#            ```
-#            {
-#              "fieldname": "",
-#              "operator": "",
-#              "value": ""
-#            }
-#            ```
-#          items:
-#            anyOf:
-#              - $ref: './search.yaml#/components/schemas/NameField' 
-#              - $ref: './search.yaml#/components/schemas/Repositories'
         sort:
           $ref: './common.yaml#/components/schemas/SearchSortList'
         pagination:
@@ -620,13 +651,6 @@ components:
         - message
     EventNotificationMessage:
       properties:
-#        notify_event:
-#          type: array
-#          items:
-#            anyOf:
-#              - $ref: '#/components/schemas/PersonWithVitalInfo'
-#              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
-#              - $ref: '#/components/schemas/MarriageInfo'
         transaction_id:
           $ref : "./common.yaml#/components/schemas/TransactionId"
         notify_event:
@@ -636,40 +660,7 @@ components:
       required:
         - transaction_id
         - notify_event
-    PersonWithVitalInfo:
-      allOf:
-        - $ref: './common.yaml#/components/schemas/Person'    
-      type: object
-      properties:
-        is_alive:
-          type: boolean
-        age:
-          type: integer
-        marital_status:
-          $ref: './common.yaml#/components/schemas/MaritalStatus'
-        related_persons:
-          type: array
-          items:
-            $ref: './common.yaml#/components/schemas/Relationship'
-        contactno:
-          type: array
-          items:
-            $ref: './common.yaml#/components/schemas/ContactDetails'
-        gender:
-          $ref: './common.yaml#/components/schemas/Gender'
-    PersonWithVitalEventsDetails:
-      allOf:
-        - $ref: './common.yaml#/components/schemas/Person'
-      type: object
-      properties:
-        vital_event_dates:
-          type: array
-          items:
-            $ref: './common.yaml#/components/schemas/VitalEventDate'
-        vital_event_registration_info:
-          type: array
-          items:
-            $ref: './common.yaml#/components/schemas/VitalEventInfo'
+
             
   securitySchemes:
     x-access-token:

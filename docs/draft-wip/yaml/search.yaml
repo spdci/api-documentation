@@ -15,7 +15,7 @@ components:
         middle_name:
           type: string
           example: ''
-        gender:
+        sex:
           type: string
           example: ''
         birthdate:
@@ -130,14 +130,6 @@ components:
               - $ref: "./common.yaml#/components/schemas/CRRecordDeath"
               - $ref: "./common.yaml#/components/schemas/CRRecordUnion"
               - $ref: "./common.yaml#/components/schemas/RegistryRecord"
-#        beneficiary: 
-#          type: array
-#          items:
-#            anyOf:
-#              - $ref: '#/components/schemas/Person'
-#              - $ref: '#/components/schemas/PersonWithVitalInfo'
-#              - $ref: '#/components/schemas/PersonWithVitalEventsDetails'              
-#              - $ref: '#/components/schemas/MarriageInfo' 
         pagination:
           $ref: './common.yaml#/components/schemas/PaginationInfoInResponse'
         locale:

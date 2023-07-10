@@ -52,11 +52,11 @@ components:
           type: string
           example: ''
           description: 'Refer relationship code directory' 
-        person_info:
+        name:
           $ref: './common.yaml#/components/schemas/HumanName'
-    Gender:
+    Sex:
       type: object
-      description: 'Refer code directory all gender codes'
+      description: 'Refer code directory all sex codes'
       properties:
         code:
           type: string
@@ -65,7 +65,7 @@ components:
         display_text: 
           type: string
           example: ''
-          enum: ['male','female','transgender']          
+          enum: ['unknown','male','female']          
     MaritalStatus:
       type: object
       properties:
@@ -92,6 +92,10 @@ components:
       type: object
       description: 'Date object'
       properties:
+
+    DateTimeObject:
+      description: 'DateTime object'
+      properties:
         day:
           type: string
           example: ''
@@ -100,12 +104,7 @@ components:
           example: ''
         year: 
           type: string
-          example: ''
-    DateTimeObject:
-      allOf:
-        $ref: '#/components/schemas/DateObject'
-      description: 'DateTime object'
-      properties:
+          example: ''      
         hour:
           type: integer
           example: ''
@@ -167,9 +166,9 @@ components:
               type: object
               properties:
                 northeast:
-                  $ref: '#/components/schemas/LatLong'
+                  - $ref: '#/components/schemas/LatLong'
                 southwest:
-                  $ref: '#/components/schemas/LatLong'
+                  - $ref: '#/components/schemas/LatLong'
             location:
               $ref: '#/components/schemas/LatLong'
     LatLong:
@@ -309,16 +308,7 @@ components:
       description: Indicates language code as per ISO 639.3 standard
       type: string
       pattern: "^[a-z]{3,3}$"
-      example: ''          
-    KeyValueMap:
-      type: object
-      properties:
-        key: 
-          type: string
-          example: ''
-        value: 
-          type: string
-          example: ''          
+      example: ''                    
     FileUploadRequest:
       type: object
       properties:
@@ -344,33 +334,6 @@ components:
         display_text: 
           type: string
           example: ''          
-    VitalEventInfo:
-      type: object
-      properties:
-        event_code: 
-          type: string
-          description: 'Refer code directory'
-          example: ''
-          enum: ['1','2']
-        registration_number: 
-          type: string
-          example: ''          
-        registration_date: 
-          $ref: '#/components/schemas/DateObject'
-        event_occured_at: 
-          $ref: '#/components/schemas/PersonAddress'           
-        registration_address: 
-          $ref: '#/components/schemas/PersonAddress' 
-    VitalEventDate:
-      type: object
-      properties:
-        type: 
-          type: string
-          example: ''
-          enum: ['birth','death','marriage','divorce']
-        registration_date: 
-          $ref: '#/components/schemas/DateObject'           
-            
     Attribute:
       type: object
       properties:
@@ -449,9 +412,7 @@ components:
         identifier:
           $ref: '#/components/schemas/Identifiers'
         issue_date:
-          type: string
-          format: date-time
-          example: ''
+          $ref: '#/components/schemas/DateTimeObject'
         status:
           description: Registry status
           type: string
@@ -494,19 +455,14 @@ components:
             which the parties are operating.
           type: boolean
           example: ''
-        gender:
-          description: End-User's gender. Values defined by this specification are
+        sex:
+          description: End-User's sex. Values defined by this specification are
             female and male. Other values MAY be used when neither of the defined
             values are applicable.
           type: string
           example: ''
         birthdate:
-          description: YYYY format is allowed. Note that depending on the underlying
-            platform's date related function, providing just year can result in varying
-            month and day, so the implementers need to take this factor into account
-            to correctly process the dates.
-          type: string
-          example: ''
+          $ref: '#/components/schemas/DateTimeObject'
         place_of_birth:
           description: End-User's place of birth. The value of this member is a JSON
             structure containing some or all of the following members
@@ -529,7 +485,10 @@ components:
           type: string
           example: ''
         address:
-          $ref : "#/components/schemas/PersonAddress"
+          type: array
+          description: 'Address'
+          items:
+            - $ref : "#/components/schemas/PersonAddress"
         nationalities:
           description: End-User's nationalities using ICAO 3-letter codes [ICAO-Doc9303],
             e.g., "USA" or "JPN". 2-letter ICAO codes MAY be used in some circumstances
@@ -616,6 +575,7 @@ components:
             type: string
             format: date-time
             example: ''
+            $ref: '#/components/schemas/DateTimeObject'
           status:
             description: Civil registry status
             type: string
@@ -640,7 +600,7 @@ components:
             example: ''
           registration_date:
             description: Registration date
-            example: ''
+            $ref: '#/components/schemas/DateTimeObject'
           link_registration_number:
             description: Registration number to related record. e.g birth registration
               no for death, marriage registration no for divorce/annulment, etc.,
@@ -678,6 +638,7 @@ components:
             example: ''
           registration_date:
             description: Registration date
+            $ref: '#/components/schemas/DateTimeObject'
           link_registration_number:
             description: Registration number to related record. e.g birth registration
               no for death, marriage registration no for divorce/annulment, etc.,
@@ -689,7 +650,7 @@ components:
               varying month and day, so the implementers need to take this factor
               into account to correctly process the dates.
             type: string
-            example: ''
+            $ref: '#/components/schemas/DateTimeObject'
           place_of_death:
             description: End-User's place of birth. The value of this member is a
               JSON structure containing some or all of the following members
@@ -716,7 +677,7 @@ components:
             example: ''
           registration_date:
             description: Registration date
-            example: ''
+            $ref: '#/components/schemas/DateTimeObject'
           link_registration_number:
             description: Registration number to related record. e.g birth registration
               no for death, marriage registration no for divorce/annulment, etc.,
@@ -735,7 +696,7 @@ components:
     CRRelatedPerson:
       type: object
       title: CRRelatedPerson
-      description: 'Related person details '
+      description: 'Related person details'
       properties:
         identifier:
           $ref: "#/components/schemas/Identifiers"
@@ -746,7 +707,7 @@ components:
           enum:
             - mother
             - father
-            - gaurdian
+            - guardian
             - bride
             - groom
             - wife
@@ -963,8 +924,8 @@ components:
           type: array
           items:
             $ref: './common.yaml#/components/schemas/ContactDetails'
-        gender:
-          $ref: './common.yaml#/components/schemas/Gender'
+        sex:
+          $ref: './common.yaml#/components/schemas/Sex'
     Filter:           
       type: object
       description: Record attribute(s) to send in response thorugh callback notification

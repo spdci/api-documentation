@@ -1080,7 +1080,7 @@ components:
       properties:
         suffix:
           type: string
-          example: PhD
+          example: ''
         prefix:
           type: string
           example: Mr.
@@ -1133,7 +1133,7 @@ components:
         gender:
           type: string
           example: 'male'       
-          enum: ['male','female','transgender']   
+          enum: ['not known','male','female','not applicable']   
         location:
           type: string
         farmer_type:
@@ -1158,9 +1158,9 @@ components:
           $ref: '#/components/schemas/ReferenceId'
         father_name:
           $ref: '#/components/schemas/HumanName'
-        gaurdian_name:
+        guardian_name:
           $ref: '#/components/schemas/HumanName'
-        relation_with_gaurdian:
+        relation_with_guardian:
           example: brother
           enum: ['brother', 'uncle','sister','adopted', 'father']  
         contactno:
@@ -1171,7 +1171,7 @@ components:
         gender:
           type: string
           example: 'male'       
-          enum: ['male','female','transgender']   
+          enum: ['not known','male','female','not applicable']   
         location:
           type: string
         crop_type:
