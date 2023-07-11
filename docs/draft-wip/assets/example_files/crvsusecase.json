@@ -9,23 +9,23 @@
     },
     {
         "processflow_id" : "processflow3",        
-        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrive Id Details"
+        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrieve Id Details"
     },
     {
         "processflow_id" : "processflow3a",
-        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrive Marital Status"
+        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrieve Marital Status"
     },
     {
         "processflow_id" : "processflow3b",
-        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrive Marriage Details"
+        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrieve Marriage Details"
     },
     {
         "processflow_id" : "processflow3c",
-        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrive Divorce Details"
+        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrieve Divorce Details"
     },
     {
         "processflow_id" : "processflow3d",
-        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrive Deceased Details"
+        "processflow_name": "Process Flow 3 : Enrollment in Widow Allowance Scheme - Retrieve Deceased Details"
     },
     {
         "processflow_id" : "processflow4",
