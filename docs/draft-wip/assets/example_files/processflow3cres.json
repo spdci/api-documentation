@@ -25,17 +25,15 @@
             "identifier": [
               {
                 "identifier_type": "UIN",
-                "identifier_value": "345678916"
-              }
+                "identifier_value": "345678917"
+              } 
             ],
-            "name": {              
-              "family_name": "Doe",
-              "given_name": "John",
-              "middle_name": "Jackson",
-              "suffix": "Jr",
-              "prefix": "Mr."
-            },
-            "date_of_birth":"1958-01-01T14:30:00Z" 
+             
+            "date_of_divorce":"2022-12-12T21:30:00Z",
+            "marital_status": {
+              "code": "D",
+              "display_text": "Divorced"
+            }
           }
         ],
         "pagination": {

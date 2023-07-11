@@ -20,23 +20,22 @@
         "reference_id": "",
         "query": "",
         "timestamp": "2022-12-04T17:20:07-04:00",
-        "beneficiary": [
+        "person": [
           {
             "identifier": [
               {
-                "identifier_type": "",
-                "identifier_value": ""
+                "identifier_type": "UIN",
+                "identifier_value": "345678916"
               }
             ],
             "name": {
-              "suffix": "",
-              "prefix": "",
-              "first_name": "",
-              "middle_name": "",
-              "last_name": ""
+              "suffix": "Jr",
+              "prefix": "Mr.",
+              "first_name": "John",
+              "middle_name": "Doe",
+              "last_name": "Jackson"
             },
-            "date_of_birth":"",
-            "date_of_death":""
+            "date_of_birth":"1958-01-01" 
           }
         ],
         "pagination": {

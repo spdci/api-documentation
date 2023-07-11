@@ -20,49 +20,60 @@
         "reference_id": "",
         "query": "",
         "timestamp": "2022-12-04T17:20:07-04:00",
-        "beneficiary": [
+        "persons": [
           {
             "identifier": [
               {
-                "identifier_type": "",
-                "identifier_value": ""
+                "identifier_type": "uin",
+                "identifier_value": "345678916"
               }
             ],
             "name": {
-              "suffix": "",
-              "prefix": "",
-              "first_name": "",
-              "middle_name": "",
-              "last_name": ""
+              "family_name": "Doe",
+              "given_name": "John",
+              "middle_name": "Jackson",
+              "suffix": "Jr",
+              "prefix": "Mr."
             },
-            "date_of_birth":"",
-            "date_of_death":"",
             "related_persons": [
               {
-                  "relation_code": "",
+                  "relation_code": "father",
+                  "identifier": [
+                    {
+                      "identifier_type": "uin",
+                      "identifier_value": "345678912"
+                    }
+                  ],
                   "person_info": {
-                  "suffix": "",
-                  "prefix": "",
-                  "first_name": "",
-                  "middle_name": "",
-                  "last_name": ""
+                    "family_name": "Doe",
+                    "given_name": "John",
+                    "middle_name": "Jackson",
+                    "suffix": "Sr",
+                    "prefix": "Mr."
                 }
               },
               {
-                "relation_code": "",
+                "relation_code": "mother",
+                "identifier": [
+                  {
+                    "identifier_type": "uin",
+                    "identifier_value": "345678913"
+                  }
+                ],
                 "person_info": {
-                "suffix": "",
-                "prefix": "",
-                "first_name": "",
-                "middle_name": "",
-                "last_name": ""
+                  "family_name": "Doe",
+                  "given_name": "Jessica",
+                  "middle_name": "John", 
+                  "prefix": "Mrs."
               }
             }
             ],
+            "date_of_birth":"1958-01-01T14:30:00Z",
+            "date_of_death":"2022-12-12T21:30:00Z",
             "gender": {
-              "code": "",
-              "display_text": ""
-              }
+              "code": "M",
+              "display_text": "Male"
+            }
           }
         ],
         "pagination": {

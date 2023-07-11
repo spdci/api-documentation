@@ -15,28 +15,30 @@
   },
   "message": {
     "transaction_id": "",
-    "search_request": [
+    "search_response": [
       {
         "reference_id": "",
         "query": "",
         "timestamp": "2022-12-04T17:20:07-04:00",
-        "beneficiary": [
+        "persons": [
           {
             "identifier": [
               {
-                "identifier_type": "",
-                "identifier_value": ""
+                "identifier_type": "uin",
+                "identifier_value": "345678917"
               }
             ],
             "name": {
-              "suffix": "",
-              "prefix": "",
-              "first_name": "",
-              "middle_name": "",
-              "last_name": ""
-            },
-            "date_of_birth":"",
-            "date_of_death":""
+              "family_name": "Doe",
+              "given_name": "Sophia", 
+              "middle_name": "John", 
+              "prefix": "Mrs."
+            }, 
+            "date_of_birth":"1960-01-01T14:30:00Z", 
+            "gender": {
+              "code": "F",
+              "display_text": "Female"
+            }
           }
         ],
         "pagination": {

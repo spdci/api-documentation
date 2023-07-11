@@ -24,20 +24,33 @@
           {
             "identifier": [
               {
-                "identifier_type": "uin",
-                "identifier_value": "345678916"
+                "identifier_type": "UIN",
+                "identifier_value": "345678917"
+              },
+              {
+                "identifier_type": "MRN",
+                "identifier_value": "MRN19790101"
               }
             ],
             "name": {
               "family_name": "Doe",
-              "given_name": "John",
-              "middle_name": "Jackson",
-              "suffix": "Jr",
-              "prefix": "Mr."
-            },
+              "given_name": "Sophia", 
+              "middle_name": "John", 
+              "prefix": "Mrs."
+            }, 
             "related_persons": [
               {
-                  "relation_code": "father",
+                  "relation_code": "spouse",
+                  "identifier": [
+                    {
+                      "identifier_type": "UIN",
+                      "identifier_value": "345678916"
+                    },
+                    {
+                      "identifier_type": "MRN",
+                      "identifier_value": "MRN19790101"
+                    }
+                  ],
                   "person_info": {
                     "family_name": "Doe",
                     "given_name": "John",
@@ -45,23 +58,9 @@
                     "suffix": "Sr",
                     "prefix": "Mr."
                 }
-              },
-              {
-                "relation_code": "mother",
-                "person_info": {
-                  "family_name": "Doe",
-                  "given_name": "Jessica",
-                  "middle_name": "John", 
-                  "prefix": "Mrs."
               }
-            }
-            ],
-            "date_of_birth":"1958-01-01T14:30:00Z",
-            "date_of_death":"2022-12-12T21:30:00Z",
-            "gender": {
-              "code": "M",
-              "display_text": "Male"
-            }
+            ]           
+             
           }
         ],
         "pagination": {

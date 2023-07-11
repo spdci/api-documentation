@@ -20,7 +20,7 @@
         "reference_id": "",
         "timestamp": "2022-12-04T17:20:07-04:00",
         "registry_type": "civil",
-        "event_type": "read",
+        "event_type": "birth",
         "search_criteria": { 
           "custom_query": [
             {
