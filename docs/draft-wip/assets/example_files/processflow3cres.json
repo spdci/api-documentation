@@ -27,8 +27,7 @@
                 "identifier_type": "UIN",
                 "identifier_value": "345678917"
               } 
-            ],
-             
+            ], 
             "date_of_divorce":"2022-12-12T21:30:00Z",
             "marital_status": {
               "code": "D",

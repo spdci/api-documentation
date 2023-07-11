@@ -39,15 +39,15 @@
               },
               "expression3": {
                 "seq_num": 1,
-                "attribute_name": "gender",
+                "attribute_name": "sex",
                 "operator": "eq",
                 "attribute_value": "F"
-              },
+              }, 
               "expression4": {
                 "seq_num": 1,
-                "attribute_name": "location_code",
+                "attribute_name": "region",
                 "operator": "eq",
-                "attribute_value": "XXXX"
+                "attribute_value": "Enchanted Forest"
               }
             }
           ]

@@ -24,8 +24,12 @@
           {
             "identifier": [
               {
-                "identifier_type": "uin",
+                "identifier_type": "UIN",
                 "identifier_value": "345678916"
+              },
+              {
+                "identifier_type": "DRN",
+                "identifier_value": "DRN20221212"
               }
             ],
             "name": {
@@ -34,31 +38,18 @@
               "middle_name": "Jackson",
               "suffix": "Jr",
               "prefix": "Mr."
-            },
-            "related_persons": [
-              {
-                  "relation_code": "father",
-                  "person_info": {
-                    "family_name": "Doe",
-                    "given_name": "John",
-                    "middle_name": "Jackson",
-                    "suffix": "Sr",
-                    "prefix": "Mr."
-                }
-              },
-              {
-                "relation_code": "mother",
-                "person_info": {
-                  "family_name": "Doe",
-                  "given_name": "Jessica",
-                  "middle_name": "John", 
-                  "prefix": "Mrs."
-              }
-            }
-            ],
-            "date_of_birth":"1958-01-01T14:30:00Z",
+            }, 
             "date_of_death":"2022-12-12T21:30:00Z",
-            "gender": {
+            "place_of_death":{ 
+              "address_line1": "Dragon's Lair",
+              "street_address": "Firebreath Lane",
+              "locality": "Mystic Meadows",
+              "region": "Enchanted Forest",
+              "postal_code": "12345",
+              "country": "Eldoria",
+              "country_code": "ELD"
+            },
+            "sex": {
               "code": "M",
               "display_text": "Male"
             }

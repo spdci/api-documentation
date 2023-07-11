@@ -35,7 +35,7 @@
               "prefix": "Mrs."
             }, 
             "date_of_birth":"1960-01-01T14:30:00Z", 
-            "gender": {
+            "sex": {
               "code": "F",
               "display_text": "Female"
             }

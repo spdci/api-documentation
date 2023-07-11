@@ -50,7 +50,9 @@
                     "middle_name": "Jackson",
                     "suffix": "Sr",
                     "prefix": "Mr."
-                }
+                  },
+                  "contact_number": "+99997775678",
+                  "email_id":"john.deo.sr@xyz.com"
               },
               {
                 "relation_code": "mother",
@@ -65,12 +67,14 @@
                   "given_name": "Jessica",
                   "middle_name": "John", 
                   "prefix": "Mrs."
-              }
+                },
+                "contact_number": "+99997775678",
+                "email_id":"jessica.deo.sr@xyz.com"
             }
             ],
             "date_of_birth":"1958-01-01T14:30:00Z",
-            "date_of_death":"2022-12-12T21:30:00Z",
-            "gender": {
+            "date_of_death":"",
+            "sex": {
               "code": "M",
               "display_text": "Male"
             }
