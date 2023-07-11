@@ -30,28 +30,34 @@ components:
     HumanName:
       type: object
       properties:
+        family_name:
+          type: string
+          example: ""
+          description: "The name shared by the people in a family surname."
+        given_name:
+          type: string
+          example: ""
+          description: "A person's first name"
+        middle_name:
+          type: string
+          description: "Multiple middle names may be included by separating them with spaces."
+          example: ""
         suffix:
           type: string
           example: ""
+          description: "Used to specify a name suffix (e.g., Jr. or III)."
         prefix:
           type: string
           example: ""
-        first_name:
-          type: string
-          example: ""
-        middle_name:
-          type: string
-          example: ""
-        last_name:
-          type: string
-          example: ""
+          description: "Definition: Used to specify a name prefix (e.g., Dr.)."
+
     Relationship:
       type: object       
       properties:
         relation_code:
           type: string
           example: ''
-          description: 'Refer relationship code directory' 
+          description: 'Refer relationship code directory for listing' 
         name:
           $ref: './common.yaml#/components/schemas/HumanName'
     Sex:
@@ -88,71 +94,38 @@ components:
           type: string
           example: ''          
           enum: ['birth','death','crvs','farmer','disability']          
-    DateObject:
-      type: object
-      description: 'Date object'
-      properties:
-
     DateTimeObject:
-      description: 'DateTime object'
+      description: 'All dates and timestamps are represented in ISO 8601 format including timezone.Reference: ISO 8601 Date & Time'
       properties:
         day:
           type: string
           example: ''
+          description: '01 to 31'
         month: 
           type: string
           example: ''
+          description: '01 (January) to 12 (December)'
         year: 
           type: string
-          example: ''      
+          example: ''
+          description: 'all the digits, i.e. 2012'      
         hour:
           type: integer
           example: ''
+          description: '00 to 23, 24:00:00 as the end time'
         minute:
           type: integer
           example: ''
+          description: '00 to 59 ( Minute is optional )'
         second:
           type: integer
           example: ''
+          description: '00 to 59 ( Second is optional )'
         timezone:
           type: string
           example: ''
- 
-    Location:
-      type: object
-      properties:
-        house_no:
-          type: string
-          example: ''
-        address_line_1:
-          type: string
-          example: ''
-        address_line_2:
-          type: string
-          example: ''          
-        district:
-          type: string
-          example: ''          
-        state:
-          type: string
-          example: ''          
-        region:
-          type: string
-          example: ''
-          description: 'state and region can be used alternatively as some cuntry may not have concept of state'
-        postal_code:
-          type: string
-          example: '' 
-        latitude:
-          type: string
-          format: float
-          example: ''
-        longitude:
-          type: string
-          format: float
-          example: ''
-        google_plus_code:
-          $ref: '#/components/schemas/GooglePlusCode'          
+          description: ''
+         
     GooglePlusCode:
       type: object
       properties:
@@ -233,7 +206,7 @@ components:
     TransactionId:
       type: string
       example: ''
-      description: ' Unique transaction_id set by txn initiating system (i.e sender) to co-relate requests across processing systems/service end points'
+      description: 'Unique transaction_id set by txn initiating system (i.e sender) to co-relate requests across processing systems/service end points'
     
     ReferenceId:
       type: string
@@ -418,30 +391,7 @@ components:
           type: string
           example: ''
         name:
-          description: End-User's full name in displayable form including all name
-            parts, possibly including titles and suffixes, ordered according to the
-            End-User's locale and preferences.
-          type: string
-          example: ''
-        given_name:
-          description: Given name(s) or first name(s) of the End-User. Note that in
-            some cultures, people can have multiple given names; all can be present,
-            with the names being separated by space characters.
-          type: string
-          example: ''
-        family_name:
-          description: Surname(s) or last name(s) of the End-User. Note that in some
-            cultures, people can have multiple family names or no family name; all
-            can be present, with the names being separated by space characters.
-          type: string
-          example: ''
-        middle_name:
-          description: Middle name(s) of the End-User. Note that in some cultures,
-            people can have multiple middle names; all can be present, with the names
-            being separated by space characters. Also note that in some cultures,
-            middle names are not used.
-          type: string
-          example: ''
+          $ref: '#/components/schemas/HumanName'
         email:
           description: End-User's preferred e-mail address. Its value MUST conform
             to the RFC 5322 [RFC5322] addr-spec syntax. The RP MUST NOT rely upon
@@ -456,17 +406,13 @@ components:
           type: boolean
           example: ''
         sex:
-          description: End-User's sex. Values defined by this specification are
-            female and male. Other values MAY be used when neither of the defined
-            values are applicable.
-          type: string
-          example: ''
+          $ref: '#/components/schemas/Sex'
         birthdate:
           $ref: '#/components/schemas/DateTimeObject'
         place_of_birth:
           description: End-User's place of birth. The value of this member is a JSON
             structure containing some or all of the following members
-          $ref: '#/components/schemas/Location'
+          $ref: '#/components/schemas/Address'
         phone_number:
           description: The value of this member is a JSON
             structure containing some or all of the following members in array of ContactDetails object
@@ -484,11 +430,12 @@ components:
             MUST be represented in RFC 3966 format.
           type: string
           example: ''
+        
         address:
           type: array
-          description: 'Address'
+          description: End-User's preferred postal address. The value of the address member is a JSON structure containing some or all of the members defined in Section 5.1.1.
           items:
-            - $ref : "#/components/schemas/PersonAddress"
+            - $ref : "#/components/schemas/Address"
         nationalities:
           description: End-User's nationalities using ICAO 3-letter codes [ICAO-Doc9303],
             e.g., "USA" or "JPN". 2-letter ICAO codes MAY be used in some circumstances
@@ -501,15 +448,15 @@ components:
           description: Time the End-User's information was last updated. Its value
             is a JSON number representing the number of seconds from 1970-01-01T0:0:0Z
             as measured in UTC until the date/time
-          type: number
+          $ref: '#/components/schemas/DateTimeObject'
           example: ''
         additional_attributes:
           $ref : "#/components/schemas/AttributeNameValue"
-    PersonAddress:
+    Address:
       title: Address
       description: Address info as per OpenID <a href="https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim">specs</a>
       properties:
-        formatted:
+        address_line1:
           description: Full mailing address, formatted for display or use on a mailing
             label. This field MAY contain multiple lines, separated by newlines. Newlines
             can be represented either as a carriage return/line feed pair ("\r\n")
@@ -546,6 +493,8 @@ components:
             to the existing country field.
           type: string
           example: ''
+        geo_location:
+          $ref : "#/components/schemas/GooglePlusCode"         
     AttributeNameValue:
       type: object
       description: Attribute name value object
@@ -572,9 +521,6 @@ components:
           identifier:
             $ref: '#/components/schemas/Identifiers'
           issue_date:
-            type: string
-            format: date-time
-            example: ''
             $ref: '#/components/schemas/DateTimeObject'
           status:
             description: Civil registry status
@@ -588,7 +534,7 @@ components:
       title: CRRecordBirth
       allOf:
       - properties:
-          type:
+          event_type:
             type: string
             enum:
               - birth
@@ -627,7 +573,7 @@ components:
       title: CRRecordDeath
       allOf:
       - properties:
-          type:
+          event_type:
             type: string
             enum:
               - death
@@ -644,17 +590,14 @@ components:
               no for death, marriage registration no for divorce/annulment, etc.,
             type: string
             example: ''
-          deathdate:
+          death_date:
             description: YYYY format is allowed. Note that depending on the underlying
-              platform's date related function, providing just year can result in
-              varying month and day, so the implementers need to take this factor
+              platform's date related function, providing just year can result in varying month and day, so the implementers need to take this factor
               into account to correctly process the dates.
-            type: string
             $ref: '#/components/schemas/DateTimeObject'
           place_of_death:
-            description: End-User's place of birth. The value of this member is a
-              JSON structure containing some or all of the following members
-            $ref: '#/components/schemas/Location'
+            description: End-User's place of birth. The value of this member is a JSON structure containing some or all of the following members
+            $ref: '#/components/schemas/Address'
       - "$ref": "#/components/schemas/CRRecord"
     CRRecordUnion:
       description: |
@@ -663,7 +606,7 @@ components:
       title: CRRecordUnion
       allOf:
       - properties:
-          type:
+          event_type:
             type: string
             enum:
               - marriage
