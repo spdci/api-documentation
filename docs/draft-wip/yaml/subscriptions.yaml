@@ -97,16 +97,6 @@ components:
             example: '[]'
 
     SubscriptionResponse:
-#      allOf:
-#        - $ref: './responses.yaml#/components/schemas/BaseResponse'
-#      type: object
-#      properties:
-#        message: 
-#          type: array
-#          items:
-#            type: object
-#            anyOf:
-#              - $ref: '#/components/schemas/SubscriptionList'
       type: object
       properties:
         signature: 
@@ -114,13 +104,11 @@ components:
         headers:
           allOf:
             - $ref: './headers.yaml#/components/schemas/CommonHeaders'
-            - $ref: './headers.yaml#/components/schemas/TotalCountHeader'
-            - $ref: './headers.yaml#/components/schemas/CompletedCountHeader'
             - $ref: './headers.yaml#/components/schemas/EncHeaders'          
         message:
           type: object
           anyOf:
-            - $ref: '#/components/schemas/SubscribeReqStatusMsg'
+            - $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'          
       required:
         - headers
@@ -208,7 +196,7 @@ components:
         message:
           type: object
           anyOf:
-            - $ref: '#/components/schemas/UnSubscribeMessage'
+            - $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest'      
       required:
         - headers
@@ -245,14 +233,22 @@ components:
         - event_type
         - reason        
     UnSubscribeResponse:
-      allOf:
-        - $ref: './responses.yaml#/components/schemas/BaseResponse'
       type: object
       properties:
-        message: 
-          type: array
-          items:
-            $ref: '#/components/schemas/UnSubscribeObjectList'
+        signature: 
+          $ref: './signature.yaml#/components/schemas/MsgSignature'
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders' 
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'          
+        message:
+          type: object
+          anyOf:
+            - $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'          
+      required:
+        - headers
+        - message
     UnSubscribeObjectList:
       type: object
       properties:

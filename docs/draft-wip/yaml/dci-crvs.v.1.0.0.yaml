@@ -252,7 +252,7 @@ paths:
               $ref: './common.yaml#/components/schemas/FileUploadRequest'
         required: true
       responses:
-        '200':
+        'default':
           description: Successful operation
           content:
             application/json:
@@ -265,11 +265,6 @@ paths:
               schema:
                 type: string
                 format: binary                
-        '201':
-          $ref: './responses.yaml#/components/responses/201'
-        '202':
-          $ref: './responses.yaml#/components/responses/202'
-
         '400':
           $ref: './responses.yaml#/components/responses/400'
         '401':
@@ -310,7 +305,7 @@ paths:
         required: true
       responses:
         
-        '200':
+        'default':
           description: Successful operation
           content:
             application/json:
@@ -323,10 +318,6 @@ paths:
               schema:
                 type: string
                 format: binary                
-        '201':
-          $ref: './responses.yaml#/components/responses/201'
-        '202':
-          $ref: './responses.yaml#/components/responses/202'
         '400':
           $ref: './responses.yaml#/components/responses/400'
         '401':
@@ -364,8 +355,8 @@ paths:
               $ref: './common.yaml#/components/schemas/FileUploadRequest'
         required: true
       responses:
-        '200':
-          description: Successful operation
+        'default':
+          description: Acknowledgement from receiver
           content:
             application/json:
               schema:
@@ -377,12 +368,6 @@ paths:
               schema:
                 type: string
                 format: binary                
-
-        '201':
-          $ref: './responses.yaml#/components/responses/201'
-        '202':
-          $ref: './responses.yaml#/components/responses/202'
-
         '400':
           $ref: './responses.yaml#/components/responses/400'
         '401':
@@ -421,7 +406,7 @@ paths:
               $ref: './common.yaml#/components/schemas/FileUploadRequest'
         required: true
       responses:
-        '200':
+        'default':
           description: Successful operation
           content:
             application/json:
@@ -434,11 +419,6 @@ paths:
               schema:
                 type: string
                 format: binary                
-
-        '201':
-          $ref: './responses.yaml#/components/responses/201'
-        '202':
-          $ref: './responses.yaml#/components/responses/202'
 
         '400':
           $ref: './responses.yaml#/components/responses/400'
@@ -478,7 +458,7 @@ paths:
               $ref: './common.yaml#/components/schemas/FileUploadRequest'
         required: true
       responses:
-        '200':
+        'default':
           description: Successful operation
           content:
             application/json:
@@ -487,11 +467,6 @@ paths:
             application/xml:
               schema:
                 $ref: './responses.yaml#/components/schemas/BaseResponse'
-        '201':
-          $ref: './responses.yaml#/components/responses/201'
-        '202':
-          $ref: './responses.yaml#/components/responses/202'
-
         '400':
           $ref: './responses.yaml#/components/responses/400'
         '401':
@@ -547,6 +522,9 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/SearchRequestObject'
+          required: 
+            - version
+            - search_request          
       required: 
         - transaction_id
         - search_request
@@ -574,7 +552,7 @@ components:
             custom_query:
               $ref: "common.yaml#/components/schemas/ExpressionWithConditionList" 
         filter:
-          description: Attribute(s) to send in response
+          description: Attribute(s) to send in response, 
           items:
             type: string
           example: ''                       
@@ -597,11 +575,17 @@ components:
     EventResponse:
       type: object
       properties:
-        event_status:
-          type: array
-          items:
-            anyOf:
-              - $ref: './responses.yaml#/components/schemas/BaseResponse'
+        signature: 
+          $ref: './signature.yaml#/components/schemas/MsgSignature'
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders' 
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'          
+        message:
+          type: object
+          anyOf:
+            - $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest' 
          
     SearchResponse:
       type: object
