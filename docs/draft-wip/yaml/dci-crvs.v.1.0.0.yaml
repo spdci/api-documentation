@@ -463,10 +463,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './responses.yaml#/components/schemas/BaseResponse'     
+                $ref: '#/components/schemas/OnStatusResponse'     
             application/xml:
               schema:
-                $ref: './responses.yaml#/components/schemas/BaseResponse'
+                $ref: '#/components/schemas/OnStatusResponse'
         '400':
           $ref: './responses.yaml#/components/responses/400'
         '401':
@@ -586,7 +586,20 @@ components:
           anyOf:
             - $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             - $ref: './common.yaml#/components/schemas/EncryptedRequest' 
-         
+    OnStatusResponse:
+      type: object
+      properties:
+        signature: 
+          $ref: './signature.yaml#/components/schemas/MsgSignature'
+        headers:
+          allOf:
+            - $ref: './headers.yaml#/components/schemas/CommonHeaders' 
+            - $ref: './headers.yaml#/components/schemas/EncHeaders'          
+        message:
+          type: object
+          anyOf:
+            - $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
+            - $ref: './common.yaml#/components/schemas/EncryptedRequest'          
     SearchResponse:
       type: object
       properties:
