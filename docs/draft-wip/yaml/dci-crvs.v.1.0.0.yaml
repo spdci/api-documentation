@@ -51,30 +51,17 @@ tags:
     x-displayName: SubscriptionRequest
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/SubscriptionRequest" />
-  - name: SubscriptionResponse
-    x-displayName: SubscriptionResponse
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/SubscriptionResponse" />
+ 
   - name: UnSubscribeRequest
     x-displayName: UnSubscribeRequest
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/UnSubscribeRequest" /> 
-  - name: UnSubscribeResponse
-    x-displayName: UnSubscribeResponse
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/UnSubscribeResponse" /> 
-  - name: RequestStatusCheckRequest
-    x-displayName: RequestStatusCheckRequest
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/RequestStatusCheckRequest" /> 
+ 
   - name: EventNotificationRequest
     x-displayName: EventNotificationRequest
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/EventNotificationRequest" /> 
-  - name: EventResponse
-    x-displayName: EventResponse
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/EventResponse" />                        
+                       
 x-tagGroups:
   - name: API Definition
     tags:
@@ -257,10 +244,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './subscriptions.yaml#/components/schemas/SubscriptionResponse'     
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'     
             application/xml:
               schema:
-                $ref: './subscriptions.yaml#/components/schemas/SubscriptionResponse'
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             application/octet-stream:
               schema:
                 type: string
@@ -310,10 +297,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './subscriptions.yaml#/components/schemas/UnSubscribeResponse'     
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'     
             application/xml:
               schema:
-                $ref: './subscriptions.yaml#/components/schemas/UnSubscribeResponse'
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             application/octet-stream:
               schema:
                 type: string
@@ -360,10 +347,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventResponse'     
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'     
             application/xml:
               schema:
-                $ref: '#/components/schemas/EventResponse'
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             application/octet-stream:
               schema:
                 type: string
@@ -411,10 +398,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './req-status.yaml#/components/schemas/RequestStatusCheckResponse'     
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'     
             application/xml:
               schema:
-                $ref: './req-status.yaml#/components/schemas/RequestStatusCheckResponse'
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
             application/octet-stream:
               schema:
                 type: string
@@ -463,10 +450,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OnStatusResponse'     
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'     
             application/xml:
               schema:
-                $ref: '#/components/schemas/OnStatusResponse'
+                $ref: './responses.yaml#/components/schemas/ApiResponseMessage'
         '400':
           $ref: './responses.yaml#/components/responses/400'
         '401':
