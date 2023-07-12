@@ -98,6 +98,7 @@ components:
               $ref: './common.yaml#/components/schemas/Version'
             data: 
               type: array
+              description: 'asdas'
               items:
                 $ref: '#/components/schemas/SearchResponseObject'
  
@@ -125,6 +126,7 @@ components:
         registry_data:
           items:
             oneOf:
+              - $ref: "./common.yaml#/components/schemas/Person"
               - $ref: "./common.yaml#/components/schemas/CRRecordBirth"
               - $ref: "./common.yaml#/components/schemas/CRRecordDeath"
               - $ref: "./common.yaml#/components/schemas/CRRecordUnion"
